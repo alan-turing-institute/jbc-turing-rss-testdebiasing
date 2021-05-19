@@ -1,6 +1,6 @@
 ### Figure 2 ###
 
-control <- covid.test.debias::get_control_parameters()
+control <- prevdebiasr::get_control_parameters()
 
 param_df <- expand.grid(delta_AR_rho = c(0.975, 0.99, 0.999),
                         delta_AR_sd = c(1, 2),

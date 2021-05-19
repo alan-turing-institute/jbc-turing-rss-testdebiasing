@@ -16,11 +16,14 @@ source("scripts/SIR_utils.R")
 
 trans_mats <- readRDS("transmats/poisson_SIR_epi_gamma_1.RDS")
 vax_df <- readr::read_csv("data/vaccination.csv")
-ltla_df <- readr::read_csv("data/ltla.csv") %>%
-  left_join(vax_df, by = c("ltla", "mid_week"))
 pcr_infectious_df <- readr::read_csv("data/moment_match_infectious.csv")
 region_df <- readr::read_csv("data/region.csv") %>%
   left_join(pcr_infectious_df, by = c("phe_region", "mid_week"))
+ltla_df <- readr::read_csv("data/ltla.csv") %>%
+  left_join(vax_df, by = c("ltla", "mid_week")) %>%
+  left_join(select(region_df, -c(Nt, nt, M)),
+            by = c("phe_region", "mid_week")) %>%
+  select(ltla, phe_region, mid_week, Nt, nt, M, V, alpha, beta)
 
 control_debias <- prevdebiasr::get_control_parameters()
 

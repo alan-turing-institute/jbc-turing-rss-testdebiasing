@@ -11,16 +11,20 @@ git config --global user.password "My password here"
 # mkdir /mnt/c/Users/nicho/Documents/bauer_sync/projects/covid/covid_github/jbc-turing-rss-testdebiasing-1
 # cd /mnt/c/Users/nicho/Documents/bauer_sync/projects/covid/covid_github/jbc-turing-rss-testdebiasing-1
 cd /mnt/c/Users/nicho/Documents/bauer_sync/projects/covid/covid_github/jbc-turing-rss-testdebiasing
+
+# cd /mnt/c/Users/nicho/Documents/bauer_sync/projects/covid/covid_github
+
+
 # Look at local branches
 git branch
 # switch to local main branch
-git checkout main
+git checkout develop
 # check everything up to date
 git remote update && git status 
 # Make the local master sync with remote master
-git pull origin main
+git pull origin develop
 
-git merge main
+git merge develop
 
 # Checkout a local branch to work on
 git checkout -b george
@@ -36,11 +40,11 @@ git pull origin george
 # Switch to local george branch
 git checkout george
 git add -A # Add all files to be committed
-git commit -m 'Adding some NPI exploratory analysis' # Commit files with message
+git commit -m 'Updating data sources' # Commit files with message
 git push --set-upstream origin george
 
 # switch to local main branch
-git checkout main
+git checkout develop
 # check everything up to date
 git status
 # delete local george branch

@@ -1,0 +1,631 @@
+ltla,positive,number_samples,round,mid_round_date
+Adur,3,548,7,2020-11-23
+Allerdale,0,526,7,2020-11-23
+Amber Valley,6,577,7,2020-11-23
+Arun,1,568,7,2020-11-23
+Ashfield,9,545,7,2020-11-23
+Ashford,1,557,7,2020-11-23
+Aylesbury Vale,2,581,7,2020-11-23
+Babergh,1,613,7,2020-11-23
+Barking and Dagenham,10,405,7,2020-11-23
+Barnet,5,490,7,2020-11-23
+Barnsley,1,490,7,2020-11-23
+Barrow-in-Furness,3,468,7,2020-11-23
+Basildon,4,451,7,2020-11-23
+Basingstoke and Deane,2,550,7,2020-11-23
+Bassetlaw,3,548,7,2020-11-23
+Bath and North East Somerset,6,566,7,2020-11-23
+Bedford,2,549,7,2020-11-23
+Bexley,8,492,7,2020-11-23
+Birmingham,5,472,7,2020-11-23
+Blaby,7,548,7,2020-11-23
+Blackburn with Darwen,4,404,7,2020-11-23
+Blackpool,6,472,7,2020-11-23
+Bolsover,8,551,7,2020-11-23
+Bolton,7,453,7,2020-11-23
+Boston,15,580,7,2020-11-23
+"Bournemouth, Christchurch and Poole",6,584,7,2020-11-23
+Bracknell Forest,3,551,7,2020-11-23
+Bradford,7,479,7,2020-11-23
+Braintree,2,556,7,2020-11-23
+Breckland,4,635,7,2020-11-23
+Brent,2,393,7,2020-11-23
+Brentwood,7,520,7,2020-11-23
+Brighton and Hove,0,561,7,2020-11-23
+"Bristol, City of",6,581,7,2020-11-23
+Broadland,2,594,7,2020-11-23
+Bromley,2,554,7,2020-11-23
+Bromsgrove,3,543,7,2020-11-23
+Broxbourne,6,514,7,2020-11-23
+Broxtowe,4,560,7,2020-11-23
+Burnley,7,387,7,2020-11-23
+Bury,5,435,7,2020-11-23
+Calderdale,7,494,7,2020-11-23
+Cambridge,1,571,7,2020-11-23
+Camden,5,498,7,2020-11-23
+Cannock Chase,5,512,7,2020-11-23
+Canterbury,9,640,7,2020-11-23
+Carlisle,3,516,7,2020-11-23
+Castle Point,2,475,7,2020-11-23
+Central Bedfordshire,3,546,7,2020-11-23
+Charnwood,4,499,7,2020-11-23
+Chelmsford,2,567,7,2020-11-23
+Cheltenham,6,511,7,2020-11-23
+Cherwell,5,599,7,2020-11-23
+Cheshire East,4,571,7,2020-11-23
+Cheshire West and Chester,6,547,7,2020-11-23
+Chesterfield,4,568,7,2020-11-23
+Chichester,1,597,7,2020-11-23
+Chiltern,2,619,7,2020-11-23
+Chorley,7,460,7,2020-11-23
+Colchester,2,558,7,2020-11-23
+Copeland,2,555,7,2020-11-23
+Corby,2,424,7,2020-11-23
+Cornwall,0,566,7,2020-11-23
+Cotswold,2,571,7,2020-11-23
+County Durham,4,515,7,2020-11-23
+Coventry,3,501,7,2020-11-23
+Craven,4,506,7,2020-11-23
+Crawley,4,530,7,2020-11-23
+Croydon,2,485,7,2020-11-23
+Dacorum,1,548,7,2020-11-23
+Darlington,3,509,7,2020-11-23
+Dartford,9,512,7,2020-11-23
+Daventry,5,598,7,2020-11-23
+Derby,4,509,7,2020-11-23
+Derbyshire Dales,5,623,7,2020-11-23
+Doncaster,1,535,7,2020-11-23
+Dorset,1,620,7,2020-11-23
+Dover,4,563,7,2020-11-23
+Dudley,7,536,7,2020-11-23
+Ealing,3,472,7,2020-11-23
+East Cambridgeshire,1,581,7,2020-11-23
+East Devon,5,627,7,2020-11-23
+East Hampshire,3,583,7,2020-11-23
+East Hertfordshire,0,610,7,2020-11-23
+East Lindsey,13,646,7,2020-11-23
+East Northamptonshire,3,587,7,2020-11-23
+East Riding of Yorkshire,3,614,7,2020-11-23
+East Staffordshire,10,517,7,2020-11-23
+East Suffolk,4,583,7,2020-11-23
+Eastbourne,4,530,7,2020-11-23
+Eastleigh,5,593,7,2020-11-23
+Eden,0,546,7,2020-11-23
+Elmbridge,2,531,7,2020-11-23
+Enfield,4,490,7,2020-11-23
+Epping Forest,5,460,7,2020-11-23
+Epsom and Ewell,3,564,7,2020-11-23
+Erewash,2,523,7,2020-11-23
+Exeter,0,545,7,2020-11-23
+Fareham,3,603,7,2020-11-23
+Fenland,5,576,7,2020-11-23
+Folkestone and Hythe,5,551,7,2020-11-23
+Forest of Dean,2,550,7,2020-11-23
+Fylde,4,526,7,2020-11-23
+Gateshead,5,492,7,2020-11-23
+Gedling,8,536,7,2020-11-23
+Gloucester,7,492,7,2020-11-23
+Gosport,4,559,7,2020-11-23
+Gravesham,7,542,7,2020-11-23
+Great Yarmouth,3,544,7,2020-11-23
+Greenwich,2,511,7,2020-11-23
+Guildford,7,637,7,2020-11-23
+Hackney,1,446,7,2020-11-23
+Halton,4,390,7,2020-11-23
+Hambleton,4,582,7,2020-11-23
+Hammersmith and Fulham,4,518,7,2020-11-23
+Harborough,7,603,7,2020-11-23
+Haringey,5,488,7,2020-11-23
+Harlow,6,514,7,2020-11-23
+Harrogate,2,571,7,2020-11-23
+Harrow,6,546,7,2020-11-23
+Hart,5,590,7,2020-11-23
+Hartlepool,9,410,7,2020-11-23
+Hastings,6,521,7,2020-11-23
+Havant,5,570,7,2020-11-23
+Havering,9,510,7,2020-11-23
+"Herefordshire, County of",3,606,7,2020-11-23
+Hertsmere,4,501,7,2020-11-23
+High Peak,7,563,7,2020-11-23
+Hillingdon,5,469,7,2020-11-23
+Hinckley and Bosworth,7,599,7,2020-11-23
+Horsham,2,602,7,2020-11-23
+Hounslow,2,528,7,2020-11-23
+Huntingdonshire,1,614,7,2020-11-23
+Hyndburn,3,398,7,2020-11-23
+Ipswich,1,586,7,2020-11-23
+Isle of Wight,2,639,7,2020-11-23
+Islington,6,456,7,2020-11-23
+Kensington and Chelsea,2,509,7,2020-11-23
+Kettering,3,536,7,2020-11-23
+King's Lynn and West Norfolk,4,604,7,2020-11-23
+"Kingston upon Hull, City of",11,520,7,2020-11-23
+Kingston upon Thames,1,520,7,2020-11-23
+Kirklees,9,492,7,2020-11-23
+Knowsley,1,358,7,2020-11-23
+Lambeth,4,508,7,2020-11-23
+Lancaster,1,550,7,2020-11-23
+Leeds,5,480,7,2020-11-23
+Leicester,8,406,7,2020-11-23
+Lewes,2,646,7,2020-11-23
+Lewisham,2,541,7,2020-11-23
+Lichfield,6,563,7,2020-11-23
+Lincoln,7,542,7,2020-11-23
+Liverpool,3,324,7,2020-11-23
+Luton,3,435,7,2020-11-23
+Maidstone,8,551,7,2020-11-23
+Maldon,2,523,7,2020-11-23
+Malvern Hills,1,555,7,2020-11-23
+Manchester,2,442,7,2020-11-23
+Mansfield,9,502,7,2020-11-23
+Medway,4,528,7,2020-11-23
+Melton,4,576,7,2020-11-23
+Mendip,1,565,7,2020-11-23
+Merton,2,504,7,2020-11-23
+Mid Devon,1,557,7,2020-11-23
+Mid Suffolk,1,610,7,2020-11-23
+Mid Sussex,6,597,7,2020-11-23
+Middlesbrough,7,446,7,2020-11-23
+Milton Keynes,6,510,7,2020-11-23
+Mole Valley,5,574,7,2020-11-23
+New Forest,4,577,7,2020-11-23
+Newark and Sherwood,2,582,7,2020-11-23
+Newcastle upon Tyne,5,448,7,2020-11-23
+Newcastle-under-Lyme,5,534,7,2020-11-23
+Newham,6,248,7,2020-11-23
+North Devon,1,566,7,2020-11-23
+North East Derbyshire,6,576,7,2020-11-23
+North East Lincolnshire,4,573,7,2020-11-23
+North Hertfordshire,1,587,7,2020-11-23
+North Kesteven,5,603,7,2020-11-23
+North Lincolnshire,5,581,7,2020-11-23
+North Norfolk,0,589,7,2020-11-23
+North Somerset,8,638,7,2020-11-23
+North Tyneside,2,480,7,2020-11-23
+North Warwickshire,3,512,7,2020-11-23
+North West Leicestershire,6,522,7,2020-11-23
+Northampton,4,546,7,2020-11-23
+Northumberland,3,501,7,2020-11-23
+Norwich,3,564,7,2020-11-23
+Nottingham,8,478,7,2020-11-23
+Nuneaton and Bedworth,6,516,7,2020-11-23
+Oadby and Wigston,7,450,7,2020-11-23
+Oldham,10,391,7,2020-11-23
+Oxford,2,560,7,2020-11-23
+Pendle,3,382,7,2020-11-23
+Peterborough,2,548,7,2020-11-23
+Plymouth,2,596,7,2020-11-23
+Portsmouth,5,551,7,2020-11-23
+Preston,5,439,7,2020-11-23
+Reading,4,589,7,2020-11-23
+Redbridge,6,479,7,2020-11-23
+Redcar and Cleveland,4,517,7,2020-11-23
+Redditch,4,542,7,2020-11-23
+Reigate and Banstead,1,553,7,2020-11-23
+Ribble Valley,2,487,7,2020-11-23
+Richmond upon Thames,4,575,7,2020-11-23
+Richmondshire,3,533,7,2020-11-23
+Rochdale,3,415,7,2020-11-23
+Rochford,3,483,7,2020-11-23
+Rossendale,10,490,7,2020-11-23
+Rother,3,561,7,2020-11-23
+Rotherham,7,515,7,2020-11-23
+Rugby,5,537,7,2020-11-23
+Runnymede,7,534,7,2020-11-23
+Rushcliffe,4,551,7,2020-11-23
+Rushmoor,1,500,7,2020-11-23
+Rutland,3,567,7,2020-11-23
+Ryedale,1,546,7,2020-11-23
+Salford,8,385,7,2020-11-23
+Sandwell,6,429,7,2020-11-23
+Scarborough,7,578,7,2020-11-23
+Sedgemoor,2,588,7,2020-11-23
+Sefton,5,504,7,2020-11-23
+Selby,3,600,7,2020-11-23
+Sevenoaks,3,592,7,2020-11-23
+Sheffield,10,538,7,2020-11-23
+Shropshire,2,568,7,2020-11-23
+Slough,5,469,7,2020-11-23
+Solihull,5,503,7,2020-11-23
+Somerset West and Taunton,0,603,7,2020-11-23
+South Bucks,2,547,7,2020-11-23
+South Cambridgeshire,4,632,7,2020-11-23
+South Derbyshire,3,513,7,2020-11-23
+South Gloucestershire,4,624,7,2020-11-23
+South Hams,2,617,7,2020-11-23
+South Holland,3,602,7,2020-11-23
+South Kesteven,8,620,7,2020-11-23
+South Lakeland,2,557,7,2020-11-23
+South Norfolk,1,604,7,2020-11-23
+South Northamptonshire,0,579,7,2020-11-23
+South Oxfordshire,4,580,7,2020-11-23
+South Ribble,1,448,7,2020-11-23
+South Somerset,1,607,7,2020-11-23
+South Staffordshire,8,511,7,2020-11-23
+South Tyneside,3,456,7,2020-11-23
+Southampton,4,553,7,2020-11-23
+Southend-on-Sea,4,485,7,2020-11-23
+Southwark,6,469,7,2020-11-23
+Spelthorne,7,551,7,2020-11-23
+St Albans,3,612,7,2020-11-23
+St. Helens,1,461,7,2020-11-23
+Stafford,9,550,7,2020-11-23
+Staffordshire Moorlands,3,525,7,2020-11-23
+Stevenage,3,473,7,2020-11-23
+Stockport,8,538,7,2020-11-23
+Stockton-on-Tees,4,453,7,2020-11-23
+Stoke-on-Trent,8,497,7,2020-11-23
+Stratford-on-Avon,1,586,7,2020-11-23
+Stroud,5,579,7,2020-11-23
+Sunderland,4,446,7,2020-11-23
+Surrey Heath,6,585,7,2020-11-23
+Sutton,4,506,7,2020-11-23
+Swale,8,607,7,2020-11-23
+Swindon,7,534,7,2020-11-23
+Tameside,7,452,7,2020-11-23
+Tamworth,11,482,7,2020-11-23
+Tandridge,1,550,7,2020-11-23
+Teignbridge,0,560,7,2020-11-23
+Telford and Wrekin,1,544,7,2020-11-23
+Tendring,2,549,7,2020-11-23
+Test Valley,3,589,7,2020-11-23
+Tewkesbury,6,510,7,2020-11-23
+Thanet,7,604,7,2020-11-23
+Three Rivers,5,515,7,2020-11-23
+Thurrock,2,434,7,2020-11-23
+Tonbridge and Malling,6,575,7,2020-11-23
+Torbay,2,581,7,2020-11-23
+Torridge,2,558,7,2020-11-23
+Tower Hamlets,7,481,7,2020-11-23
+Trafford,3,547,7,2020-11-23
+Tunbridge Wells,5,591,7,2020-11-23
+Uttlesford,1,568,7,2020-11-23
+Vale of White Horse,1,617,7,2020-11-23
+Wakefield,10,513,7,2020-11-23
+Walsall,13,433,7,2020-11-23
+Waltham Forest,4,498,7,2020-11-23
+Wandsworth,2,507,7,2020-11-23
+Warrington,4,553,7,2020-11-23
+Warwick,7,568,7,2020-11-23
+Watford,5,476,7,2020-11-23
+Waverley,3,577,7,2020-11-23
+Wealden,2,630,7,2020-11-23
+Wellingborough,4,489,7,2020-11-23
+Welwyn Hatfield,6,524,7,2020-11-23
+West Berkshire,1,607,7,2020-11-23
+West Devon,4,556,7,2020-11-23
+West Lancashire,0,451,7,2020-11-23
+West Lindsey,4,574,7,2020-11-23
+West Oxfordshire,0,562,7,2020-11-23
+West Suffolk,1,546,7,2020-11-23
+Westminster,5,470,7,2020-11-23
+Wigan,6,445,7,2020-11-23
+Wiltshire,1,584,7,2020-11-23
+Winchester,3,596,7,2020-11-23
+Windsor and Maidenhead,6,565,7,2020-11-23
+Wirral,3,535,7,2020-11-23
+Woking,4,568,7,2020-11-23
+Wokingham,0,612,7,2020-11-23
+Wolverhampton,4,422,7,2020-11-23
+Worcester,4,587,7,2020-11-23
+Worthing,3,551,7,2020-11-23
+Wychavon,2,575,7,2020-11-23
+Wycombe,3,596,7,2020-11-23
+Wyre,4,529,7,2020-11-23
+Wyre Forest,6,531,7,2020-11-23
+York,3,548,7,2020-11-23
+Newham,13,307,8,2021-01-14
+Luton,16,435,8,2021-01-14
+Harrow,17,463,8,2021-01-14
+Enfield,16,456,8,2021-01-14
+Wigan,16,475,8,2021-01-14
+Brent,14,418,8,2021-01-14
+Havering,16,480,8,2021-01-14
+Southwark,16,494,8,2021-01-14
+Hastings,18,577,8,2021-01-14
+Waltham Forest,14,452,8,2021-01-14
+Three Rivers,18,584,8,2021-01-14
+Hounslow,15,500,8,2021-01-14
+Gravesham,15,505,8,2021-01-14
+Southend-on-Sea,15,514,8,2021-01-14
+Thurrock,9,309,8,2021-01-14
+Tower Hamlets,13,449,8,2021-01-14
+Bromley,16,554,8,2021-01-14
+Adur,16,568,8,2021-01-14
+Hammersmith and Fulham,14,508,8,2021-01-14
+Hillingdon,13,473,8,2021-01-14
+Reading,14,520,8,2021-01-14
+Hertsmere,15,570,8,2021-01-14
+Haringey,12,459,8,2021-01-14
+Epsom and Ewell,16,614,8,2021-01-14
+Knowsley,8,308,8,2021-01-14
+Stevenage,13,501,8,2021-01-14
+Westminster,12,467,8,2021-01-14
+Camden,14,547,8,2021-01-14
+Broxbourne,14,549,8,2021-01-14
+Wolverhampton,10,396,8,2021-01-14
+Barking and Dagenham,8,317,8,2021-01-14
+Merton,13,520,8,2021-01-14
+Maidstone,14,562,8,2021-01-14
+Dudley,12,487,8,2021-01-14
+Isle of Wight,15,623,8,2021-01-14
+Lambeth,13,540,8,2021-01-14
+Spelthorne,13,542,8,2021-01-14
+Rushmoor,13,543,8,2021-01-14
+Watford,12,506,8,2021-01-14
+Castle Point,12,509,8,2021-01-14
+Greenwich,12,510,8,2021-01-14
+Harlow,11,477,8,2021-01-14
+Kensington and Chelsea,11,481,8,2021-01-14
+East Hertfordshire,14,614,8,2021-01-14
+Hackney,10,441,8,2021-01-14
+Dartford,12,531,8,2021-01-14
+Slough,10,445,8,2021-01-14
+North Warwickshire,10,447,8,2021-01-14
+Epping Forest,10,448,8,2021-01-14
+Sefton,11,495,8,2021-01-14
+Redbridge,9,407,8,2021-01-14
+Welwyn Hatfield,12,545,8,2021-01-14
+Lewisham,11,511,8,2021-01-14
+Tendring,13,605,8,2021-01-14
+Ealing,11,514,8,2021-01-14
+Sutton,12,563,8,2021-01-14
+Milton Keynes,11,525,8,2021-01-14
+Sevenoaks,13,621,8,2021-01-14
+Lewes,12,575,8,2021-01-14
+Liverpool,8,384,8,2021-01-14
+Norwich,12,579,8,2021-01-14
+Sandwell,9,435,8,2021-01-14
+Coventry,10,489,8,2021-01-14
+Bexley,11,546,8,2021-01-14
+Birmingham,9,449,8,2021-01-14
+Kingston upon Thames,12,600,8,2021-01-14
+Fenland,11,552,8,2021-01-14
+Crawley,10,502,8,2021-01-14
+Solihull,11,553,8,2021-01-14
+Brentwood,10,511,8,2021-01-14
+Tameside,9,462,8,2021-01-14
+Basingstoke and Deane,12,624,8,2021-01-14
+South Holland,12,625,8,2021-01-14
+Croydon,10,523,8,2021-01-14
+Barnet,10,524,8,2021-01-14
+Basildon,9,476,8,2021-01-14
+South Staffordshire,10,529,8,2021-01-14
+Rochdale,8,424,8,2021-01-14
+Barrow-in-Furness,8,429,8,2021-01-14
+Corby,8,430,8,2021-01-14
+Eastbourne,11,597,8,2021-01-14
+Rossendale,8,435,8,2021-01-14
+Wandsworth,10,544,8,2021-01-14
+Wycombe,11,600,8,2021-01-14
+Tunbridge Wells,11,601,8,2021-01-14
+Bedford,10,550,8,2021-01-14
+Chelmsford,10,550,8,2021-01-14
+Mansfield,9,495,8,2021-01-14
+Darlington,9,497,8,2021-01-14
+Blackburn with Darwen,7,395,8,2021-01-14
+Central Bedfordshire,10,569,8,2021-01-14
+Surrey Heath,11,630,8,2021-01-14
+Leicester,6,344,8,2021-01-14
+Walsall,8,462,8,2021-01-14
+Cheshire East,10,584,8,2021-01-14
+Cherwell,10,585,8,2021-01-14
+Worthing,10,585,8,2021-01-14
+Ribble Valley,8,469,8,2021-01-14
+South Derbyshire,9,531,8,2021-01-14
+"Bournemouth, Christchurch and Poole",9,552,8,2021-01-14
+Southampton,9,553,8,2021-01-14
+Ashford,9,553,8,2021-01-14
+South Northamptonshire,10,620,8,2021-01-14
+Forest of Dean,8,497,8,2021-01-14
+South Tyneside,7,440,8,2021-01-14
+Dorset,10,630,8,2021-01-14
+Oxford,9,567,8,2021-01-14
+West Berkshire,10,631,8,2021-01-14
+South Oxfordshire,10,636,8,2021-01-14
+Waverley,10,636,8,2021-01-14
+Telford and Wrekin,7,446,8,2021-01-14
+Ashfield,9,575,8,2021-01-14
+Dacorum,9,577,8,2021-01-14
+Bury,7,449,8,2021-01-14
+Medway,8,523,8,2021-01-14
+St. Helens,6,394,8,2021-01-14
+Rother,9,593,8,2021-01-14
+Hartlepool,7,464,8,2021-01-14
+Newcastle upon Tyne,7,468,8,2021-01-14
+Selby,8,536,8,2021-01-14
+Uttlesford,9,604,8,2021-01-14
+Eastleigh,9,606,8,2021-01-14
+East Suffolk,9,608,8,2021-01-14
+York,8,544,8,2021-01-14
+Tandridge,9,613,8,2021-01-14
+Worcester,8,546,8,2021-01-14
+Guildford,10,683,8,2021-01-14
+Brighton and Hove,8,551,8,2021-01-14
+South Gloucestershire,9,626,8,2021-01-14
+Bromsgrove,8,557,8,2021-01-14
+Northampton,7,489,8,2021-01-14
+Wirral,6,424,8,2021-01-14
+St Albans,9,639,8,2021-01-14
+Stratford-on-Avon,8,580,8,2021-01-14
+Redditch,7,509,8,2021-01-14
+"Bristol, City of",8,584,8,2021-01-14
+Huntingdonshire,8,588,8,2021-01-14
+Wyre Forest,7,515,8,2021-01-14
+Swale,7,519,8,2021-01-14
+Carlisle,7,530,8,2021-01-14
+Charnwood,7,533,8,2021-01-14
+Manchester,6,458,8,2021-01-14
+Bradford,6,463,8,2021-01-14
+South Norfolk,8,620,8,2021-01-14
+Canterbury,8,621,8,2021-01-14
+Mole Valley,8,621,8,2021-01-14
+Middlesbrough,6,466,8,2021-01-14
+Kirklees,6,467,8,2021-01-14
+Mid Sussex,8,623,8,2021-01-14
+Derby,7,550,8,2021-01-14
+Chorley,6,474,8,2021-01-14
+Bracknell Forest,7,557,8,2021-01-14
+Erewash,7,558,8,2021-01-14
+"Kingston upon Hull, City of",6,482,8,2021-01-14
+Wellingborough,6,482,8,2021-01-14
+Tonbridge and Malling,7,565,8,2021-01-14
+Thanet,7,570,8,2021-01-14
+Harborough,7,571,8,2021-01-14
+Doncaster,6,491,8,2021-01-14
+Nottingham,6,495,8,2021-01-14
+Calderdale,6,495,8,2021-01-14
+County Durham,6,496,8,2021-01-14
+North Kesteven,7,579,8,2021-01-14
+South Kesteven,7,580,8,2021-01-14
+Test Valley,7,582,8,2021-01-14
+Trafford,6,500,8,2021-01-14
+Richmond upon Thames,7,585,8,2021-01-14
+Hambleton,7,587,8,2021-01-14
+Rutland,7,588,8,2021-01-14
+Folkestone and Hythe,7,588,8,2021-01-14
+Babergh,7,588,8,2021-01-14
+Stroud,6,507,8,2021-01-14
+Oadby and Wigston,6,508,8,2021-01-14
+Burnley,5,426,8,2021-01-14
+Lancaster,6,514,8,2021-01-14
+Hinckley and Bosworth,6,514,8,2021-01-14
+Woking,7,605,8,2021-01-14
+Great Yarmouth,6,519,8,2021-01-14
+Rochford,6,526,8,2021-01-14
+Horsham,7,618,8,2021-01-14
+Nuneaton and Bedworth,5,442,8,2021-01-14
+Cambridge,7,620,8,2021-01-14
+Vale of White Horse,7,624,8,2021-01-14
+Blaby,6,536,8,2021-01-14
+Gedling,6,536,8,2021-01-14
+Wealden,7,629,8,2021-01-14
+North Hertfordshire,7,631,8,2021-01-14
+Cannock Chase,5,454,8,2021-01-14
+Halton,4,367,8,2021-01-14
+Swindon,6,555,8,2021-01-14
+Portsmouth,6,561,8,2021-01-14
+Dover,6,568,8,2021-01-14
+Ipswich,6,570,8,2021-01-14
+North East Derbyshire,6,571,8,2021-01-14
+Stockton-on-Tees,5,477,8,2021-01-14
+Havant,6,573,8,2021-01-14
+Hyndburn,4,383,8,2021-01-14
+Reigate and Banstead,6,583,8,2021-01-14
+Islington,5,488,8,2021-01-14
+Sedgemoor,6,590,8,2021-01-14
+Colchester,6,593,8,2021-01-14
+North Lincolnshire,5,498,8,2021-01-14
+Warrington,5,503,8,2021-01-14
+Runnymede,6,605,8,2021-01-14
+Stafford,5,505,8,2021-01-14
+North Somerset,6,607,8,2021-01-14
+Wokingham,6,608,8,2021-01-14
+Wakefield,5,511,8,2021-01-14
+Lichfield,5,512,8,2021-01-14
+Peterborough,5,516,8,2021-01-14
+New Forest,6,629,8,2021-01-14
+Eden,5,525,8,2021-01-14
+Richmondshire,5,525,8,2021-01-14
+Bolton,4,428,8,2021-01-14
+South Bucks,5,540,8,2021-01-14
+Newark and Sherwood,5,546,8,2021-01-14
+Rugby,5,548,8,2021-01-14
+Stockport,5,548,8,2021-01-14
+Broxtowe,5,549,8,2021-01-14
+Chesterfield,5,552,8,2021-01-14
+Wychavon,5,553,8,2021-01-14
+Ryedale,5,554,8,2021-01-14
+East Northamptonshire,5,556,8,2021-01-14
+Gateshead,4,445,8,2021-01-14
+Cotswold,5,558,8,2021-01-14
+Gosport,5,558,8,2021-01-14
+Cheshire West and Chester,5,560,8,2021-01-14
+Sunderland,4,450,8,2021-01-14
+Braintree,5,569,8,2021-01-14
+Amber Valley,5,570,8,2021-01-14
+Malvern Hills,5,570,8,2021-01-14
+Stoke-on-Trent,4,461,8,2021-01-14
+Shropshire,5,585,8,2021-01-14
+Elmbridge,5,586,8,2021-01-14
+Hart,5,589,8,2021-01-14
+Daventry,5,593,8,2021-01-14
+Newcastle-under-Lyme,4,479,8,2021-01-14
+Copeland,4,493,8,2021-01-14
+Winchester,5,621,8,2021-01-14
+Salford,3,376,8,2021-01-14
+East Staffordshire,4,506,8,2021-01-14
+Staffordshire Moorlands,4,507,8,2021-01-14
+Mid Suffolk,5,635,8,2021-01-14
+South Somerset,5,652,8,2021-01-14
+Maldon,4,534,8,2021-01-14
+Kettering,4,551,8,2021-01-14
+"Herefordshire, County of",4,562,8,2021-01-14
+Windsor and Maidenhead,4,563,8,2021-01-14
+Arun,4,568,8,2021-01-14
+North West Leicestershire,4,569,8,2021-01-14
+West Oxfordshire,4,573,8,2021-01-14
+Oldham,3,431,8,2021-01-14
+Mid Devon,4,576,8,2021-01-14
+Mendip,4,590,8,2021-01-14
+West Suffolk,4,593,8,2021-01-14
+Rushcliffe,4,599,8,2021-01-14
+Chichester,4,601,8,2021-01-14
+Aylesbury Vale,4,605,8,2021-01-14
+East Cambridgeshire,4,606,8,2021-01-14
+Bath and North East Somerset,4,608,8,2021-01-14
+East Riding of Yorkshire,4,609,8,2021-01-14
+West Lancashire,3,462,8,2021-01-14
+Cheltenham,3,469,8,2021-01-14
+East Hampshire,4,638,8,2021-01-14
+Allerdale,3,496,8,2021-01-14
+East Devon,4,675,8,2021-01-14
+Bassetlaw,3,512,8,2021-01-14
+Plymouth,3,517,8,2021-01-14
+Scarborough,3,520,8,2021-01-14
+Sheffield,3,522,8,2021-01-14
+Wyre,3,532,8,2021-01-14
+Exeter,3,534,8,2021-01-14
+Fylde,3,537,8,2021-01-14
+High Peak,3,552,8,2021-01-14
+West Lindsey,3,555,8,2021-01-14
+Northumberland,3,556,8,2021-01-14
+Torbay,3,560,8,2021-01-14
+South Lakeland,3,576,8,2021-01-14
+Somerset West and Taunton,3,580,8,2021-01-14
+Cornwall,3,588,8,2021-01-14
+Preston,2,399,8,2021-01-14
+Fareham,3,603,8,2021-01-14
+South Cambridgeshire,3,622,8,2021-01-14
+Derbyshire Dales,3,622,8,2021-01-14
+Breckland,3,626,8,2021-01-14
+Broadland,3,635,8,2021-01-14
+South Ribble,2,432,8,2021-01-14
+Tamworth,2,437,8,2021-01-14
+Blackpool,2,438,8,2021-01-14
+Barnsley,2,443,8,2021-01-14
+Gloucester,2,458,8,2021-01-14
+North Tyneside,2,475,8,2021-01-14
+North East Lincolnshire,2,476,8,2021-01-14
+Rotherham,2,480,8,2021-01-14
+Craven,2,482,8,2021-01-14
+Bolsover,2,485,8,2021-01-14
+Redcar and Cleveland,2,497,8,2021-01-14
+Harrogate,2,501,8,2021-01-14
+Lincoln,2,509,8,2021-01-14
+Boston,2,522,8,2021-01-14
+Melton,2,553,8,2021-01-14
+North Devon,2,564,8,2021-01-14
+Warwick,2,567,8,2021-01-14
+East Lindsey,2,593,8,2021-01-14
+Teignbridge,2,609,8,2021-01-14
+Wiltshire,2,612,8,2021-01-14
+Chiltern,2,642,8,2021-01-14
+South Hams,2,643,8,2021-01-14
+Pendle,1,402,8,2021-01-14
+Tewkesbury,1,473,8,2021-01-14
+Torridge,1,555,8,2021-01-14
+King's Lynn and West Norfolk,1,584,8,2021-01-14
+West Devon,1,599,8,2021-01-14
+North Norfolk,1,622,8,2021-01-14
+Leeds,0,479,8,2021-01-14

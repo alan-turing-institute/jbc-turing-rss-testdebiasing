@@ -21,12 +21,12 @@ pcr_samples <- pcr_df[,2:302]
 # NOTE: here we index week k 1-4 rather than 0-3 as in the paper
 
 # 1: p(infectious | infected) for each week k, eq.40
-multipliers = c(6/7, 5/7, 0, 0)
+multipliers = c(6 / 7, 5 / 7, 0, 0)
 
 # 2: p(pcr+ | infected) for each week k, eq.42
 get_pcr_infect_week <- function(k, pcr_samples){
   
-  start_week <- 1 + (k-1) * 70
+  start_week <- 1 + (k - 1) * 70
   end_week <- start_week + 70
   mean_samples <- rowMeans(pcr_samples[, start_week:end_week])
   
@@ -36,8 +36,6 @@ get_pcr_infect_week <- function(k, pcr_samples){
 #=========================================================================
 # P(Infectious | PCR+), constant incidence
 #=========================================================================
-#dists <- pcr_samples / rowSums(pcr_samples)
-#pcrplus_dist <- rowSums(dists[,11:110])
 
 for (k in 1:4) {
   
@@ -67,7 +65,6 @@ up_ci <- quantile(df$samples, prob=0.975)
 
 #=========================================================================
 # P(Infectious | PCR+), adjusted for incidence
-# NEW METHOD
 #=========================================================================
 
 # p(infected) depends on incidence and is calculated for each region & week combination

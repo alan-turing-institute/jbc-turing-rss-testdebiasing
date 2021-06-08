@@ -51,14 +51,14 @@ annotate_months <- function(d, add_axis = T, shade_alpha = .2, for_presentation 
   if (add_axis) {
     labs <- month_name[month_unique]
     ats <- month_mean_index
-    if(for_presentation) {
-      labs[labs == "May"] <- ""
-    }
+ #   if(for_presentation) {
+#      labs[labs == "May"] <- ""
+#    }
     axis(side = 1, at = ats, labels = labs, las = 2, tcl = 0)
   }
 }
 
-add_react_sampling_intervals_to_plot <- function(d, col_data, prev_max, type = c("daily", "weekly")[1]){
+add_react_sampling_intervals_to_plot <- function(d, col_data, prev_max, type = c("daily", "weekly")[1], prev_min = 0){
   
   # REACT DATES
   react.datel <- list()
@@ -73,6 +73,10 @@ add_react_sampling_intervals_to_plot <- function(d, col_data, prev_max, type = c
   react.datel$rd7b <- c("2020-11-25", "2020-12-03")
   react.datel$rd8a <- c("2021-01-06", "2021-01-15")
   react.datel$rd8 <- c("2021-01-06", "2021-01-22")
+  react.datel$rd9 <- c("2021-02-04", "2021-02-23")
+  react.datel$rd10 <- c("2021-03-11", "2021-03-30")
+  react.datel$rd11 <- c("2021-04-15", "2021-05-03")
+  react.datel$rd12 <- c("2021-05-20", "2021-06-07")
   
   for(j in 1:length(react.datel)){
     if (type == "daily") {
@@ -84,7 +88,7 @@ add_react_sampling_intervals_to_plot <- function(d, col_data, prev_max, type = c
     if (is.na(x_lims[1])) x_lims[1] <- 0
     if (is.na(x_lims[2])) x_lims[2] <- nrow(d)
     polygon(x = x_lims[c(1, 2, 2, 1, 1)], 
-            y = c(0, 0, -1, -1, 0) * prev_max / 40, 
+            y = prev_min + c(0, 0, -1, -1, 0) * prev_max / 40, 
             col = col_data["react_samples"], 
             border = NA)
   }

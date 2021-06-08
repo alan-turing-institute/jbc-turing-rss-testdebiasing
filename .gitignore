@@ -1,0 +1,13 @@
+.Rproj.user
+.Rhistory
+.RData
+.RDS
+.Ruserdata
+output
+data/**
+!data/samples_pcr.csv
+!data/northamptonshire_pop_nomis.csv
+output/**
+output/
+ignore/**
+ignore/

@@ -33,6 +33,7 @@ ltla_code <- pillar12_df %>%
   distinct(Code = LTLA, ltla = `LTLA Name`)
 
 
+str(pillar12_nt)
 
 ### Import ONS population estimates ###
 path_to_ons_pop <- "data/ukmidyearestimates20192020ladcodes.xls"

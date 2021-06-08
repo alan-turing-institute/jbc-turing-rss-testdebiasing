@@ -3,16 +3,17 @@ dir.create("data", showWarnings = FALSE)
 ### Download weekly Pillar 1+2 data ###
 # https://www.gov.uk/government/publications/nhs-test-and-trace-england-statistics-21-january-to-27-january-2021
 
-url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/958348/Demographic_LA_tables_w35.ods"
+# url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/958348/Demographic_LA_tables_w35.ods"
+url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/991016/Demographic_LA_tables_week52.ods"
 path_to_pillar12 <- "data/Demographic_LA_tables_w35.ods"
 download.file(url_to_pillar12, path_to_pillar12)
 
 
 ### Download REACT data ###
-url_to_react <- "https://raw.githubusercontent.com/mrc-ide/reactidd/bfc3a2577a692441a8de7a6f7aadbaf06741f463/inst/extdata"
+# url_to_react <- "https://raw.githubusercontent.com/mrc-ide/reactidd/bfc3a2577a692441a8de7a6f7aadbaf06741f463/inst/extdata"
+url_to_react <- "https://github.com/mrc-ide/reactidd/raw/master/inst/extdata"
 path_to_react_totals <- "data/react_total.csv"
 download.file(file.path(url_to_react, "total.csv"), path_to_react_totals)
-
 path_to_react_positives <- "data/react_positive.csv"
 download.file(file.path(url_to_react, "positive.csv"), path_to_react_positives)
 
@@ -27,6 +28,9 @@ download.file(file.path(url_to_react, "unwt_ordered_ltla_prev7b.csv"),
 path_to_react_round8 <- "data/unwt_ordered_ltla_prev8.csv"
 download.file(file.path(url_to_react, "unwt_ordered_ltla_prev8.csv"), 
               path_to_react_round8)
+
+
+
 
 ### Download ONS population estimates ###
 # https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland
@@ -62,4 +66,4 @@ unlink(temp)
 
 url_to_imperial <- "https://imperialcollegelondon.github.io/covid19local/downloads/UK_hotspot_Rt_estimates.csv"
 path_to_imperial <- "data/UK_hotspot_Rt_estimates_Imperial.csv"
-download.file(url_to_imperial , path_to_imperial)
+download.file(url_to_imperial, path_to_imperial)

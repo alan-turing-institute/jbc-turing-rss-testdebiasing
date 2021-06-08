@@ -42,9 +42,11 @@ download.file(url_to_ons_pop, path_to_ons_pop)
 
 ### Download NHS vaccination data ###
 # https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/covid-19-vaccinations-archive/ 
-url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/01/COVID-19-monthly-announced-vaccinations-14-January-2021.xlsx"
+# url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/01/COVID-19-monthly-announced-vaccinations-14-January-2021.xlsx"
+url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/05/COVID-19-monthly-announced-vaccinations-13-May-2021.xlsx"
 path_to_vax <- "data/COVID-19-monthly-announced-vaccinations-14-January-2021.xlsx"
 download.file(url_to_vax, path_to_vax)
+
 
 
 ### Download shape files for spatial plots ###

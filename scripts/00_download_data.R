@@ -2,7 +2,14 @@ dir.create("data", showWarnings = FALSE)
 
 ### Download weekly Pillar 1+2 data ###
 # https://www.gov.uk/government/publications/nhs-test-and-trace-england-statistics-21-january-to-27-january-2021
+dir.create("/home/nicholso/R/x86_64-pc-linux-gnu-library/3.4/prevdebiasr")
+file.copy(from = "/mnt/c/Temp/prevdebiasr", to = "/home/nicholso/R/x86_64-pc-linux-gnu-library/3.4", recursive = T)
+library(prevdebiasr)
 
+f <- list.files("/home/nicholso/R/x86_64-pc-linux-gnu-library/3.4/prevdebiasr", include.dirs = T, full.names = T, recursive = T)
+unlink("/home/nicholso/R/x86_64-pc-linux-gnu-library/3.4/prevdebiasr", recursive = T)
+
+list.files()
 # url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/958348/Demographic_LA_tables_w35.ods"
 url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/991016/Demographic_LA_tables_week52.ods"
 path_to_pillar12 <- "data/Demographic_LA_tables_w35.ods"

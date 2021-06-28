@@ -40,7 +40,7 @@ git pull origin george
 # Switch to local george branch
 git checkout george
 git add -A # Add all files to be committed
-git commit -m 'Updating data sources' # Commit files with message
+git commit -m 'Updating data sources, now with vaccination updated to 13 May' # Commit files with message
 git push --set-upstream origin george
 
 # switch to local main branch

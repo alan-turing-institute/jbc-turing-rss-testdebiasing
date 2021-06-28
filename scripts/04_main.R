@@ -51,7 +51,7 @@ for (i in 1:nrow(param_df)) {
   )
   control <- c(control_debias, control_SIR)
   dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
-  saveRDS(control, file.path(out_dir, "control.RDS"))
+  saveRDS(control, file.path(out_dir, "control.RDS"), version = 2)
 
   clusterExport(clust, c("control_debias", "control_SIR"))
 
@@ -75,14 +75,13 @@ for (i in 1:nrow(param_df)) {
   ltla_prevalence <- parLapply(clust, ltla_list, local_prevalence, 
                                control_debias, imperfect, type)
   names(ltla_prevalence) <- ltla_names
-
   # Save output
 
   delta_out_file <- file.path(out_dir, "delta_pcr_perfect.csv")
   readr::write_csv(delta_df, delta_out_file)
 
   ltla_out_file <- file.path(out_dir, "ltla_prevalence_pcr_perfect.RDS")
-  saveRDS(ltla_prevalence, ltla_out_file)
+  saveRDS(ltla_prevalence, ltla_out_file, version = 2)
 
 
   ### Imperfect testing, PCR positivity and infectiousness ###
@@ -114,7 +113,7 @@ for (i in 1:nrow(param_df)) {
      readr::write_csv(delta_df, delta_out_file)
     
     ltla_out_file <- file.path(out_dir, type, "ltla_prevalence.RDS")
-    saveRDS(ltla_prevalence, ltla_out_file)
+    saveRDS(ltla_prevalence, ltla_out_file, version = 2)
     
     # Fit SIR to latest available date
     foreach(ltla_name = ltla_names, .packages = "dplyr") %dopar% {
@@ -128,50 +127,50 @@ for (i in 1:nrow(param_df)) {
       
        out_file <- file.path(out_dir, type, "SIR", paste0(ltla_name, ".RDS"))
        dir.create(dirname(out_file), recursive = TRUE, showWarnings = FALSE)
-       saveRDS(SIR_model_out_ltla, out_file)
+       saveRDS(SIR_model_out_ltla, out_file, version = 2)
     }
 
     # Fit SIR with cut dates (for n-week ahead predictions)
     for (mid_week_int in cut_dates) {
       mid_week_cut <- as.Date(mid_week_int, origin = "1970-01-01")
       print(c(mid_week_cut = mid_week_cut))
-      
+
       results_file <- file.path(out_dir, type, paste0("cut_", mid_week_cut, ".RDS"))
-      
+
       delta_df <- region_df %>%
         filter(mid_week <= mid_week_cut) %>%
         group_by(phe_region) %>%
-        group_modify(~ cbind(mid_week = .x$mid_week, 
+        group_modify(~ cbind(mid_week = .x$mid_week,
                              specify_delta_prior(.x, control_debias, imperfect)))
-      
+
       ltla_list <- ltla_df %>%
          filter(mid_week <= mid_week_cut) %>%
          left_join(delta_df, by = c("phe_region", "mid_week")) %>%
          left_join(pcr_infectious_df,  by = c("phe_region", "mid_week")) %>%
          group_by(ltla) %>%
          group_split()
-      ltla_names <- sapply(ltla_list, function(x) x$ltla[1]) 
-      
-      ltla_prevalence <- parLapply(clust, ltla_list, local_prevalence, 
+      ltla_names <- sapply(ltla_list, function(x) x$ltla[1])
+
+      ltla_prevalence <- parLapply(clust, ltla_list, local_prevalence,
                                    control_debias, imperfect, type)
       names(ltla_prevalence) <- ltla_names
-      
+
       SIR_out <- foreach(ltla_curr = ltla_names, .verbose = TRUE,
                           .packages = "dplyr") %dopar% {
-                           
+
                             d_ltla <- ltla_df %>%
                               filter(ltla == ltla_curr &
                                        mid_week <= mid_week_cut)
-                           
+
                             I_log_lik <- ltla_prevalence[[ltla_curr]]$log_post
-                            SIR_model_out_ltla <- sample_I_R_SIR_from_pre_calc_lik(d_ltla, I_log_lik, 
+                            SIR_model_out_ltla <- sample_I_R_SIR_from_pre_calc_lik(d_ltla, I_log_lik,
                                                                                    trans_mats, control_debias,
                                                                                    control_SIR)
-                           
+
                             return(SIR_model_out_ltla)
                           }
       names(SIR_out) <- ltla_names
-      saveRDS(SIR_out, results_file)
+      saveRDS(SIR_out, results_file, version = 2)
     }
   }
 }

@@ -81,7 +81,7 @@ for (i in 1:nrow(param_df)) {
     readr::write_csv(delta_df, delta_out_file)
 
     ltla_out_file <- file.path(out_dir, type, "ltla_prevalence.RDS")
-    saveRDS(ltla_prevalence, ltla_out_file)
+    saveRDS(ltla_prevalence, ltla_out_file, version = 2)
 
     # Fit SIR to latest available date
     foreach(ltla_name = ltla_names, .packages = "dplyr") %dopar% {
@@ -97,7 +97,7 @@ for (i in 1:nrow(param_df)) {
 
       out_file <- file.path(out_dir, type, "SIR", paste0(ltla_name, ".RDS"))
       dir.create(dirname(out_file), recursive = TRUE, showWarnings = FALSE)
-      saveRDS(SIR_model_out_ltla, out_file)
+      saveRDS(SIR_model_out_ltla, out_file, version = 2)
     }
   }
 }

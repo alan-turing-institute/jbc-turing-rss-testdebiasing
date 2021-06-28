@@ -73,6 +73,10 @@ add_react_sampling_intervals_to_plot <- function(d, col_data, prev_max, type = c
   react.datel$rd7b <- c("2020-11-25", "2020-12-03")
   react.datel$rd8a <- c("2021-01-06", "2021-01-15")
   react.datel$rd8 <- c("2021-01-06", "2021-01-22")
+  react.datel$rd9 <- c("2021-02-04", "2021-02-23")
+  react.datel$rd10 <- c("2021-03-11", "2021-03-30")
+  react.datel$rd11 <- c("2021-04-15", "2021-05-03")
+  react.datel$rd12 <- c("2021-05-20", "2021-06-07")
   
   for(j in 1:length(react.datel)){
     if (type == "daily") {

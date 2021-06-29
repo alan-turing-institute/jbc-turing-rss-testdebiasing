@@ -43,8 +43,8 @@ download.file(url_to_ons_pop, path_to_ons_pop)
 
 ### Download NHS vaccination data ###
 # https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/covid-19-vaccinations-archive/ 
-# url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/01/COVID-19-monthly-announced-vaccinations-14-January-2021.xlsx"
-url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/05/COVID-19-monthly-announced-vaccinations-13-May-2021.xlsx"
+url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/01/COVID-19-monthly-announced-vaccinations-14-January-2021.xlsx"
+# url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/05/COVID-19-monthly-announced-vaccinations-13-May-2021.xlsx"
 path_to_vax <- "data/COVID-19-monthly-announced-vaccinations-14-January-2021.xlsx"
 download.file(url_to_vax, path_to_vax)
 
@@ -68,3 +68,14 @@ unlink(temp)
 url_to_imperial <- "https://imperialcollegelondon.github.io/covid19local/downloads/UK_hotspot_Rt_estimates.csv"
 path_to_imperial <- "data/UK_hotspot_Rt_estimates_Imperial.csv"
 download.file(url_to_imperial, path_to_imperial)
+
+
+### Download Sanger variant data ###
+
+url_to_sanger_variant_data <- "https://covid-surveillance-data.cog.sanger.ac.uk/download/lineages_by_ltla_and_week.tsv"
+path_to_sanger <- "data/UK_variant_data_Sanger.tsv"
+download.file(url_to_sanger_variant_data, path_to_sanger)
+
+
+
+

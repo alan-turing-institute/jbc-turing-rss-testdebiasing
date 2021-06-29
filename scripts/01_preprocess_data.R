@@ -114,6 +114,9 @@ write_csv(ltla_df, "data/ltla.csv")
 
 
 ### Get vaccination data ###
+######################################################
+# WE NEED TO FIX (there is a better data format than currently imported)
+######################################################
 phe_region_to_region_df <- tibble(phe_region = c("East of England",
                                                  "London",
                                                  "West Midlands",
@@ -137,11 +140,14 @@ region_pop <- phe_region_pop %>%
   group_by(region) %>%
   summarise(M = sum(M), .groups = "drop")
 path_to_vax <- "data/COVID-19-monthly-announced-vaccinations-14-January-2021.xlsx"
+# path_to_vax <- "data/COVID-19-monthly-announced-vaccinations-14-January-2021 - Copy.xlsx"
 vax_start_mid_week <- as.Date("2020-12-13") + (2 * 7)
 vax_data_mid_week <- as.Date("2021-01-24")
 vax_df <- read_excel(path_to_vax,
                      sheet = "Vaccinations by Region & Age",
+                     # sheet = "Region & Age",
                      skip = 12, n_max = 9) %>%
+                      # skip = 11, n_max = 9) %>%
   dplyr::filter(!`...1` %in% c(NA, "Total")) %>%
   dplyr::select(region = 1, 3:10) %>%
   group_by(region) %>%
@@ -155,3 +161,24 @@ vax_df <- read_excel(path_to_vax,
          V = round(prop_vax * M)) %>%
   select(ltla, mid_week, V)
 write_csv(vax_df, "data/vaccination.csv")
+
+### Get variant data ###
+path_to_sanger <- "data/UK_variant_data_Sanger.tsv"
+variants_in <- as.data.frame(read_tsv(path_to_sanger))
+variants_in$mid_week <- as.character(as.Date(variants_in$WeekEndDate) - 3)
+variants_in$ltla <- unlist(ltla_code[match(variants_in$LTLA, ltla_code$Code), "ltla"])
+variants_in$name_date <- paste0(variants_in$ltla, "_", variants_in$mid_week)
+name_date_unique <- unique(variants_in$name_date)
+variants_out <- variants_in[match(name_date_unique, variants_in$name_date), c("mid_week", "ltla", "name_date")]
+variants_out$n_delta <- sapply(name_date_unique, function(x) 
+  sum(variants_in[variants_in$name_date == x & variants_in$Lineage == "B.1.617.2", "Count"]))
+variants_out$n_tot <- sapply(name_date_unique, function(x) 
+  sum(variants_in[variants_in$name_date == x, "Count"]))
+variants_out$prop_delta <- variants_out$n_delta / variants_out$n_tot
+variants_out <- variants_out[order(variants_out$ltla, variants_out$mid_week), ]
+variants_out$week <- variants_out$mid_week
+readr::write_csv(variants_out, "data/variants.csv")
+
+
+
+

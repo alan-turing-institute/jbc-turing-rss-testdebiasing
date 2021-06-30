@@ -1,8 +1,13 @@
 dir.create("data", showWarnings = FALSE)
 
+# Make sure to install prevdebiasr first
+# (GN: I did this by creating local prevdebiasr.tar.gz and using install.packages())
+library(prevdebiasr)
+
 ### Download weekly Pillar 1+2 data ###
 # https://www.gov.uk/government/publications/nhs-test-and-trace-england-statistics-21-january-to-27-january-2021
 
+list.files()
 # url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/958348/Demographic_LA_tables_w35.ods"
 url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/991016/Demographic_LA_tables_week52.ods"
 path_to_pillar12 <- "data/Demographic_LA_tables_w35.ods"
@@ -29,9 +34,6 @@ path_to_react_round8 <- "data/unwt_ordered_ltla_prev8.csv"
 download.file(file.path(url_to_react, "unwt_ordered_ltla_prev8.csv"), 
               path_to_react_round8)
 
-
-
-
 ### Download ONS population estimates ###
 # https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland
 
@@ -48,8 +50,6 @@ download.file(url_to_ons_pop, path_to_ons_pop)
 url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/06/COVID-19-monthly-announced-vaccinations-10-June-2021.xlsx"
 path_to_vax <- "data/COVID-19-monthly-announced-vaccinations-14-January-2021.xlsx"
 download.file(url_to_vax, path_to_vax)
-
-
 
 ### Download shape files for spatial plots ###
 # https://geoportal.statistics.gov.uk/datasets/054349b09c094df2a97f8ddbd169c7a7_0
@@ -71,3 +71,14 @@ unlink(temp)
 url_to_imperial <- "https://imperialcollegelondon.github.io/covid19local/downloads/UK_hotspot_Rt_estimates.csv"
 path_to_imperial <- "data/UK_hotspot_Rt_estimates_Imperial.csv"
 download.file(url_to_imperial, path_to_imperial)
+
+
+### Download Sanger variant data ###
+
+url_to_sanger_variant_data <- "https://covid-surveillance-data.cog.sanger.ac.uk/download/lineages_by_ltla_and_week.tsv"
+path_to_sanger <- "data/UK_variant_data_Sanger.tsv"
+download.file(url_to_sanger_variant_data, path_to_sanger)
+
+
+
+

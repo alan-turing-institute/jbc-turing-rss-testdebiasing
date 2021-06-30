@@ -1,6 +1,17 @@
 .Rproj.user
 .Rhistory
 .RData
+.RDS
 .Ruserdata
+**/*.RData
+*.RData
+**/*.RDS
+*.RDS
+**/*.sh
+*.sh
+**/.Rproj.user/**
+.Rhistory
+**/*.Rproj
+*.Rproj
 data
 output

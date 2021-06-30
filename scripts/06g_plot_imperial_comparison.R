@@ -22,7 +22,13 @@ for (i in 1:nrow(param_df)) {
   SIR_model_results <- lapply(out_files, readRDS)
   names(SIR_model_results) <- sub(".RDS", "", basename(out_files))
   
-  rd <- read.csv("data/UK_hotspot_Rt_estimates_Imperial.csv")
+  rd <- read.csv("data/UK_hotspot_Rt_estimates_Imperial.csv") %>%
+    mutate(date = as.Date(date)) %>%
+    filter(date <= max(ltla_df$mid_week))
+  imperial_min_date <- min(rd$date)
+  
+  mid_week_unique <- unique(ltla_df$mid_week)
+  week_ind <- which(mid_week_unique >= imperial_min_date)
   
   its_keep <- (control_SIR$burn_in + 1):control_SIR$n_iters
   
@@ -43,10 +49,10 @@ for (i in 1:nrow(param_df)) {
   
   for (ltla_curr in ltla_plot) {
     d <- ltla_df %>%
-      filter(ltla == ltla_curr)
+      filter(ltla == ltla_curr & mid_week >= imperial_min_date)
     
-    plot_map <- data.frame(date = seq(min(as.Date(d$mid_week)) - 3, 
-                                      max(as.Date(d$mid_week)) + 3, 
+    plot_map <- data.frame(date = seq(min(as.Date(d$mid_week)), 
+                                      max(as.Date(d$mid_week)), 
                                       by = 1))
     plot_map$day_index <- 1:nrow(plot_map)
     plot_map$date2 <- format(as.Date(plot_map$date), format = "%d/%m/%Y")
@@ -61,8 +67,8 @@ for (i in 1:nrow(param_df)) {
     abline(h = 1)
 
     xpl_week <- plot_map[match(d$mid_week, plot_map$date), "day_index"]
-    if(what_pl == "R") {
-      SIR_model_results[[ltla_curr]]$R_quant <- t(apply(SIR_model_results[[ltla_curr]]$R[, its_keep], 1, 
+    if (what_pl == "R") {
+      SIR_model_results[[ltla_curr]]$R_quant <- t(apply(SIR_model_results[[ltla_curr]]$R[week_ind,its_keep], 1, 
                                                         function(v) quantile(v, qplot, na.rm = T)))
       
       matc <- SIR_model_results[[ltla_curr]]$R_quant
@@ -73,7 +79,7 @@ for (i in 1:nrow(param_df)) {
     lines(xpl_week, matc[, 1], lty = 1, lwd = 1, col = col_use$debias)
 
     imperial_R <- rd %>%
-      filter(area == ltla_curr & date %in% as.character(plot_map$date)) %>%
+      filter(area == ltla_curr & date %in% plot_map$date) %>%
       select(CIlow, Rt, CIup)
     lines(plot_map$day_index, imperial_R[, 2], lty = 1, lwd = 4, col = col_use$imperial)
     lines(plot_map$day_index, imperial_R[, 3], lty = 1, lwd = 1, col = col_use$imperial)

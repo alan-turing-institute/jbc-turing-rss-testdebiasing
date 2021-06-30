@@ -40,9 +40,18 @@ readr::write_csv(raw_pillar2_df, "output/raw_pillar2.csv")
 
 old_bucks_names <- c("Aylesbury Vale", "Chiltern", "South Bucks", "Wycombe")
 new_bucks_name <- "Buckinghamshire"
+
+old_north_names <- c("Corby", "East Northamptonshire", "Kettering", "Wellingborough")
+new_north_name <- "North Northamptonshire"
+
+old_west_names <- c("Daventry", "Northampton", "South Northamptonshire")
+new_west_name <- "West Northamptonshire"
+
 react_ltla_df <- react_round_df %>%
-  mutate(ltla = if_else(ltla %in% old_bucks_names,
-                        new_bucks_name, ltla)) %>%
+  mutate(ltla = case_when(ltla %in% old_bucks_names ~ new_bucks_name,
+                          ltla %in% old_north_names ~ new_north_name,
+                          ltla %in% old_west_names ~ new_west_name,
+                          TRUE ~ ltla)) %>%
   group_by(ltla, round, mid_round_date) %>%
   summarise(positive = sum(positive),
             number_samples = sum(number_samples), .groups = "drop") %>%

@@ -118,10 +118,10 @@ for (i in 1:nrow(param_df)) {
   
   dev.off()
   
-  if (id == "AR0.99sd1Rsd0.2") {
-    overleaf_dir <- "~/Dropbox/Apps/Overleaf/Estimating local prevalence from targeted testing data/figures"
-    file.copy(paste0(plot_dir, "/uncorrected_and_cross_sec_corr.pdf"),
-              paste0(overleaf_dir, "/uncorrected_and_cross_sec_corr.pdf"),
-              overwrite = TRUE)
-  }
+  # if (id == "AR0.99sd1Rsd0.2") {
+  #   overleaf_dir <- "~/Dropbox/Apps/Overleaf/Estimating local prevalence from targeted testing data/figures"
+  #   file.copy(paste0(plot_dir, "/uncorrected_and_cross_sec_corr.pdf"),
+  #             paste0(overleaf_dir, "/uncorrected_and_cross_sec_corr.pdf"),
+  #             overwrite = TRUE)
+  # }
 }

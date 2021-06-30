@@ -2,7 +2,7 @@
 source("scripts/plot_utils.R")
 source("scripts/SIR_utils.R")
 
-ltla_prevalence <- readRDS("output/ltla_prevalence.RDS")
+#ltla_prevalence <- readRDS("output/ltla_prevalence.RDS")
 unique_ltla <- unique(ltla_df$ltla)
 mid_week_unique <- sort(unique(ltla_df$mid_week))
 cut_dates <- rev(mid_week_unique)[2:12]

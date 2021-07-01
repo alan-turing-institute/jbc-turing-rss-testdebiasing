@@ -5,7 +5,7 @@ dir.create("data", showWarnings = FALSE)
 library(prevdebiasr)
 
 ### Download weekly Pillar 1+2 data ###
-# Procedure for updating Pillar 1+2 data
+# Procedure for updating Pillar 1+2 data links
 # 1.	Go to https://www.gov.uk/government/collections/nhs-test-and-trace-statistics-england-weekly-reports
 # 2.	Scroll down to “Latest Report” and click the link
 # 3.	Scroll down to “Demographic and regional information for people tested and testing positive, STARTDATE to ENDDATE: data tables”
@@ -15,7 +15,9 @@ path_to_pillar12 <- "data/Demographic_LA_tables.ods"
 download.file(url_to_pillar12, path_to_pillar12)
 
 ### Download REACT data ###
-# url_to_react <- "https://raw.githubusercontent.com/mrc-ide/reactidd/bfc3a2577a692441a8de7a6f7aadbaf06741f463/inst/extdata"
+# Procedure for updating REACT data links
+# 1.	Go to https://github.com/mrc-ide/reactidd/raw/master/inst/extdata
+# 2.	Find additional files of the form unwt_ordered_ltla_prev*.csv and add on in below format
 url_to_react <- "https://github.com/mrc-ide/reactidd/raw/master/inst/extdata"
 path_to_react_totals <- "data/react_total.csv"
 download.file(file.path(url_to_react, "total.csv"), path_to_react_totals)
@@ -46,23 +48,24 @@ path_to_react_round11 <- "data/unwt_ordered_ltla_prev11.csv"
 download.file(file.path(url_to_react, "unwt_ordered_ltla_prev11.csv"), 
               path_to_react_round11)
 
+### Download NHS vaccination data ###
+# Procedure for updating vaccination data links
+# 1.	Go to https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/covid-19-vaccinations-archive/ 
+# 2.	Scroll to bottom of page where the "Monthly Covid-19 vaccinations data archive" is
+# 3.  Copy and paste most recent monthly data URL below to url_to_vax <- "HERE PLEASE"
+url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/05/COVID-19-monthly-announced-vaccinations-13-May-2021.xlsx"
+path_to_vax <- "data/COVID-19-monthly-announced-vaccinations.xlsx"
+download.file(url_to_vax, path_to_vax)
+
 
 ### Download ONS population estimates ###
 # https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland
-
 url_to_ons_pop <- "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland/mid2019april2020localauthoritydistrictcodes/ukmidyearestimates20192020ladcodes.xls"
 path_to_ons_pop <- "data/ukmidyearestimates20192020ladcodes.xls"
 download.file(url_to_ons_pop, path_to_ons_pop)
 
 ### NOTE: West and North Northamptonshire estimates available from
 # https://www.nomisweb.co.uk/datasets/pestsyoala
-
-### Download NHS vaccination data ###
-# https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/covid-19-vaccinations-archive/ 
-# url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/01/COVID-19-monthly-announced-vaccinations-14-January-2021.xlsx"
-url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/06/COVID-19-monthly-announced-vaccinations-10-June-2021.xlsx"
-path_to_vax <- "data/COVID-19-monthly-announced-vaccinations-14-January-2021.xlsx"
-download.file(url_to_vax, path_to_vax)
 
 ### Download shape files for spatial plots ###
 # https://geoportal.statistics.gov.uk/datasets/054349b09c094df2a97f8ddbd169c7a7_0

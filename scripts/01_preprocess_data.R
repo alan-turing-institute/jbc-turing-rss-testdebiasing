@@ -119,9 +119,6 @@ write_csv(ltla_df, "data/ltla.csv")
 
 
 ### Get vaccination data ###
-######################################################
-# WE NEED TO FIX (there is a better data format than currently imported)
-######################################################
 phe_region_to_region_df <- tibble(phe_region = c("East of England",
                                                  "London",
                                                  "West Midlands",
@@ -144,8 +141,7 @@ region_pop <- phe_region_pop %>%
   left_join(phe_region_to_region_df, by = "phe_region") %>%
   group_by(region) %>%
   summarise(M = sum(M), .groups = "drop")
-path_to_vax <- "data/COVID-19-monthly-announced-vaccinations-14-January-2021.xlsx"
-# path_to_vax <- "data/COVID-19-monthly-announced-vaccinations-14-January-2021 - Copy.xlsx"
+path_to_vax <- "data/COVID-19-monthly-announced-vaccinations.xlsx"
 vax_start_mid_week <- as.Date("2020-12-13") + (2 * 7)
 vax_data_mid_week <- as.Date("2021-01-27")
 vax_df <- readxl::read_excel(path_to_vax,
@@ -168,6 +164,10 @@ vax_df <- readxl::read_excel(path_to_vax,
   #         as.integer((vax_data_mid_week - vax_start_mid_week))),
   select(ltla, mid_week = date, V)
 write_csv(vax_df, "data/vaccination.csv")
+
+# max(vax_df$mid_week)
+# dim(vax_df[vax_df$ltla == "Adur", "V"])
+# plot(1:sum(vax_df$ltla == "Adur"), unlist(vax_df[vax_df$ltla == "Adur", "V"]))
 
 ### Get variant data ###
 path_to_sanger <- "data/UK_variant_data_Sanger.tsv"

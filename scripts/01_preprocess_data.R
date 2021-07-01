@@ -5,7 +5,7 @@ library(dplyr)
 library(tidyr)
 
 ### Import weekly LTLA-level Pillar 1+2 testing data ###
-path_to_pillar12 <- "data/Demographic_LA_tables_w35.ods"
+path_to_pillar12 <- "data/Demographic_LA_tables.ods"
 
 pillar12_Nt <- read_ods(path_to_pillar12, sheet = "Table_6", skip = 2) %>%
   pivot_longer(-(1:6), names_to = "week", values_to = "Nt")

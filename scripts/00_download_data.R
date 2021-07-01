@@ -5,14 +5,14 @@ dir.create("data", showWarnings = FALSE)
 library(prevdebiasr)
 
 ### Download weekly Pillar 1+2 data ###
-# https://www.gov.uk/government/publications/nhs-test-and-trace-england-statistics-21-january-to-27-january-2021
-
-list.files()
-# url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/958348/Demographic_LA_tables_w35.ods"
-url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/991016/Demographic_LA_tables_week52.ods"
-path_to_pillar12 <- "data/Demographic_LA_tables_w35.ods"
+# Procedure for updating Pillar 1+2 data
+# 1.	Go to https://www.gov.uk/government/collections/nhs-test-and-trace-statistics-england-weekly-reports
+# 2.	Scroll down to “Latest Report” and click the link
+# 3.	Scroll down to “Demographic and regional information for people tested and testing positive, STARTDATE to ENDDATE: data tables”
+# 4.	Copy that link address to the url_to_pillar12 <- "PASTE ME HERE"
+url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/996372/Demographic_LA_tables_week55.ods"
+path_to_pillar12 <- "data/Demographic_LA_tables.ods"
 download.file(url_to_pillar12, path_to_pillar12)
-
 
 ### Download REACT data ###
 # url_to_react <- "https://raw.githubusercontent.com/mrc-ide/reactidd/bfc3a2577a692441a8de7a6f7aadbaf06741f463/inst/extdata"
@@ -33,6 +33,19 @@ download.file(file.path(url_to_react, "unwt_ordered_ltla_prev7b.csv"),
 path_to_react_round8 <- "data/unwt_ordered_ltla_prev8.csv"
 download.file(file.path(url_to_react, "unwt_ordered_ltla_prev8.csv"), 
               path_to_react_round8)
+
+path_to_react_round9 <- "data/unwt_ordered_ltla_prev9.csv"
+download.file(file.path(url_to_react, "unwt_ordered_ltla_prev9.csv"), 
+              path_to_react_round9)
+
+path_to_react_round10 <- "data/unwt_ordered_ltla_prev10.csv"
+download.file(file.path(url_to_react, "unwt_ordered_ltla_prev10.csv"), 
+              path_to_react_round10)
+
+path_to_react_round11 <- "data/unwt_ordered_ltla_prev11.csv"
+download.file(file.path(url_to_react, "unwt_ordered_ltla_prev11.csv"), 
+              path_to_react_round11)
+
 
 ### Download ONS population estimates ###
 # https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland

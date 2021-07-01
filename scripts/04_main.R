@@ -76,11 +76,8 @@ for (i in c(3,6)) {
     group_by(ltla) %>%
     group_split()
   ltla_names <- sapply(ltla_list, function(x) x$ltla[1])
-
-  ltla_prevalence <- parLapply(
-    clust, ltla_list, local_prevalence,
-    control_debias, imperfect, type
-  )
+  ltla_prevalence <- parLapply(clust, ltla_list, local_prevalence, 
+                               control_debias, imperfect, type)
   names(ltla_prevalence) <- ltla_names
   # Save output
 

@@ -13,5 +13,5 @@
 .Rhistory
 **/*.Rproj
 *.Rproj
-data
-output
+data/**
+output/**

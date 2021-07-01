@@ -59,6 +59,24 @@ for (i in 1:nrow(param_df)) {
   imperfect <- FALSE
   type <- "PCR_positive"
 
+  
+  ###########
+  library(ggplot2)
+  dc <- region_df[region_df$phe_region == "South East", ]
+  dc[dc$mid_week > "2021-01-20", c("Nr", "nr")] <- 0
+  test_df = dc; control = control_debias; imperfect = imperfect
+  delout <- specify_delta_prior(test_df = dc, control = control_debias, imperfect = imperfect)
+  plot(delout$delta_prior_mean + 2 * delout$delta_prior_sd, type = "l")
+  lines(delout$delta_prior_mean - 2 * delout$delta_prior_sd)
+  plot(1:nrow(dc), dc$Nr)
+  str(delta_df)
+  range(ltla_list[[1]]$mid_week)
+  test <- local_prevalence(test_df = , control = control_debias, imperfect = imperfect, type = type)
+  str(test)
+  ###########
+  
+  
+  
   # Calculate regional bias parameters
   delta_df <- region_df %>%
     group_by(phe_region) %>%
@@ -71,6 +89,7 @@ for (i in 1:nrow(param_df)) {
     group_by(ltla) %>%
     group_split()
   ltla_names <- sapply(ltla_list, function(x) x$ltla[1])
+  
   
   ltla_prevalence <- parLapply(clust, ltla_list, local_prevalence, 
                                control_debias, imperfect, type)

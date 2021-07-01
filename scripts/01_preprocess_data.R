@@ -41,9 +41,14 @@ pop_size <- readxl::read_excel(path_to_ons_pop, sheet = "MYE2 - Persons", skip =
   select(1:4) %>%
   filter(Code %in% c(pillar12_df$LTLA, pillar12_df$Region))
 
+northamptonshire_pop <- readr::read_csv("data/northamptonshire_pop_nomis.csv", skip = 5) %>%
+  rename(ltla = 1, M = 2)
+
 ltla_pop <- pop_size %>%
   inner_join(ltla_code, by = "Code") %>%
-  select(ltla, M = `All ages`)
+  select(ltla, M = `All ages`) %>%
+  filter(ltla != "Northamptonshire") %>%
+  bind_rows(northamptonshire_pop)
 
 phe_region_pop <- pop_size %>%
   inner_join(region_code, by = "Code") %>%
@@ -142,24 +147,26 @@ region_pop <- phe_region_pop %>%
 path_to_vax <- "data/COVID-19-monthly-announced-vaccinations-14-January-2021.xlsx"
 # path_to_vax <- "data/COVID-19-monthly-announced-vaccinations-14-January-2021 - Copy.xlsx"
 vax_start_mid_week <- as.Date("2020-12-13") + (2 * 7)
-vax_data_mid_week <- as.Date("2021-01-24")
-vax_df <- read_excel(path_to_vax,
-                     sheet = "Vaccinations by Region & Age",
-                     # sheet = "Region & Age",
-                     skip = 12, n_max = 9) %>%
-                      # skip = 11, n_max = 9) %>%
-  dplyr::filter(!`...1` %in% c(NA, "Total")) %>%
-  dplyr::select(region = 1, 3:10) %>%
-  group_by(region) %>%
-  summarise(n_vax = rowSums(across(where(is.numeric))), .groups = "drop") %>%
-  left_join(region_pop, by = "region") %>%
-  transmute(region = region, prop_vax = n_vax / M) %>%
-  right_join(phe_region_to_region_df, by = "region") %>%
-  right_join(ltla_df, by = "phe_region") %>%
-  mutate(prop_vax = pmax(0, prop_vax * as.integer((mid_week - vax_start_mid_week)) / 
-           as.integer((vax_data_mid_week - vax_start_mid_week))),
-         V = round(prop_vax * M)) %>%
-  select(ltla, mid_week, V)
+vax_data_mid_week <- as.Date("2021-01-27")
+vax_df <- readxl::read_excel(path_to_vax,
+                     sheet = "Vaccination Date",
+                     skip = 11, n_max = 141) %>%
+  dplyr::select(date = 1, 3:9) %>%
+    tidyr::pivot_longer(-date, names_to = "region", values_to = "count") %>%
+    mutate(date = as.Date(date), region = gsub("...\\d", "", region)) %>%
+    left_join(region_pop, by = "region") %>%
+    transmute(date = date, region = region, prop_vax = count / M) %>%
+    right_join(phe_region_to_region_df, by = "region") %>%
+    right_join(ltla_df, by = c("phe_region", "date" = "mid_week")) %>%
+    mutate(prop_vax = if_else(date < vax_start_mid_week, 0, prop_vax)) %>%
+    group_by(ltla) %>%
+    arrange(ltla, date) %>%
+    mutate(
+      prop_vax = approx(1:n(), prop_vax, 1:n())$y, 
+      V = round(prop_vax * M)) %>%
+  #mutate(prop_vax = if_else(is.na(prop_vax, pmax(0, prop_vax * as.integer((date - vax_start_mid_week)) / 
+  #         as.integer((vax_data_mid_week - vax_start_mid_week))),
+  select(ltla, mid_week = date, V)
 write_csv(vax_df, "data/vaccination.csv")
 
 ### Get variant data ###

@@ -10,7 +10,7 @@ library(prevdebiasr)
 # 2.	Scroll down to “Latest Report” and click the link
 # 3.	Scroll down to “Demographic and regional information for people tested and testing positive, STARTDATE to ENDDATE: data tables”
 # 4.	Copy that link address to the url_to_pillar12 <- "PASTE ME HERE"
-url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/996372/Demographic_LA_tables_week55.ods"
+url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/998213/Demographic_output_w56.ods"
 path_to_pillar12 <- "data/Demographic_LA_tables.ods"
 download.file(url_to_pillar12, path_to_pillar12)
 
@@ -54,8 +54,11 @@ download.file(file.path(url_to_react, "unwt_ordered_ltla_prev11.csv"),
 # 2.	Scroll to bottom of page where the "Monthly Covid-19 vaccinations data archive" is
 # 3.  Copy and paste most recent monthly data URL below to url_to_vax <- "HERE PLEASE"
 url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/05/COVID-19-monthly-announced-vaccinations-13-May-2021.xlsx"
+url_to_most_recent_daily_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/06/COVID-19-daily-announced-vaccinations-30-June-2021.xlsx"
 path_to_vax <- "data/COVID-19-monthly-announced-vaccinations.xlsx"
+path_to_daily_vax <- "data/COVID-19-daily-announced-vaccinations.xlsx"
 download.file(url_to_vax, path_to_vax)
+download.file(url_to_most_recent_daily_vax, path_to_daily_vax)
 
 
 ### Download ONS population estimates ###

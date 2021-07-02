@@ -163,6 +163,10 @@ vax_df <- readxl::read_excel(path_to_vax,
   #mutate(prop_vax = if_else(is.na(prop_vax, pmax(0, prop_vax * as.integer((date - vax_start_mid_week)) / 
   #         as.integer((vax_data_mid_week - vax_start_mid_week))),
   select(ltla, mid_week = date, V)
+
+path_to_daily_vax <- "data/COVID-19-daily-announced-vaccinations.xlsx"
+
+
 write_csv(vax_df, "data/vaccination.csv")
 
 # max(vax_df$mid_week)

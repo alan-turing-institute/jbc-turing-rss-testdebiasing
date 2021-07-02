@@ -9,7 +9,7 @@ pdf("/mnt/c/Temp/upper_bnd_FPR_from_REACT.pdf", 12, 8)
 par(mfrow = c(2, 2))
 for(prinamc in names(prev_pri_list)) {
   prev_pri <- prev_pri_list[[prinamc]]
-  pseq <- 10^seq(-5, -2, len = 100)
+  pseq <- 10^seq(-5, -3, len = 100)
   prev <- 0
   pall <- 0
   for (prev in prev_pri) {
@@ -19,7 +19,6 @@ for(prinamc in names(prev_pri_list)) {
     }  
     pall <- pall + pdens
   }
-  str(pall)
   tot_log_lik <- colSums(log(pall))
   plot(pseq, tot_log_lik, log = "x", ty = "l", xlab = "FPR (alpha)", ylab = "Log marginal likelihood")
   mtext(side = 3, text = paste0("Prevalence prior = ", prinamc), line = 2.5)

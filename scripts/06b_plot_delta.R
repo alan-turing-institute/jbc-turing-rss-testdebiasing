@@ -2,6 +2,7 @@
 # Plot variation in delta across PHE regions 
 ###########################################
 
+library(dplyr)
 source("scripts/plot_utils.R")
 
 plot_delta_curves <- function(dl, phe_regs, del_axis_side = 4,
@@ -68,33 +69,23 @@ plot_delta_curves <- function(dl, phe_regs, del_axis_side = 4,
   }  
 }
 
-param_df <- expand.grid(delta_AR_rho = c(0.975, 0.99, 0.999),
-                        delta_AR_sd = c(1, 2),
-                        R_AR_sd = c(0.2),
-                        type = c("PCR_positive", "Infectious"))
-
-for (i in 1:nrow(param_df)) {
-  
-  id <- paste0("AR", param_df$delta_AR_rho[i],
-               "sd", param_df$delta_AR_sd[i],
-               "Rsd", param_df$R_AR_sd[i])
-  
-  type <- param_df$type[i]
+id <- "AR0.99sd1Rsd0.2"
+for (type in c("Infectious", "PCR_positive")) {
   out_dir <- file.path("output", id, type)
   plot_dir <- file.path("plots", id, type)
   dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
   
   delta_df <- readr::read_csv(file.path(out_dir, "delta.csv"))
-
+  
   pdf(paste0(plot_dir, "/delta_estimates.pdf"), 12, 7)
   par(mfrow = c(1, 2), oma = c(4, 14, 6, 1), mar = c(3, 3, 2, 3))
   phe_regs <- c("London", "Yorkshire and The Humber", "South West", 
                 "East of England", "West Midlands", "North West", "South East", 
                 "North East", "East Midlands")
   plot_delta_curves(delta_df, phe_regs, del_axis_side = 2, add_legend = T,
-                    add_t_cut = F, add_react_round_legend = T, ylim_use = c(0,4))
+                    add_t_cut = F, add_react_round_legend = T, ylim_use = c(0.5,4.5))
   plot_delta_curves(delta_df, "London", del_axis_side = 2, add_legend = F,
-                    add_t_cut = F, add_react_round_legend = F, ylim_use = c(0,4))
+                    add_t_cut = F, add_react_round_legend = F, ylim_use = c(0.5,4.5))
   dev.off()
-  
 }
+

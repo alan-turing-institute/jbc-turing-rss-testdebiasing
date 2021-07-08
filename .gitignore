@@ -15,5 +15,6 @@
 *.Rproj
 data/**
 !data/samples_pcr.csv
+!data/northamptonshire_pop_nomis.csv
 output/**
 ignore/**

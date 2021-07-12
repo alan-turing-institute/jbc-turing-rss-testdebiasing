@@ -14,6 +14,9 @@
 **/*.Rproj
 *.Rproj
 data/**
+data/
 !data/samples_pcr.csv
 output/**
+output/
 ignore/**
+ignore/

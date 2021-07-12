@@ -53,12 +53,12 @@ download.file(file.path(url_to_react, "unwt_ordered_ltla_prev11.csv"),
 # 1.	Go to https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/covid-19-vaccinations-archive/ 
 # 2.	Scroll to bottom of page where the "Monthly Covid-19 vaccinations data archive" is
 # 3.  Copy and paste most recent monthly data URL below to url_to_vax <- "HERE PLEASE"
-url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/05/COVID-19-monthly-announced-vaccinations-13-May-2021.xlsx"
-url_to_most_recent_daily_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/06/COVID-19-daily-announced-vaccinations-30-June-2021.xlsx"
+url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/06/COVID-19-monthly-announced-vaccinations-10-June-2021.xlsx"
+url_to_most_recent_weekly_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/06/COVID-19-weekly-announced-vaccinations-24-June-2021.xlsx"
 path_to_vax <- "data/COVID-19-monthly-announced-vaccinations.xlsx"
-path_to_daily_vax <- "data/COVID-19-daily-announced-vaccinations.xlsx"
+path_to_weekly_vax <- "data/COVID-19-weekly-announced-vaccinations.xlsx"
 download.file(url_to_vax, path_to_vax)
-download.file(url_to_most_recent_daily_vax, path_to_daily_vax)
+download.file(url_to_most_recent_weekly_vax, path_to_weekly_vax)
 
 
 ### Download ONS population estimates ###

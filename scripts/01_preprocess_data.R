@@ -33,8 +33,6 @@ ltla_code <- pillar12_df %>%
   distinct(Code = LTLA, ltla = `LTLA Name`)
 
 
-str(pillar12_nt)
-
 ### Import ONS population estimates ###
 path_to_ons_pop <- "data/ukmidyearestimates20192020ladcodes.xls"
 pop_size <- readxl::read_excel(path_to_ons_pop, sheet = "MYE2 - Persons", skip = 3) %>%
@@ -205,7 +203,6 @@ r_out[, c("CIlow", "Rt", "CIup")] <- r_in[match(paste0(r_out$area, "_", r_out$da
 r_out$coverage <- .95
 path_to_preproc_Epimap_Rt <- "data/Rt_estimates_Epimap_combined_preprocessed.csv"
 write.csv(r_out, file = path_to_preproc_Epimap_Rt, row.names = F)
-
 
 
 

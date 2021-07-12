@@ -92,6 +92,30 @@ path_to_imperial <- "data/UK_hotspot_Rt_estimates_Imperial.csv"
 download.file(url_to_imperial, path_to_imperial)
 
 
+### Download Epimap Rt estimates ###
+
+## TODO: tweak below to new 2-week overlap files from yw
+
+epi_in_tab <- data.frame(epimap_dates_import = c("2021-07-11-bootstrap", "2021-04-20", "2021-01-19", "2020-10-19"),
+                        epimap_final_dates_keep = c("2021-07-11", "2021-04-06", "2021-01-05", "2020-10-05"), stringsAsFactors = F)
+epi_in_tab <- epi_in_tab[order(epi_in_tab$epimap_final_dates_keep, decreasing = T), ]
+rd_all <- data.frame()
+for (i in 1:nrow(epi_in_tab)) {
+    url_to_epimap <- paste0("https://github.com/oxcsml/Rmap/raw/deployed/docs/assets/data/",
+              epi_in_tab$epimap_dates_import[i], "/Rt.csv")
+  path_to_epimap <- "data/Rt_estimates_Epimap.csv"
+  download.file(url_to_epimap, path_to_epimap)
+  rd <- read.csv("data/Rt_estimates_Epimap.csv", stringsAsFactors = F)
+  rd_keep <- rd[rd$Date <= epi_in_tab$epimap_final_dates_keep[i], ]
+  rd_new_dates <- sort(unique(rd_keep$Date))
+  # Removing earlier import dates that overlap with current import date range 
+  rd_all <- rd_all[!rd_all$Date %in% rd_new_dates, ]
+  rd_all <- rbind(rd_all, rd_keep)
+}
+path_to_combined_epimap <- "data/Rt_estimates_Epimap_combined.csv"
+write.csv(rd_all, file = path_to_combined_epimap)
+
+
 ### Download Sanger variant data ###
 
 url_to_sanger_variant_data <- "https://covid-surveillance-data.cog.sanger.ac.uk/download/lineages_by_ltla_and_week.tsv"

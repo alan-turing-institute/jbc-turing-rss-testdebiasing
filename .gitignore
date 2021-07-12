@@ -14,7 +14,10 @@
 **/*.Rproj
 *.Rproj
 data/**
+data/
 !data/samples_pcr.csv
 !data/northamptonshire_pop_nomis.csv
 output/**
+output/
 ignore/**
+ignore/

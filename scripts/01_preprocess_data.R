@@ -33,8 +33,6 @@ ltla_code <- pillar12_df %>%
   distinct(Code = LTLA, ltla = `LTLA Name`)
 
 
-str(pillar12_nt)
-
 ### Import ONS population estimates ###
 path_to_ons_pop <- "data/ukmidyearestimates20192020ladcodes.xls"
 pop_size <- readxl::read_excel(path_to_ons_pop, sheet = "MYE2 - Persons", skip = 3) %>%
@@ -189,6 +187,38 @@ variants_out$prop_delta <- variants_out$n_delta / variants_out$n_tot
 variants_out <- variants_out[order(variants_out$ltla, variants_out$mid_week), ]
 variants_out$week <- variants_out$mid_week
 readr::write_csv(variants_out, "data/variants.csv")
+
+### Get epimap Rt data ###
+
+path_to_combined_epimap <- "data/Rt_estimates_Epimap_combined.csv"
+r_in <- read.csv(file = path_to_combined_epimap, stringsAsFactors = F)  
+r_in$name_date <- paste0(r_in$area, "_", r_in$Date)
+mid_week_unique <- sort(unique(as.character(week_df$mid_week)))
+path_to_imperial <- "data/UK_hotspot_Rt_estimates_Imperial.csv"
+r_to_dup <- read.csv(file = path_to_imperial, stringsAsFactors = F)  
+str(r_to_dup)
+r_out <- r_in[r_in$Date %in% mid_week_unique, c("area", "Date")]
+colnames(r_out) <- c("area", "date")
+r_out[, c("CIlow", "Rt", "CIup")] <- r_in[match(paste0(r_out$area, "_", r_out$date), r_in$name_date), c("Rt_2_5", "Rt_50", "Rt_97_5")]
+r_out$coverage <- .95
+path_to_preproc_Epimap_Rt <- "data/Rt_estimates_Epimap_combined_preprocessed.csv"
+write.csv(r_out, file = path_to_preproc_Epimap_Rt, row.names = F)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

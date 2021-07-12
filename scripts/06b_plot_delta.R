@@ -6,7 +6,7 @@ library(dplyr)
 source("scripts/plot_utils.R")
 
 plot_delta_curves <- function(dl, phe_regs, del_axis_side = 4,
-                              ylim_use = c(0, 3.5), add_legend = F, 
+                              ylim_use = c(1, 4.5), add_legend = F, 
                               add_t_cut = F, add_react_round_legend = F) {
 
   d <- filter(dl, phe_region == "London")
@@ -83,9 +83,9 @@ for (type in c("Infectious", "PCR_positive")) {
                 "East of England", "West Midlands", "North West", "South East", 
                 "North East", "East Midlands")
   plot_delta_curves(delta_df, phe_regs, del_axis_side = 2, add_legend = T,
-                    add_t_cut = F, add_react_round_legend = T, ylim_use = c(0.5,4.5))
+                    add_t_cut = F, add_react_round_legend = T, ylim_use = c(1,5))
   plot_delta_curves(delta_df, "London", del_axis_side = 2, add_legend = F,
-                    add_t_cut = F, add_react_round_legend = F, ylim_use = c(0.5,4.5))
+                    add_t_cut = F, add_react_round_legend = F, ylim_use = c(1,5))
   dev.off()
 }
 

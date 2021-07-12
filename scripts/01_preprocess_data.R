@@ -140,30 +140,44 @@ region_pop <- phe_region_pop %>%
   group_by(region) %>%
   summarise(M = sum(M), .groups = "drop")
 path_to_vax <- "data/COVID-19-monthly-announced-vaccinations.xlsx"
+path_to_weekly_vax <- "data/COVID-19-weekly-announced-vaccinations.xlsx"
+
 vax_start_mid_week <- as.Date("2020-12-13") + (2 * 7)
 vax_data_mid_week <- as.Date("2021-01-27")
-vax_df <- readxl::read_excel(path_to_vax,
+latest_vax_date <- as.Date("2021-06-20")
+
+weekly_vax_df <- readxl::read_excel(path_to_weekly_vax,
+  sheet = "NHS Region", skip = 15, n_max = 7, col_names = FALSE
+) %>%
+  select(region = 1, Count = 17) %>%
+  mutate(date = latest_vax_date)
+
+monthly_vax_df <- readxl::read_excel(path_to_vax,
                      sheet = "Vaccination Date",
                      skip = 11, n_max = 141) %>%
   dplyr::select(date = 1, 3:9) %>%
-    tidyr::pivot_longer(-date, names_to = "region", values_to = "count") %>%
+    tidyr::pivot_longer(-date, names_to = "region", values_to = "Count") %>%
     mutate(date = as.Date(date), region = gsub("...\\d", "", region)) %>%
-    left_join(region_pop, by = "region") %>%
-    transmute(date = date, region = region, prop_vax = count / M) %>%
-    right_join(phe_region_to_region_df, by = "region") %>%
+    bind_rows(weekly_vax_df)
+    
+vax_df <- region_pop %>%
+  rename(M_reg = M) %>%
+  full_join(tibble(date = seq(vax_start_mid_week - 1, latest_vax_date, by = 1)), by = character()) %>%
+  left_join(monthly_vax_df, by = c("date", "region")) %>%
+  group_by(region) %>%
+  arrange(region, date) %>%
+  mutate(Count = if_else(date == vax_start_mid_week - 1, 0, Count),
+         count_fill = round(zoo::na.approx(Count)),
+         prop_vax = count_fill / M_reg) %>%
+  right_join(phe_region_to_region_df, by = "region") %>%
     right_join(ltla_df, by = c("phe_region", "date" = "mid_week")) %>%
-    mutate(prop_vax = if_else(date < vax_start_mid_week, 0, prop_vax)) %>%
-    group_by(ltla) %>%
-    arrange(ltla, date) %>%
     mutate(
-      prop_vax = approx(1:n(), prop_vax, 1:n())$y, 
-      V = round(prop_vax * M)) %>%
-  #mutate(prop_vax = if_else(is.na(prop_vax, pmax(0, prop_vax * as.integer((date - vax_start_mid_week)) / 
-  #         as.integer((vax_data_mid_week - vax_start_mid_week))),
-  select(ltla, mid_week = date, V)
-
-path_to_daily_vax <- "data/COVID-19-daily-announced-vaccinations.xlsx"
-
+      prop_vax = if_else(date < vax_start_mid_week, 0, prop_vax),
+      V = round(prop_vax * M)
+    ) %>%
+    ungroup() %>%
+  select(ltla, mid_week = date, V) %>%
+  arrange(ltla, mid_week)
 
 write_csv(vax_df, "data/vaccination.csv")
 

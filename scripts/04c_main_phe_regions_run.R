@@ -95,8 +95,6 @@ region_out_file <- file.path(out_dir, "phe_region_prevalence_pcr_perfect.RDS")
 saveRDS(region_prevalence, region_out_file, version = 2)
 
 
-
-
 ### Imperfect testing, PCR positivity and infectiousness ###
 imperfect <- FALSE
 type <- "PCR_positive" # for (type in c("Infectious", "PCR_positive")) {

@@ -115,22 +115,6 @@ for (i in 1:nrow(epi_in_tab)) {
 path_to_combined_epimap <- "data/Rt_estimates_Epimap_combined.csv"
 write.csv(rd_all, file = path_to_combined_epimap)
 
-sanity_check_input_joining <- F
-if (sanity_check_input_joining) {
-  rd_all <- rd_all[order(rd_all$area, rd_all$Date), ]
-  ltla_unique <- unique(rd_all$area)
-  pdf("/mnt/c/Temp/epimap_plot_inputs.pdf", 9, 9)
-  par(mfrow = c(3, 3), oma = c(2, 2, 4, 2))
-  for(ltla_curr in ltla_unique[1:9]) {
-    rdc <- rd_all[rd_all$area == ltla_curr, ]
-    matplot(1:nrow(rdc), rdc[, c("Rt_2_5", "Rt_97_5")], ty = "l", lty = 1, col = 1, main = ltla_curr, xlab = "Date index", ylab = "Rt")
-    lines(1:nrow(rdc), rdc[, c("Rt_50")], lwd = 3)
-    abline(v = which(rdc$Date %in% epi_in_tab$epimap_final_dates_keep))
-  }
-  mtext(outer = T, paste0("Joins at ", paste(epi_in_tab$epimap_final_dates_keep, collapse = ", ")), side = 3)
-  dev.off()
-}
-
 ### Download Sanger variant data ###
 
 url_to_sanger_variant_data <- "https://covid-surveillance-data.cog.sanger.ac.uk/download/lineages_by_ltla_and_week.tsv"

@@ -78,20 +78,23 @@ readr::write_csv(react_df, "data/react.csv")
 # Round data
 path_to_react_7a <- "data/unwt_ordered_ltla_prev7a.csv"
 path_to_react_7b <- "data/unwt_ordered_ltla_prev7b.csv"
-path_to_react_8 <- "data/unwt_ordered_ltla_prev8.csv"
 react_7a <- read_csv(path_to_react_7a)
 react_7b <- read_csv(path_to_react_7b)
 react_7 <- bind_rows(react_7a, react_7b) %>%
   group_by(ltla) %>%
   summarise(positive = sum(positive), 
             number_samples = sum(number_samples), .groups = "drop") %>%
-  mutate(round = 7,
-         mid_round_date = as.Date("2020-11-23"))
-react_8 <- read_csv(path_to_react_8) %>%
-  select(ltla, positive, number_samples) %>%
-  mutate(round = 8,
-         mid_round_date = as.Date("2021-01-14"))
-react_round_df <- bind_rows(react_7, react_8)
+  mutate(round = 7)
+
+react_round_df <- react_7
+for (this_round in 8:11) {
+  path_to_react <- paste0("data/unwt_ordered_ltla_prev", this_round, ".csv")
+  this_react <- read_csv(path_to_react) %>%
+    select(ltla, positive, number_samples) %>%
+    mutate(round = this_round)
+  react_round_df <- bind_rows(react_round_df, this_react)
+}
+
 readr::write_csv(react_round_df, "data/react_round.csv")
 
 ### Get regional counts ###

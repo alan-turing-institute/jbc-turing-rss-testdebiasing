@@ -6,29 +6,30 @@ dir.create("output", showWarnings = FALSE)
 
 react_round_df <- readr::read_csv("data/react_round.csv")
 
-react7_start_date <- as.Date("2020-11-13")
-react7_end_date <- as.Date("2020-12-03")
-react7_pillar2_mid_week <- as.Date("2020-11-22")
+round_start_dates <- as.Date(c("2020-11-13", "2021-01-06", "2021-02-04",
+                               "2021-03-11", "2021-04-15"))
+round_end_dates <- as.Date(c("2020-12-03", "2021-01-22", "2021-02-23",
+                             "2021-03-30", "2021-05-03"))
 
-react8_start_date <- as.Date("2021-01-06")
-react8_end_date <- as.Date("2021-01-22")
-react8_pillar2_mid_week <- as.Date("2021-01-17")
-
-react_date_df <- tibble(round = c(7, 8), 
-                        start_date = c(react7_start_date, react8_start_date),
-                        end_date = c(react7_end_date, react8_end_date)) %>%
-  mutate(mid_date = as.Date(0.5 * (as.numeric(start_date) + 
-                                     as.numeric(end_date)),
-                            origin = "1970-01-01"))
+react_date_df <- tibble(round = 7:11, 
+                        start_date = round_start_dates,
+                        end_date = round_end_dates) %>%
+  mutate(mid_date = as.Date(round(0.5 * (as.numeric(start_date) + 
+                                     as.numeric(end_date))),
+                            origin = "1970-01-01")) %>%
+  right_join(distinct(ltla_df, mid_week), by = character()) %>%
+  group_by(round) %>%
+  filter(abs(mid_week - mid_date) == min(abs(mid_week - mid_date)))
+  
 
 ######################################
 # Calculate raw pillar 2 estimates
 ######################################
 
 raw_pillar2_df <- ltla_df %>%
-  left_join(react_date_df, by = character()) %>%
-  group_by(round) %>%
-  filter(abs(mid_week - mid_date) == min(abs(mid_week - mid_date))) %>%
+  inner_join(react_date_df, by = "mid_week") %>%
+#  group_by(round) %>%
+#  filter(abs(mid_week - mid_date) == min(abs(mid_week - mid_date))) %>%
   bind_cols(as_tibble(Hmisc::binconf(.$nt, .$Nt) * 100)) %>%
   rename(m = PointEst, l = Lower, u = Upper)
 
@@ -52,7 +53,7 @@ react_ltla_df <- react_round_df %>%
                           ltla %in% old_north_names ~ new_north_name,
                           ltla %in% old_west_names ~ new_west_name,
                           TRUE ~ ltla)) %>%
-  group_by(ltla, round, mid_round_date) %>%
+  group_by(ltla, round) %>%
   summarise(positive = sum(positive),
             number_samples = sum(number_samples), .groups = "drop") %>%
   bind_cols(as_tibble(Hmisc::binconf(.$positive, .$number_samples) * 100)) %>%

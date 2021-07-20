@@ -64,7 +64,7 @@ for (qnum in 1:n_quant) {
                                                         control, imperfect)
       
     }
-    ll_prev <- apply(ll_targeted, 1, normalise_logprob)
+    ll_prev <- apply(ll_targeted, 1, prevdebiasr:::normalise_logprob)
 
     # Moment matching for beta shape parameters
     p1_mean <- colSums(exp(ll_prev) * p1_quants)
@@ -114,7 +114,8 @@ plot_dir <- file.path("plots", id, "PCR_positive")
 
 for (phe_reg in c("London", "North West")) {
   indvc <- which(region_df$phe_region == phe_reg & 
-                   region_df$mid_week >= as.Date("2020-11-23"))
+                   region_df$mid_week >= as.Date("2020-11-23") &
+                   region_df$mid_week <= as.Date("2021-01-24"))
   graphics.off()
   
   pdf(file.path(plot_dir, paste0("SI_moment_match_", phe_reg, ".pdf")), 8, 7)

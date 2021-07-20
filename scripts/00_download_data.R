@@ -94,10 +94,10 @@ download.file(url_to_imperial, path_to_imperial)
 
 ### Download Epimap Rt estimates ###
 
-## TODO: tweak below to new 2-week overlap files from yw
-
-epi_in_tab <- data.frame(epimap_dates_import = c("2021-07-11-bootstrap", "2021-04-20", "2021-01-19", "2020-10-19"),
-                        epimap_final_dates_keep = c("2021-07-11", "2021-04-06", "2021-01-05", "2020-10-05"), stringsAsFactors = F)
+# Omit final weeks of "2021-Q1", "2020-Q4" as there is two week overlap between neighbouring runs
+epi_in_tab <- data.frame(epimap_dates_import = c("2021-07-11-bootstrap", "2021-Q1", "2020-Q4"),
+                         epimap_final_dates_keep = c("2021-07-11", "2021-03-26", "2020-12-25"), stringsAsFactors = F)
+# epimap_final_dates_keep = c("2021-07-11", "2021-03-19", "2020-12-18"), stringsAsFactors = F)
 epi_in_tab <- epi_in_tab[order(epi_in_tab$epimap_final_dates_keep, decreasing = T), ]
 rd_all <- data.frame()
 for (i in 1:nrow(epi_in_tab)) {
@@ -115,6 +115,21 @@ for (i in 1:nrow(epi_in_tab)) {
 path_to_combined_epimap <- "data/Rt_estimates_Epimap_combined.csv"
 write.csv(rd_all, file = path_to_combined_epimap)
 
+sanity_check_input_joining <- F
+if (sanity_check_input_joining) {
+  rd_all <- rd_all[order(rd_all$area, rd_all$Date), ]
+  ltla_unique <- unique(rd_all$area)
+  pdf("/mnt/c/Temp/epimap_plot_inputs.pdf", 9, 9)
+  par(mfrow = c(3, 3), oma = c(2, 2, 4, 2))
+  for(ltla_curr in ltla_unique[1:9]) {
+    rdc <- rd_all[rd_all$area == ltla_curr, ]
+    matplot(1:nrow(rdc), rdc[, c("Rt_2_5", "Rt_97_5")], ty = "l", lty = 1, col = 1, main = ltla_curr, xlab = "Date index", ylab = "Rt")
+    lines(1:nrow(rdc), rdc[, c("Rt_50")], lwd = 3)
+    abline(v = which(rdc$Date %in% epi_in_tab$epimap_final_dates_keep))
+  }
+  mtext(outer = T, paste0("Joins at ", paste(epi_in_tab$epimap_final_dates_keep, collapse = ", ")), side = 3)
+  dev.off()
+}
 
 ### Download Sanger variant data ###
 

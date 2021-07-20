@@ -33,7 +33,7 @@ control_debias <- prevdebiasr::get_control_parameters(
 )
 
 mid_week_unique <- sort(unique(ltla_df$mid_week))
-cut_dates <- seq(as.Date("2021-05-23"), rev(mid_week_unique)[2], by = 7)
+cut_dates <- seq(as.Date("2020-10-18"), rev(mid_week_unique)[2], by = 7)
 
 n_cores <- 12
 clust <- makeCluster(n_cores)

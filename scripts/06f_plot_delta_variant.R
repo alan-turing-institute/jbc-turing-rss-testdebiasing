@@ -30,11 +30,11 @@ ltla_pop <- pop_size %>%
   bind_rows(northamptonshire_pop)
 
 voc_df <- readr::read_csv("data/variants.csv") %>%
-  rename(denom = n_tot) %>%
+    rename(denom = n_tot) %>%
   filter(denom >= 10) %>%
   left_join(select(LTLA2Reg, LAD20NM, LAD20CD), by = c("ltla" = "LAD20NM")) %>%
   mutate(week = week(mid_week),
-         prop_delta = 100 * prop_delta) %>%
+         `Percent delta VOC` = 100 * prop_delta) %>%
   filter(!is.na(ltla))
 ### Load prevalence output
 names(SIR_model_results) <- sub(".RDS", "", basename(out_files))
@@ -67,8 +67,6 @@ for (ltla_curr in ltla_unique) {
   IR <- rbind(IR, add_all)
 }
 
-
-
 ### PLOTS ###
 
 # Plotting libraries 
@@ -90,6 +88,7 @@ yoffset <- (1/5)*(ymax-xmin); xoffset <- (1/5)*(xmax-xmin)
 mid_week_start <- as.Date("2021-04-18")
 mid_weeks <- mid_week_start + (1:5 * 7)
 mid_weeks <- mid_week_start + (0:3 * 21)
+mid_weeks <- mid_week_start - 7 + (1:4 * 14)
 
 var_plots <- vector("list", 5)
 for (i in seq_along(mid_weeks)) {
@@ -98,22 +97,23 @@ for (i in seq_along(mid_weeks)) {
   variant_df_week <- dplyr::filter(voc_df, week == week(this_mid_week))
   var_week_shp <- left_join(LTLA_shp_Reg, variant_df_week, by = c("lad20cd" = "LAD20CD"))
   var_plt <- ggplot(data = var_week_shp) + 
-    geom_sf(aes(fill = prop_delta ), color = NA) + 
+    geom_sf(aes(fill = `Percent delta VOC`), color = NA) + 
     scale_fill_viridis_c(limits=c(0,100), 
-                         guide = guide_colourbar(title.position = "top")) +
-    theme_void() + 
-    ggtitle(this_mid_week)
+                         guide = guide_colourbar(title.position = "top"),
+                         na.value = "gray90") +
+    theme_void()
   
   var_lnd <- ggplot(data = filter(var_week_shp, RGN20NM == "London")) + 
-    geom_sf(aes(fill = prop_delta ), color = NA, show.legend = FALSE) + 
-    scale_fill_viridis_c(limits = c(0, 100)) +
+    geom_sf(aes(fill = `Percent delta VOC`), color = NA, show.legend = FALSE) + 
+    scale_fill_viridis_c(limits = c(0, 100),
+                         na.value = "gray90") +
     theme_void() + 
     ggtitle("London") + 
     theme(plot.title = element_text(size = 5))
   
-  var_plots[[i]] = var_plt +
+  var_plots[[i]] <- var_plt +
     annotation_custom(grob = ggplotGrob(var_lnd), xmin = xmin, xmax = xmin+0.35*(xmax-xmin), 
-                      ymin = ymin+3.5*yoffset, ymax =ymin + 3.5*yoffset + 0.35*(ymax-ymin))+ 
+                      ymin = ymin+3.5*yoffset, ymax =ymin + 3.5*yoffset + 0.35*(ymax-ymin)) + 
     theme_void() +
     theme(plot.title = element_text(size = 5), 
           legend.key.size = unit(0.2, 'cm'), #change legend key size
@@ -147,7 +147,7 @@ for (i in seq_along(mid_weeks)) {
   y_lnd <- ggplot(data = filter(LTLA_shp_Reg, RGN20NM == "London")) + 
     geom_sf(aes(fill = lf_mean ), color = NA, show.legend = FALSE) + 
     theme_void() + ggtitle("London") + 
-    scale_fill_distiller(palette = "RdYlGn", limits =c(0, 2)) + theme(plot.title = element_text(size = 5), 
+    scale_fill_distiller(palette = "RdYlBu", limits =c(0, 2)) + theme(plot.title = element_text(size = 5), 
                                                                       legend.key.size = unit(0.2, 'cm'), #change legend key size
                                                                       legend.key.height = unit(0.2, 'cm'), #change legend key height
                                                                       legend.key.width = unit(0.2, 'cm'), #change legend key width
@@ -160,7 +160,7 @@ for (i in seq_along(mid_weeks)) {
     theme(plot.title = element_text(size = 5)) + 
     annotation_custom(grob = lnd_grob, xmin = xmin, xmax = xmin+0.35*(xmax-xmin), 
                       ymin = ymin+3.5*yoffset, ymax =ymin + 3.5*yoffset + 0.35*(ymax-ymin)) + 
-    scale_fill_distiller(palette = "RdYlGn", limits =c(0, 2), 
+    scale_fill_distiller(palette = "RdYlBu", limits =c(0, 2), 
                          guide = guide_colourbar(title.position = "top")) + 
     labs(fill=leg_name) + 
     theme(legend.key.size = unit(0.2, 'cm'), #change legend key size
@@ -222,16 +222,20 @@ joint_df <- IR %>%
   left_join(LTLA2Reg, by = c("ltla" = "LAD20NM")) %>%
   select(-c(ltla)) %>%
   left_join(voc_df, by = c("LAD20CD", "mid_week")) %>%
-  rename(Region = RGN20NM)
+#  filter(!is.na(ltla)) %>%
+  rename(Region = RGN20NM) %>%
+  mutate(Region = factor(Region))
 scatt_plots <- vector("list", 5)
 for (i in seq_along(mid_weeks)) {
   this_mid_week <- mid_weeks[i] + 3
   scatt_plots[[i]] <- joint_df %>%
     filter(!is.na(R_m)) %>%
     filter(mid_week == this_mid_week) %>%
-    ggplot(aes(prop_delta, R_m, color = Region)) +
-    scale_colour_viridis_d(option = "B", alpha = 0.7) + 
-    geom_point(size = 0.5) + theme_minimal() + 
+    ggplot(aes(`Percent delta VOC`, R_m, color = Region)) +
+    scale_colour_viridis_d(option = "B", alpha = 0.7, na.translate = FALSE) + 
+    geom_point(size = 0.5) + 
+    geom_hline(yintercept = 1, linetype = "dashed", size = 0.5) +
+    theme_minimal() + 
     labs(y = "Rt") +#+ ggtitle("2020-11-07")+
     theme(plot.title = element_text(size = 5), 
           axis.title = element_text(size = 5),
@@ -252,12 +256,12 @@ p1 <- ltla_I_plots[[1]]  + ltla_R_plots[[1]] + var_plots[[1]] + scatt_plots[[1]]
   guides(color = guide_legend(nrow = 9)) &
   theme(legend.position = "bottom",
         legend.box = "horizontal",
-        axis.title = element_text(size = 5),
-        legend.text = element_text(size = 5),
-        legend.title = element_text(size=7)) # plot.margin =margin(-1,-1,-1,, "cm"))
+        axis.title = element_text(size = 6),
+        legend.text = element_text(size = 6),
+        legend.title = element_text(size=9)) # plot.margin =margin(-1,-1,-1,, "cm"))
 
 plot_dir <- file.path("plots", "AR0.99sd1Rsd0.2", "Infectious")
 dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
 ggsave(file.path(plot_dir, "delta_variant.png"), 
-       width = 8, height = 14, units = "in")
+       width = 8, height = 12, units = "in")
        

@@ -39,19 +39,17 @@ debiased_ltla_estimates <- abind::abind(
 
 graphics.off()
 
-pdf(file.path(plot_dir, "fig2_bias_correction_789.pdf"), 9, 6.25)
+pdf(file.path(plot_dir, "fig2_bias_correction_V2.pdf"), 9, 9)
 
-par(mfrow = c(2, 2), oma = c(4, 4, 4, 10), mar = c(3, 2, 2, 2))
-#max_prev <- 5
-#max_prev_uncorr <- 30
-max_prev <- 1.5
-max_prev_uncorr <- 8
-rounds_todo <- 7:9
+par(mfrow = c(5, 2), oma = c(4, 4, 4, 10), mar = c(3, 2, 2, 2))
+max_prev <- c(5, 5, 4, 2, 2)
+max_prev_uncorr <- c(30, 30, 15, 8, 8)
+rounds_todo <- 7:11
 panel_count <- 0
 point_col <- rgb(red = .5, green = .4, blue = .8, alpha = .75)
 
-for (meth in c("raw", "debiased")) {
-  for(this_round in rounds_todo) { 
+for(this_round in rounds_todo) { 
+  for (meth in c("raw", "debiased")) {
     panel_count <- panel_count + 1
     
     ###########################################
@@ -81,9 +79,11 @@ for (meth in c("raw", "debiased")) {
     bias_mn <- mean(comp_2$m - comp_1$m, na.rm = T)
     bias_se <- sd(comp_2$m - comp_1$m, na.rm = T) / sqrt(nrow(comp_1))
     
-    plot(comp_1$m, comp_2$m, main = "", xlim = c(0, max_prev), 
-         ylim = c(0, ifelse(meth == "raw", max_prev_uncorr, max_prev)),
+    plot(comp_1$m, comp_2$m, main = "", xlim = c(0, max_prev[this_round - 6]), 
+         ylim = c(0, ifelse(meth == "raw", max_prev_uncorr[this_round - 6], max_prev[this_round - 6])),
          xlab = "", ylab = "", ty = "n")
+#    plot(comp_1$m, comp_2$m, main = "",
+#         xlab = "", ylab = "", ty = "n")
     
     for (j in 1:nrow(comp_1)) {
       lines(x = comp_1[j, c("l", "u")], y = rep(comp_2$m[j], 2), col = grey(.8))
@@ -108,13 +108,13 @@ for (meth in c("raw", "debiased")) {
 }
 mtext(side = 1, outer = T, text = "REACT prevalence in % (95% CIs)", line = 1)
 mtext(side = 2, outer = T, text = "Pillar 1+2 prevalence in % (95% CIs)", line = 1)
-mtext(side = 4, outer = T, text = "Uncorrected", line = 0, at = .75, las = 1)
-mtext(side = 4, outer = T, text = "Corrected", line = 0, at = .25, las = 1)
-mtext(side = 3, outer = T, text = "REACT round 7", line = 0, at = .15, las = 1)
-mtext(side = 3, outer = T, text = "REACT round 8", line = 0, at = .5, las = 1)
-mtext(side = 3, outer = T, text = "REACT round 9", line = 0, at = .85, las = 1)
-#mtext(side = 3, outer = T, text = "REACT round 10", line = 0, at = .25, las = 1)
-#mtext(side = 3, outer = T, text = "REACT round 11", line = 0, at = .75, las = 1)
+mtext(side = 4, outer = T, text = "REACT round 7", line = 0, at = .9, las = 1)
+mtext(side = 4, outer = T, text = "REACT round 8", line = 0, at = .7, las = 1)
+mtext(side = 4, outer = T, text = "REACT round 9", line = 0, at = .5, las = 1)
+mtext(side = 4, outer = T, text = "REACT round 10", line = 0, at = .3, las = 1)
+mtext(side = 4, outer = T, text = "REACT round 11", line = 0, at = .1, las = 1)
+mtext(side = 3, outer = T, text = "Uncorrected", line = 0, at = .25, las = 1)
+mtext(side = 3, outer = T, text = "Corrected", line = 0, at = .75, las = 1)
 
 dev.off()
 

@@ -49,7 +49,8 @@ plot_delta_curves <- function(dl, phe_regs, del_axis_side = 4,
   axis(side = del_axis_side, las = 2)
   mtext(side = del_axis_side, text = expression(delta), las = 1, line = 3)
   add_react_sampling_intervals_to_plot(d = plot_map, prev_max = ylim_use[2], 
-                                       col_data = col_data, type = "daily")
+                                       col_data = col_data, type = "daily",
+                                       prev_min = ylim_use[1])
   annotate_months(plot_map, add_axis = T, shade_alpha = .2, 
                   for_presentation = T)
   leg_move_mult <- .8

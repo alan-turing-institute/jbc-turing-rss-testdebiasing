@@ -1,0 +1,21 @@
+% latex table generated in R 3.6.3 by xtable 1.8-4 package
+% Wed Jul 21 08:00:59 2021
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrrl}
+  \hline
+LTLA & Cases & Estimated Missing Cases & (95\% CI) \\ 
+  \hline
+Cornwall & 148 & 3616 & (3206 - 3840) \\ 
+  Tewkesbury & 247 & 3517 & (2917 - 3741) \\ 
+  Gloucester & 203 & 3496 & (2567 - 3716) \\ 
+  Cheltenham & 232 & 3425 & (2843 - 3644) \\ 
+  Bristol, City of & 220 & 3247 & (2378 - 3672) \\ 
+  South Gloucestershire & 137 & 3026 & (2232 - 3742) \\ 
+  Bath and North East Somerset & 144 & 2795 & (2057 - 3779) \\ 
+  Gateshead & 243 & 2736 & (1860 - 3510) \\ 
+  Ribble Valley & 386 & 2723 & (2079 - 3313) \\ 
+  North Tyneside & 354 & 2713 & (2080 - 3510) \\ 
+   \hline
+\end{tabular}
+\end{table}

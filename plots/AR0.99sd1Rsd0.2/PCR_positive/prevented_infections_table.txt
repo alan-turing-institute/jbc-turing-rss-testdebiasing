@@ -1,0 +1,21 @@
+% latex table generated in R 3.6.3 by xtable 1.8-4 package
+% Tue Jul 20 20:14:02 2021
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrrrrl}
+  \hline
+LTLA & Cases & Missing & R & Prevented & (95\% CI) \\ 
+  \hline
+Cornwall & 148 & 3616 & 2.8 & 6.3 & (5.2 - 7.6) \\ 
+  Cheltenham & 232 & 3425 & 2.2 & 4.8 & (3.7 - 5.9) \\ 
+  Tewkesbury & 247 & 3517 & 2.0 & 4.5 & (3.5 - 5.3) \\ 
+  South Gloucestershire & 137 & 3026 & 2.3 & 4.2 & (2.9 - 5.9) \\ 
+  County Durham & 308 & 2553 & 2.5 & 4.1 & (3.1 - 5.7) \\ 
+  Gloucester & 203 & 3496 & 1.8 & 3.9 & (2.7 - 5.3) \\ 
+  Exeter & 160 & 2562 & 2.3 & 3.7 & (2.3 - 5.2) \\ 
+  Bath and North East Somerset & 144 & 2795 & 2.1 & 3.6 & (2.2 - 5.6) \\ 
+  East Hertfordshire & 130 & 2401 & 2.4 & 3.6 & (2 - 5.2) \\ 
+  Gateshead & 243 & 2736 & 2.1 & 3.6 & (2.1 - 5.1) \\ 
+   \hline
+\end{tabular}
+\end{table}

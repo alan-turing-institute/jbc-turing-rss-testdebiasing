@@ -7,6 +7,7 @@
 #$ -o logs/main.log
 #$ -e logs/main.log
 
+# setwd("C:/Users/nicho/Documents/bauer_sync/projects/covid/covid_github/jbc-turing-rss-testdebiasing")
 ### Estimate LTLA prevalence ###
 
 library(dplyr)
@@ -32,9 +33,12 @@ control_debias <- prevdebiasr::get_control_parameters(
     alpha_testing = alpha_testing
 )
 
+reg_df_curr <- region_df[region_df$phe_region == "South West", ]
+reg_df_curr[nrow(reg_df_curr) - 10:0, ]
 mid_week_unique <- sort(unique(ltla_df$mid_week))
 
-n_cores <- 12
+n_cores <- 25
+run_type <- c("fast", "full")[2]
 clust <- makeCluster(n_cores)
 doParallel::registerDoParallel(clust)
 
@@ -80,8 +84,15 @@ saveRDS(ltla_prevalence, ltla_out_file, version = 2)
 
 
 ### Imperfect testing, PCR positivity and infectiousness ###
-imperfect <- TRUE
-for (type in c("Infectious", "PCR_positive")) {
+imperfect <- switch (run_type,
+                      fast = FALSE,
+                      full = TRUE
+                    )
+type_run <- switch (run_type,
+                       fast = c("Infectious", "PCR_positive")[2],
+                       full = c("Infectious", "PCR_positive")[1]
+                      )
+for (type in type_run) {
 
     # Calculate regional bias parameters
     delta_df <- region_df %>%
@@ -106,15 +117,17 @@ for (type in c("Infectious", "PCR_positive")) {
     names(ltla_prevalence) <- ltla_names
 
     # Save output
-    dir.create(file.path(out_dir, type), showWarnings = FALSE, recursive = TRUE)
-    delta_out_file <- file.path(out_dir, type, "delta.csv")
+    type_in_file_path <- paste0(type, "_", ifelse(imperfect, "Imperfect", "Perfect"))
+    dir.create(file.path(out_dir, type_in_file_path), showWarnings = FALSE, recursive = TRUE)
+    delta_out_file <- file.path(out_dir, type_in_file_path, "delta.csv")
     readr::write_csv(delta_df, delta_out_file)
 
-    ltla_out_file <- file.path(out_dir, type, "ltla_prevalence.RDS")
+    ltla_out_file <- file.path(out_dir, type_in_file_path, "ltla_prevalence.RDS")
     saveRDS(ltla_prevalence, ltla_out_file, version = 2)
 
     # Fit SIR to latest available date
-    foreach(ltla_name = ltla_names, .packages = "dplyr") %dopar% {
+    foreach(ltla_name = ltla_names, .packages = c("dplyr", "prevdebiasr")) %dopar% {
+        source("scripts/SIR_utils.R")
         d_ltla <- ltla_df %>%
             filter(ltla == ltla_name)
 
@@ -125,7 +138,7 @@ for (type in c("Infectious", "PCR_positive")) {
             control_SIR
         )
 
-        out_file <- file.path(out_dir, type, "SIR", paste0(ltla_name, ".RDS"))
+        out_file <- file.path(out_dir, type_in_file_path, "SIR", paste0(ltla_name, ".RDS"))
         dir.create(dirname(out_file), recursive = TRUE, showWarnings = FALSE)
         saveRDS(SIR_model_out_ltla, out_file, version = 2)
     }

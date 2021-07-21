@@ -1,0 +1,21 @@
+% latex table generated in R 3.6.3 by xtable 1.8-4 package
+% Wed Jul 21 15:42:31 2021
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrrl}
+  \hline
+LTLA & Cases & Estimated propn of cases missing & (95\% CI) \\ 
+  \hline
+Dartford & 54 & 0.97 & (0.95 - 0.98) \\ 
+  Forest of Dean & 56 & 0.97 & (0.96 - 0.98) \\ 
+  Medway & 51 & 0.97 & (0.96 - 0.98) \\ 
+  Sevenoaks & 49 & 0.97 & (0.95 - 0.98) \\ 
+  Teignbridge & 33 & 0.97 & (0.96 - 0.98) \\ 
+  West Devon & 16 & 0.97 & (0.95 - 0.98) \\ 
+  Wiltshire & 68 & 0.97 & (0.96 - 0.97) \\ 
+  Bournemouth, Christchurch and Poole & 129 & 0.96 & (0.94 - 0.96) \\ 
+  Broadland & 12 & 0.96 & (0.95 - 0.98) \\ 
+  Bromley & 63 & 0.96 & (0.93 - 0.97) \\ 
+   \hline
+\end{tabular}
+\end{table}

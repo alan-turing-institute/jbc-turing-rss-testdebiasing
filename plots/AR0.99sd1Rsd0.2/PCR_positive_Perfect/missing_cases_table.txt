@@ -1,0 +1,21 @@
+% latex table generated in R 4.1.0 by xtable 1.8-4 package
+% Thu Jul 22 11:26:20 2021
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrrl}
+  \hline
+LTLA & Cases & Estimated Missing Cases & (95\% CI) \\ 
+  \hline
+North Tyneside & 354 & 1693 & (1091 - 2727) \\ 
+  Wigan & 365 & 1690 & (1088 - 1942) \\ 
+  Newcastle upon Tyne & 389 & 1598 & (825 - 2346) \\ 
+  Ribble Valley & 386 & 1458 & (913 - 1940) \\ 
+  Salford & 416 & 1429 & (1049 - 1779) \\ 
+  South Ribble & 320 & 1388 & (1073 - 1599) \\ 
+  Tewkesbury & 247 & 1379 & (867 - 2123) \\ 
+  Burnley & 427 & 1261 & (387 - 1702) \\ 
+  Bristol, City of & 220 & 1238 & (671 - 1965) \\ 
+  Stockport & 230 & 1220 & (737 - 1398) \\ 
+   \hline
+\end{tabular}
+\end{table}

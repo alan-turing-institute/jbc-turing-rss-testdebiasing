@@ -36,8 +36,8 @@ reg_df_curr <- region_df[region_df$phe_region == "South West", ]
 reg_df_curr[nrow(reg_df_curr) - 10:0, ]
 mid_week_unique <- sort(unique(ltla_df$mid_week))
 
-n_cores <- 25
-run_type <- c("fast", "full")[1]
+n_cores <- 12
+run_type <- c("fast", "full")[2]
 clust <- makeCluster(n_cores)
 doParallel::registerDoParallel(clust)
 
@@ -88,7 +88,7 @@ imperfect <- switch (run_type,
                     )
 type_run <- switch (run_type,
                        fast = c("Infectious", "PCR_positive")[2],
-                       full = c("Infectious", "PCR_positive")[1]
+                       full = c("Infectious", "PCR_positive")[1:2]
                       )
 for (type in type_run) {
 

@@ -3,7 +3,7 @@ library(patchwork)
 library(rgdal)
 library(sf)
 library(xtable)
-# setwd("C:/Users/nicho/Documents/bauer_sync/projects/covid/covid_github/jbc-turing-rss-testdebiasing")
+library(gtools)
 source("scripts/plot_utils.R")
 source("scripts/SIR_utils.R")
 
@@ -19,8 +19,8 @@ n_weeks <- length(unique(ltla_df$mid_week))
 
 id <- "AR0.99sd1Rsd0.2"
 
-imperfect <- T
-type <- c("Infectious", "PCR_positive")[1]
+imperfect <- F
+type <- c("Infectious", "PCR_positive")[2]
 type_in_file_path <- paste0(type, "_", ifelse(imperfect, "Imperfect", "Perfect"))
 
 
@@ -28,19 +28,6 @@ out_dir <- file.path("output", id, type_in_file_path, "SIR")
 plot_dir <- file.path("plots", id, type_in_file_path)
 dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
 output_plot_dir <- c("~/Downloads", plot_dir)[2]
-
-# 
-# p1 <- readRDS(file = file.path("output", id, "Infectious", "ltla_prevalence.RDS"))
-# p2 <- readRDS(file = file.path("output", id, "PCR_positive", "ltla_prevalence.RDS"))
-# (p1[[1]]$I_quant[, 13])
-# (p2[[1]]$I_quant[, 13])
-
-
-
-# p1 <- readRDS(file = file.path("output", id, "Infectious", "SIR", "Adur.RDS"))
-# p2 <- readRDS(file = file.path("output", id, "PCR_positive", "SIR", "Adur.RDS"))
-# p1$I[, 100]
-# p2$I[, 100]
 
 phe_region_unique <- unique(ltla_df$phe_region)
 out_files <- list.files(out_dir, full.names = TRUE)
@@ -174,7 +161,6 @@ names(tab_out) <- c('LTLA', 'Cases', 'Missing', 'R', 'Prevented', '(95% CI)')
 print(tab_out,  file = paste0(output_plot_dir, "/prevented_infections_table.txt"), include.rownames = FALSE)
 tab_out
 
-#write_csv(last_week_df, "~/Downloads/prev_estimates_2021-06-20")
 
 ### PLOT DATA ###
 options(bitmapType = "cairo-png", device = "X11")

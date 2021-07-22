@@ -7,13 +7,12 @@
 #$ -o logs/main.log
 #$ -e logs/main.log
 
-# setwd("C:/Users/nicho/Documents/bauer_sync/projects/covid/covid_github/jbc-turing-rss-testdebiasing")
 ### Estimate LTLA prevalence ###
-
 library(dplyr)
 library(prevdebiasr)
 library(parallel)
 library(foreach)
+library(truncnorm)
 source("scripts/SIR_utils.R")
 
 trans_mats <- readRDS("transmats/poisson_SIR_epi_gamma_1.RDS")
@@ -38,7 +37,7 @@ reg_df_curr[nrow(reg_df_curr) - 10:0, ]
 mid_week_unique <- sort(unique(ltla_df$mid_week))
 
 n_cores <- 25
-run_type <- c("fast", "full")[2]
+run_type <- c("fast", "full")[1]
 clust <- makeCluster(n_cores)
 doParallel::registerDoParallel(clust)
 
@@ -75,7 +74,6 @@ ltla_prevalence <- parLapply(clust, ltla_list, local_prevalence,
                             control_debias, imperfect, type)
 names(ltla_prevalence) <- ltla_names
 # Save output
-
 delta_out_file <- file.path(out_dir, "delta_pcr_perfect.csv")
 readr::write_csv(delta_df, delta_out_file)
 

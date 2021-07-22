@@ -3,8 +3,11 @@ library(patchwork)
 library(rgdal)
 library(sf)
 library(xtable)
+library(gtools)
 source("scripts/plot_utils.R")
 source("scripts/SIR_utils.R")
+
+
 
 ### WRANGLE DATA ###
 ltla_df <- readr::read_csv("data/ltla.csv")
@@ -16,17 +19,25 @@ n_weeks <- length(unique(ltla_df$mid_week))
 
 id <- "AR0.99sd1Rsd0.2"
 
-type <- "Infectious"
-out_dir <- file.path("output", id, type, "SIR")
-plot_dir <- file.path("plots", id, type)
-dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
+imperfect <- F
+type <- c("Infectious", "PCR_positive")[2]
+type_in_file_path <- paste0(type, "_", ifelse(imperfect, "Imperfect", "Perfect"))
 
+
+out_dir <- file.path("output", id, type_in_file_path, "SIR")
+plot_dir <- file.path("plots", id, type_in_file_path)
+dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
+output_plot_dir <- c("~/Downloads", plot_dir)[2]
+
+phe_region_unique <- unique(ltla_df$phe_region)
 out_files <- list.files(out_dir, full.names = TRUE)
+for (phe_region in phe_region_unique) {
+  out_files <- out_files[!grepl(paste0(phe_region, ".RDS"), out_files)]
+}
 SIR_model_results <- lapply(out_files, readRDS)
 names(SIR_model_results) <- sub(".RDS", "", basename(out_files))
 
-R_all <- I_all <- data.frame()
-Rl <- Il <- list()
+R_all <- prevent_all <- I_all <- data.frame()
 
 quant_plot <- c(0.025, 0.5, 0.975)
 for (ltla_curr in ltla_unique) {
@@ -36,10 +47,15 @@ for (ltla_curr in ltla_unique) {
     pull(M)
   
   saml_biased <- SIR_model_results[[ltla_curr]]
-  
+  # str(SIR_model_results)
   its_keep <- (control_SIR$burn_in + 1):control_SIR$n_iters
-  
   I_quant_curr <- t(apply(saml_biased$I[, its_keep], 1, function(v) quantile(v, quant_plot, na.rm = T))) / this_M * 100
+  ltla_curr_df <- ltla_df[ltla_df$ltla == ltla_curr, ]
+  ltla_curr_df <- ltla_curr_df[order(ltla_curr_df$mid_week), ]
+  prob_recover_in_week <- pexp(7, 1 / 7)
+  E_num_infections_prevented_mcmc_out <- (saml_biased$I[, its_keep] - ltla_curr_df$nt) / this_M * saml_biased$R[, its_keep] * prob_recover_in_week
+  SIR_model_results[[ltla_curr]]$prevent_quant <- t(apply(E_num_infections_prevented_mcmc_out, 1, 
+                                                  function(v) quantile(v, quant_plot, na.rm = T)))
   SIR_model_results[[ltla_curr]]$I_quant <- I_quant_curr
   SIR_model_results[[ltla_curr]]$R_quant <- t(apply(saml_biased$R[, its_keep], 1, 
                                                     function(v) quantile(v, quant_plot, na.rm = T)))
@@ -47,17 +63,29 @@ for (ltla_curr in ltla_unique) {
   
   R_add <- as.data.frame(t(SIR_model_results[[ltla_curr]]$R_quant[n_weeks, ]))
   I_add <- as.data.frame(t(SIR_model_results[[ltla_curr]]$I_quant[n_weeks, ]))
-  names(I_add) <- names(R_add) <- c("l", "m", "u")
-  R_add$ltla <- I_add$ltla <- ltla_curr
+  prevent_add <- as.data.frame(t(SIR_model_results[[ltla_curr]]$prevent_quant[n_weeks, ]))
+  names(I_add) <- c("l", "m", "u")
+  names(R_add) <- paste0(c("l", "m", "u"), "_R")
+  names(prevent_add) <- paste0(c("l", "m", "u"), "_prevent")
+  prevent_add$ltla <- R_add$ltla <- I_add$ltla <- ltla_curr
   R_all <- rbind(R_all, R_add)
   I_all <- rbind(I_all, I_add)
+  prevent_all <- rbind(prevent_all, prevent_add)
 }
 rownames(R_all) <- R_all$ltla
 rownames(I_all) <- I_all$ltla
+rownames(prevent_all) <- prevent_all$ltla
+
+str(I_all)
+plot(SIR_model_results[["Cornwall"]]$I_quant[, 2])
+I_all[I_all$ltla == "Cornwall", c("m")]
+
 
 last_week_df <- ltla_df %>%
   filter(mid_week == this_week) %>%
   left_join(I_all, by = "ltla") %>%
+  left_join(R_all, by = "ltla") %>%
+  left_join(prevent_all, by = "ltla") %>%
   left_join(cov_data, by = "ltla") %>%
   mutate(nt_per_100k = 1e5 * nt / M,
          m_per_100k = 1e3 * m,
@@ -67,9 +95,11 @@ last_week_df <- ltla_df %>%
          u_missing_per_100k = u_per_100k - nt_per_100k,
          l_missing_per_100k = l_per_100k - nt_per_100k,
          missing_prop = 1 -  (nt_per_100k / m_per_100k),
-         u_missing_prop = 1 - (nt_per_100k / l_per_100k),
-         l_missing_prop = 1 - (nt_per_100k / u_per_100k))
-
+         l_missing_prop = 1 - (nt_per_100k / l_per_100k),
+         u_missing_prop = 1 - (nt_per_100k / u_per_100k))
+str(last_week_df)
+last_week_df[last_week_df$ltla == "Cornwall", "missing_per_100k"]
+last_week_df[last_week_df$ltla == "Cornwall", c("nt_per_100k", "m_per_100k")]
 ### Scatter plot ###
 
 p1 <- ggplot(last_week_df, aes(m_per_100k, missing_prop)) + 
@@ -79,7 +109,7 @@ p1 <- ggplot(last_week_df, aes(m_per_100k, missing_prop)) +
   theme_minimal() +
   viridis::scale_color_viridis(discrete = TRUE)
 
-ggsave("~/Downloads/missing_scatter.png", p1)
+ggsave(paste0(output_plot_dir, "/missing_scatter.png"), p1)
 
 ### Tables ###
 
@@ -93,7 +123,8 @@ d <- data.frame(LTLA = last_week_df$ltla, 'Cases per 100K' = round(last_week_df$
 d <- d[order(d$Missing.Cases, decreasing = T), ]
 tab_out <- xtable(d[1:10, ], digits = nround_dig)
 names(tab_out) <- c('LTLA', 'Cases', 'Estimated Missing Cases', '(95% CI)')
-print(tab_out,  file = "~/Downloads/missing_cases_table.txt", include.rownames = FALSE)
+print(tab_out,  file = paste0(output_plot_dir, "/missing_cases_table.txt"), include.rownames = FALSE)
+tab_out
 
 # Proportions
 
@@ -105,10 +136,31 @@ d <- data.frame(LTLA = last_week_df$ltla, 'Cases per 100K' = round(last_week_df$
                 '95% CI' = miss_cases_ci)
 d <- d[order(d$Proportion.of.missing.cases, decreasing = T), ]
 tab_out <- xtable(d[1:10, ], digits = c(0, 0, 0, nround_dig, nround_dig))
-names(tab_out) <- c('LTLA', 'Cases', 'Estimated proportion of cases missing', '(95% CI)')
-print(tab_out,  file = "~/Downloads/proportion_missing_cases_table.txt", include.rownames = FALSE)
+names(tab_out) <- c('LTLA', 'Cases', 'Estimated propn of cases missing', '(95% CI)')
+print(tab_out,  file = paste0(output_plot_dir, "/proportion_missing_cases_table.txt"), include.rownames = FALSE)
 
-#write_csv(last_week_df, "~/Downloads/prev_estimates_2021-06-20")
+# Prevented infections per 100 tests
+
+nround_dig <- 1
+nround_dig_R <- 1
+prevent_ci <- paste0("(", round(last_week_df$l_prevent * 100, nround_dig), 
+                        " - ", round(last_week_df$u_prevent * 100, nround_dig), ")")
+Rt_w_ci <- paste0(round(last_week_df$m_R, nround_dig_R), " (", round(last_week_df$l_R, nround_dig_R), 
+                        " - ", round(last_week_df$u_R, nround_dig_R), ")")
+Rt_wo_ci <- round(last_week_df$m_R, nround_dig_R)
+char_thresh <- 20
+ltla_abbrev <- paste0(substr(last_week_df$ltla, 1, char_thresh), ifelse(nchar(last_week_df$ltla) > char_thresh, "...", ""))
+d <- data.frame(LTLA = ltla_abbrev, 'Cases (per 100K)' = round(last_week_df$nt_per_100k, 0), 
+                'Missing (per 100K)' = round(last_week_df$missing_per_100k, 0), 
+                R = Rt_wo_ci,
+                'Prevented cases per test' =  round(last_week_df$m_prevent * 100, nround_dig), 
+                '95% CI' = prevent_ci)
+d <- d[order(d$Prevented.cases.per.test, decreasing = T), ]
+tab_out <- xtable(d[1:10, ], digits = c(0, 0, 0, 0, 1, nround_dig, nround_dig))
+names(tab_out) <- c('LTLA', 'Cases', 'Missing', 'R', 'Prevented', '(95% CI)')
+print(tab_out,  file = paste0(output_plot_dir, "/prevented_infections_table.txt"), include.rownames = FALSE)
+tab_out
+
 
 ### PLOT DATA ###
 options(bitmapType = "cairo-png", device = "X11")
@@ -282,4 +334,4 @@ out_plt <- nt_plt + prev_plt + missing_plt + prop_plt + plot_layout(nrow = 1, nc
 #    title = paste0("Estimates of missing cases by LTLA for week of ", this_week)
 #  )
 
-ggsave("~/Downloads/combi_plt.png", out_plt, width = 5.5, height = 3, dpi = 500)
+ggsave(paste0(output_plot_dir, "/combi_plt.png"), out_plt, width = 5.5, height = 3, dpi = 500)

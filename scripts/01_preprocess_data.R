@@ -59,12 +59,16 @@ phe_region_pop <- pop_size %>%
 path_to_react_totals <- "data/react_total.csv"
 path_to_react_positives <- "data/react_positive.csv"
 
-react_Nr <- read_csv(path_to_react_totals) %>%
-  rename(date = X1) %>%
+react_Nr <- read_csv(path_to_react_totals)
+missing_field_name <- ifelse("X1" %in% names(react_Nr), "X1", "...1")
+react_Nr <- react_Nr %>% 
+  rename(date = eval(missing_field_name)) %>% 
   pivot_longer(-date, names_to = "phe_region", values_to = "Nr")
+
 react_nr <- read_csv(path_to_react_positives) %>%
-  rename(date = X1) %>%
+  rename(date = eval(missing_field_name)) %>%
   pivot_longer(-date, names_to = "phe_region", values_to = "nr")
+
 react_df <- react_Nr %>%
   left_join(react_nr, by = c("date", "phe_region")) %>%
   mutate(nr = replace_na(nr, 0)) %>%

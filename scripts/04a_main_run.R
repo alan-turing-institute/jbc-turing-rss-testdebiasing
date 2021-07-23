@@ -36,7 +36,7 @@ reg_df_curr <- region_df[region_df$phe_region == "South West", ]
 reg_df_curr[nrow(reg_df_curr) - 10:0, ]
 mid_week_unique <- sort(unique(ltla_df$mid_week))
 
-n_cores <- 12
+n_cores <- 25
 run_type <- c("fast", "full")[2]
 clust <- makeCluster(n_cores)
 doParallel::registerDoParallel(clust)

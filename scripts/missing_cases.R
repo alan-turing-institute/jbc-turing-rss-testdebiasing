@@ -19,8 +19,8 @@ n_weeks <- length(unique(ltla_df$mid_week))
 
 id <- "AR0.99sd1Rsd0.2"
 
-imperfect <- F
-type <- c("Infectious", "PCR_positive")[2]
+imperfect <- T
+type <- c("Infectious", "PCR_positive")[1]
 type_in_file_path <- paste0(type, "_", ifelse(imperfect, "Imperfect", "Perfect"))
 
 
@@ -38,7 +38,6 @@ SIR_model_results <- lapply(out_files, readRDS)
 names(SIR_model_results) <- sub(".RDS", "", basename(out_files))
 
 R_all <- prevent_all <- I_all <- data.frame()
-
 quant_plot <- c(0.025, 0.5, 0.975)
 for (ltla_curr in ltla_unique) {
   
@@ -47,7 +46,6 @@ for (ltla_curr in ltla_unique) {
     pull(M)
   
   saml_biased <- SIR_model_results[[ltla_curr]]
-  # str(SIR_model_results)
   its_keep <- (control_SIR$burn_in + 1):control_SIR$n_iters
   I_quant_curr <- t(apply(saml_biased$I[, its_keep], 1, function(v) quantile(v, quant_plot, na.rm = T))) / this_M * 100
   ltla_curr_df <- ltla_df[ltla_df$ltla == ltla_curr, ]
@@ -76,11 +74,6 @@ rownames(R_all) <- R_all$ltla
 rownames(I_all) <- I_all$ltla
 rownames(prevent_all) <- prevent_all$ltla
 
-str(I_all)
-plot(SIR_model_results[["Cornwall"]]$I_quant[, 2])
-I_all[I_all$ltla == "Cornwall", c("m")]
-
-
 last_week_df <- ltla_df %>%
   filter(mid_week == this_week) %>%
   left_join(I_all, by = "ltla") %>%
@@ -103,13 +96,33 @@ last_week_df[last_week_df$ltla == "Cornwall", c("nt_per_100k", "m_per_100k")]
 ### Scatter plot ###
 
 p1 <- ggplot(last_week_df, aes(m_per_100k, missing_prop)) + 
-  geom_point(aes(color = bame_quint)) + 
+  geom_point(aes(color = "black")) + 
   ylab("Estimated proportion of cases missing") +
   xlab("Estimated prevalence (per 100k)") +
   theme_minimal() +
   viridis::scale_color_viridis(discrete = TRUE)
 
 ggsave(paste0(output_plot_dir, "/missing_scatter.png"), p1)
+
+
+p1 <- ggplot(last_week_df, aes(m_per_100k, missing_prop)) + 
+  geom_point(aes(color = bame_quint)) + 
+  ylab("Estimated proportion of cases missing") +
+  xlab("Estimated prevalence (per 100k)") +
+  theme_minimal() +
+  viridis::scale_color_viridis(discrete = TRUE)
+
+ggsave(paste0(output_plot_dir, "/missing_scatter_bame.png"), p1)
+
+p1 <- ggplot(last_week_df, aes(m_per_100k, missing_prop)) + 
+  geom_point(aes(color = imd_quint)) + 
+  ylab("Estimated proportion of cases missing") +
+  xlab("Estimated prevalence (per 100k)") +
+  theme_minimal() +
+  viridis::scale_color_viridis(discrete = TRUE)
+
+ggsave(paste0(output_plot_dir, "/missing_scatter_imd.png"), p1)
+
 
 ### Tables ###
 

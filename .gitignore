@@ -16,8 +16,13 @@
 data/**
 !data/samples_pcr.csv
 !data/northamptonshire_pop_nomis.csv
+!data/census2011_ethnicity_LSOA_black_southasian.csv
+!data/Output_Area_to_Lower_Layer_Super_Output_Area_to_Middle_Layer_Super_Output_Area_to_Local_Authority_District__December_2020__Lookup_in_England_and_Wales.csv
+!data/File_10_-_IoD2019_Local_Authority_District_Summaries__lower-tier__.xlsx
 !data/lad_to_region_from_bsu.csv
 output/**
 output/
 ignore/**
 ignore/
+plots/
+plots/**

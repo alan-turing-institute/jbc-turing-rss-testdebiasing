@@ -11,8 +11,9 @@ ltla_df <- readr::read_csv("data/ltla.csv")
 ltla_unique <- unique(ltla_df$ltla)
 source("scripts/prep_BAME-IMD.R")
 
-this_week <- max(ltla_df$mid_week)
-n_weeks <- length(unique(ltla_df$mid_week))
+mid_week_unique <- unique(ltla_df$mid_week)
+this_week <- max(mid_week_unique)
+n_weeks <- length(mid_week_unique)
 
 id <- "AR0.99sd1Rsd0.2"
 
@@ -45,19 +46,17 @@ for (ltla_curr in ltla_unique) {
                                                     function(v) quantile(v, quant_plot, na.rm = T)))
   SIR_model_results[[ltla_curr]]$R_quant[n_weeks, ]
   
-  R_add <- as.data.frame(t(SIR_model_results[[ltla_curr]]$R_quant[n_weeks, ]))
-  I_add <- as.data.frame(t(SIR_model_results[[ltla_curr]]$I_quant[n_weeks, ]))
+  R_add <- as.data.frame(SIR_model_results[[ltla_curr]]$R_quant)
+  I_add <- as.data.frame(SIR_model_results[[ltla_curr]]$I_quant)
   names(I_add) <- names(R_add) <- c("l", "m", "u")
   R_add$ltla <- I_add$ltla <- ltla_curr
+  R_add$mid_week <- I_add$mid_week <- mid_week_unique
   R_all <- rbind(R_all, R_add)
   I_all <- rbind(I_all, I_add)
 }
-rownames(R_all) <- R_all$ltla
-rownames(I_all) <- I_all$ltla
 
-last_week_df <- ltla_df %>%
-  filter(mid_week == this_week) %>%
-  left_join(I_all, by = "ltla") %>%
+joint_df <- ltla_df %>%
+  left_join(I_all, by = c("ltla", "mid_week")) %>%
   left_join(cov_data, by = "ltla") %>%
   mutate(nt_per_100k = 1e5 * nt / M,
          m_per_100k = 1e3 * m,
@@ -69,6 +68,9 @@ last_week_df <- ltla_df %>%
          missing_prop = 1 -  (nt_per_100k / m_per_100k),
          u_missing_prop = 1 - (nt_per_100k / l_per_100k),
          l_missing_prop = 1 - (nt_per_100k / u_per_100k))
+
+last_week_df <- joint_df %>%
+  filter(mid_week == this_week) 
 
 ### Scatter plot ###
 

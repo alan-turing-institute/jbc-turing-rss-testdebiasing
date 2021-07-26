@@ -1,0 +1,21 @@
+% latex table generated in R 4.1.0 by xtable 1.8-4 package
+% Fri Jul 23 07:16:32 2021
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrrl}
+  \hline
+LTLA & Cases & Estimated Missing Cases & (95\% CI) \\ 
+  \hline
+Bury & 346 & 1323 & (867 - 1527) \\ 
+  Hyndburn & 549 & 1303 & (684 - 1724) \\ 
+  Ribble Valley & 386 & 1255 & (803 - 1568) \\ 
+  Rossendale & 399 & 1172 & (708 - 1582) \\ 
+  Pendle & 337 & 1032 & (600 - 1293) \\ 
+  Manchester & 458 & 995 & (483 - 1382) \\ 
+  South Tyneside & 209 & 974 & (601 - 1565) \\ 
+  Salford & 416 & 966 & (619 - 1380) \\ 
+  South Ribble & 320 & 958 & (635 - 1200) \\ 
+  North Tyneside & 354 & 935 & (505 - 1367) \\ 
+   \hline
+\end{tabular}
+\end{table}

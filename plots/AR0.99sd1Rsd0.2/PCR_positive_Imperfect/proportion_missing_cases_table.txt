@@ -1,0 +1,21 @@
+% latex table generated in R 4.1.0 by xtable 1.8-4 package
+% Thu Jul 22 19:41:36 2021
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrrl}
+  \hline
+LTLA & Cases & Estimated propn of cases missing & (95\% CI) \\ 
+  \hline
+Forest of Dean & 56 & 0.87 & (0.77 - 0.92) \\ 
+  Bromley & 63 & 0.86 & (0.81 - 0.91) \\ 
+  Dartford & 54 & 0.86 & (0.77 - 0.92) \\ 
+  Medway & 51 & 0.86 & (0.79 - 0.91) \\ 
+  Redditch & 38 & 0.86 & (0.75 - 0.91) \\ 
+  West Devon & 16 & 0.86 & (0.78 - 0.92) \\ 
+  Cornwall & 148 & 0.85 & (0.83 - 0.86) \\ 
+  Sevenoaks & 49 & 0.85 & (0.74 - 0.9) \\ 
+  Walsall & 58 & 0.85 & (0.78 - 0.89) \\ 
+  Basingstoke and Deane & 49 & 0.84 & (0.77 - 0.88) \\ 
+   \hline
+\end{tabular}
+\end{table}

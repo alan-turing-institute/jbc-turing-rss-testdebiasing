@@ -16,6 +16,7 @@
 data/**
 !data/samples_pcr.csv
 !data/northamptonshire_pop_nomis.csv
+!data/lad_to_region_from_bsu.csv
 output/**
 output/
 ignore/**

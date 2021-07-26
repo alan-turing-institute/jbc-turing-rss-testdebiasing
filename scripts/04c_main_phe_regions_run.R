@@ -13,11 +13,15 @@ library(dplyr)
 library(prevdebiasr)
 library(parallel)
 library(foreach)
-source("scripts/SIR_utils.R")
+source("scripts/SIR_utils.R", )
 
 trans_mats <- readRDS("transmats/poisson_SIR_epi_gamma_1.RDS")
 pcr_infectious_df <- readr::read_csv("data/moment_match_infectious.csv")
 ltla_df <- readr::read_csv("data/ltla.csv")
+
+bsu_mapping <- read.csv(file = "data/lad_to_region_from_bsu.csv", stringsAsFactors = F)
+
+str(bsu_mapping)
 
 # %>%
 #   left_join(vax_df, by = c("ltla", "mid_week")) %>%
@@ -40,8 +44,15 @@ region_df <- readr::read_csv("data/region.csv") %>%
   left_join(phe_vax_df, by = c("phe_region", "mid_week"))
 region_df$ltla <- region_df$phe_region
 
-
 str(region_df)
+
+str(ltla_df)
+str(bsu_mapping)
+ltla_df$bsu_region <- bsu_mapping[match(ltla_df$ltla, bsu_mapping$LAD19NM), "RGN19NM"]
+ltla_df$bsu_region[grep("Northam", ltla_df$ltla)] <- "East Midlands"
+ltla_df$bsu_region[grep("Bucking", ltla_df$ltla)] <- "South East"
+
+
 alpha_testing <- 3e-4
 control_debias <- prevdebiasr::get_control_parameters(
     alpha_testing = alpha_testing

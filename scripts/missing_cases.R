@@ -18,6 +18,7 @@ mid_week_unique <- unique(ltla_df$mid_week)
 this_week <- max(mid_week_unique)
 n_weeks <- length(mid_week_unique)
 
+
 id <- "AR0.99sd1Rsd0.2"
 
 imperfect <- T
@@ -25,7 +26,7 @@ type <- c("Infectious", "PCR_positive")[1]
 type_in_file_path <- paste0(type, "_", ifelse(imperfect, "Imperfect", "Perfect"))
 
 
-out_dir <- file.path("output", id, type_in_file_path, "SIR")
+out_dir <- file.path("output", id, type, "SIR")
 plot_dir <- file.path("plots", id, type_in_file_path)
 dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
 output_plot_dir <- c("~/Downloads", plot_dir)[2]
@@ -60,27 +61,23 @@ for (ltla_curr in ltla_unique) {
                                                     function(v) quantile(v, quant_plot, na.rm = T)))
   SIR_model_results[[ltla_curr]]$R_quant[n_weeks, ]
   
-  R_add <- as.data.frame(t(SIR_model_results[[ltla_curr]]$R_quant[n_weeks, ]))
-  I_add <- as.data.frame(t(SIR_model_results[[ltla_curr]]$I_quant[n_weeks, ]))
-  prevent_add <- as.data.frame(t(SIR_model_results[[ltla_curr]]$prevent_quant[n_weeks, ]))
+  R_add <- as.data.frame(SIR_model_results[[ltla_curr]]$R_quant)
+  I_add <- as.data.frame(SIR_model_results[[ltla_curr]]$I_quant)
+  prevent_add <- as.data.frame(SIR_model_results[[ltla_curr]]$prevent_quant)
   names(I_add) <- c("l", "m", "u")
   names(R_add) <- paste0(c("l", "m", "u"), "_R")
   names(prevent_add) <- paste0(c("l", "m", "u"), "_prevent")
   prevent_add$ltla <- R_add$ltla <- I_add$ltla <- ltla_curr
+  prevent_add$mid_week <- R_add$mid_week <- I_add$mid_week <- mid_week_unique
   R_all <- rbind(R_all, R_add)
   I_all <- rbind(I_all, I_add)
   prevent_all <- rbind(prevent_all, prevent_add)
 }
 
-rownames(R_all) <- R_all$ltla
-rownames(I_all) <- I_all$ltla
-rownames(prevent_all) <- prevent_all$ltla
-
 last_week_df <- ltla_df %>%
-  filter(mid_week == this_week) %>%
-  left_join(I_all, by = "ltla") %>%
-  left_join(R_all, by = "ltla") %>%
-  left_join(prevent_all, by = "ltla") %>%
+  left_join(I_all, by = c("ltla", "mid_week")) %>%
+  left_join(R_all, by = c("ltla", "mid_week")) %>%
+  left_join(prevent_all, by = c("ltla", "mid_week")) %>%
   left_join(cov_data, by = "ltla") %>%
   mutate(nt_per_100k = 1e5 * nt / M,
          m_per_100k = 1e3 * m,

@@ -4,6 +4,9 @@ library(rgdal)
 library(sf)
 library(xtable)
 library(gtools)
+
+# setwd("C:/Users/nicho/Documents/bauer_sync/projects/covid/covid_github/jbc-turing-rss-testdebiasing")
+
 source("scripts/plot_utils.R")
 source("scripts/SIR_utils.R")
 
@@ -20,8 +23,8 @@ n_weeks <- length(mid_week_unique)
 
 id <- "AR0.99sd1Rsd0.2"
 
-imperfect <- T
-type <- c("Infectious", "PCR_positive")[1]
+imperfect <- F
+type <- c("Infectious", "PCR_positive")[2]
 type_in_file_path <- paste0(type, "_", ifelse(imperfect, "Imperfect", "Perfect"))
 
 

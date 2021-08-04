@@ -74,5 +74,3 @@ IMD_score <- readxl::read_excel("data/File_10_-_IoD2019_Local_Authority_District
 cov_data <- left_join(bame_prop, IMD_score, by = 'ltla') %>%
   mutate(imd_quint = gtools::quantcut(imd, q=5, na.rm=TRUE))
 
-
-region_df[match(unique_regions, region_df$phe_region), ]

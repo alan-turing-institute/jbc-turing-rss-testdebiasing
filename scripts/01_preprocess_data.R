@@ -5,6 +5,8 @@ library(dplyr)
 library(tidyr)
 library(zoo)
 
+analysis_type <- c("missing_cases", "paper_results")[1]
+
 ### Import weekly LTLA-level Pillar 1+2 testing data ###
 path_to_pillar12 <- "data/Demographic_LA_tables.ods"
 
@@ -54,30 +56,88 @@ phe_region_pop <- pop_size %>%
   select(phe_region, M = `All ages`)
 
 
-### Import REACT PHE region totals and positives ###
-# Weekly data
-path_to_react_totals <- "data/react_total.csv"
-path_to_react_positives <- "data/react_positive.csv"
+if (analysis_type == "paper_results") {
+  ### Import REACT PHE region totals and positives ###
+  # Weekly data
+  path_to_react_totals <- "data/react_total.csv"
+  path_to_react_positives <- "data/react_positive.csv"
+  
+  react_Nr <- read_csv(path_to_react_totals)
+  missing_field_name <- ifelse("X1" %in% names(react_Nr), "X1", "...1")
+  react_Nr <- react_Nr %>% 
+    rename(date = eval(missing_field_name)) %>% 
+    pivot_longer(-date, names_to = "phe_region", values_to = "Nr")
+  
+  react_nr <- read_csv(path_to_react_positives) %>%
+    rename(date = eval(missing_field_name)) %>%
+    pivot_longer(-date, names_to = "phe_region", values_to = "nr")
+  
+  react_df <- react_Nr %>%
+    left_join(react_nr, by = c("date", "phe_region")) %>%
+    mutate(nr = replace_na(nr, 0)) %>%
+    full_join(week_df, by = character()) %>%
+    filter(date <= week_end & date >= week_start) %>%
+    group_by(phe_region, mid_week) %>%
+    summarise(Nr = sum(Nr),
+              nr = sum(nr), .groups = "drop")
+  readr::write_csv(react_df, "data/react.csv")
+}
 
-react_Nr <- read_csv(path_to_react_totals)
-missing_field_name <- ifelse("X1" %in% names(react_Nr), "X1", "...1")
-react_Nr <- react_Nr %>% 
-  rename(date = eval(missing_field_name)) %>% 
-  pivot_longer(-date, names_to = "phe_region", values_to = "Nr")
-
-react_nr <- read_csv(path_to_react_positives) %>%
-  rename(date = eval(missing_field_name)) %>%
-  pivot_longer(-date, names_to = "phe_region", values_to = "nr")
-
-react_df <- react_Nr %>%
-  left_join(react_nr, by = c("date", "phe_region")) %>%
-  mutate(nr = replace_na(nr, 0)) %>%
-  full_join(week_df, by = character()) %>%
-  filter(date <= week_end & date >= week_start) %>%
-  group_by(phe_region, mid_week) %>%
-  summarise(Nr = sum(Nr),
-            nr = sum(nr), .groups = "drop")
-readr::write_csv(react_df, "data/react.csv")
+if (analysis_type == "missing_cases") {
+  # Age-stratified REACT data
+  react_age_df <- data.frame()
+  for(round in 1:13) {
+    file_name_curr <- paste0("round_", round, "_go.csv")
+    path_to_local_age_file <- file.path("data", file_name_curr)
+    d <- read.csv(path_to_local_age_file)
+    d$region_week <- paste0(d$region, "_", d$react_week_start_date)
+    add <- data.frame(region_week = unique(d$region_week))
+    add$Nr <- sapply(add$region_week, function(x) sum(d[d$region_week == x, "number_samples"]))
+    add$nr <- sapply(add$region_week, function(x) sum(d[d$region_week == x, "number_positive"]))
+    add$start_week_react <- d[match(add$region_week, d$region_week), "react_week_start_date"]
+    add$mid_week_react <- as.Date(add$start_week_react) + 3
+    add$region <- d[match(add$region_week, d$region_week), "region"]
+    react_age_df <- rbind(react_age_df, add)
+  }
+  
+  mid_week_map <- data.frame(mid_week_p12 = mid_week_unique, mid_week_react = NA)
+  react_mid_week_unique <- sort(unique(as.character(react_age_df$mid_week_react)))
+  for (j in 1:nrow(mid_week_map)) {
+    mid_week_map$mid_week_react[j] <- react_mid_week_unique[which.min(abs(as.Date(mid_week_map$mid_week_p12[j]) - as.Date(react_mid_week_unique)))]
+  }
+  react_age_df$mid_week <- mid_week_map[match(as.character(react_age_df$mid_week_react), as.character(mid_week_map$mid_week_react)), "mid_week_p12"]
+  react_age_df_out <- react_age_df[!is.na(react_age_df$mid_week), ]
+  react_age_df_out <- react_age_df_out[, c("region", "mid_week", "Nr", "nr")]
+  colnames(react_age_df_out) <- c("phe_region", "mid_week", "Nr", "nr")
+  react_age_df_out <- react_age_df_out[order(react_age_df_out$phe_region, react_age_df_out$mid_week), ]
+  readr::write_csv(react_age_df_out, "data/age_destratified_react.csv")
+  
+  sanity_check <- F
+  if (sanity_check) {
+    react_df <- react_df[order(react_df$phe_region, react_df$mid_week), ]
+    react_df$region_week <- paste0(react_df$phe_region, "_", react_df$mid_week)
+    react_age_df_out$region_week <- paste0(react_age_df_out$phe_region, "_", react_age_df_out$mid_week)
+    react_df$pr <- react_df$nr / react_df$Nr
+    react_age_df_out$pr <- react_age_df_out$nr / react_age_df_out$Nr
+    reg_week_plot <- intersect(react_df$region_week, react_age_df_out$region_week)
+    pdf("/mnt/c/Temp/cross_check_react_agestrat_vs_non.pdf")
+    par(mfrow = c(2, 2))
+    for(plc in c("nr", "Nr", "pr")) {
+      plot(unlist(react_df[match(reg_week_plot, react_df$region_week), plc]), unlist(react_age_df_out[match(reg_week_plot, react_age_df_out$region_week), plc]),
+           xlab = "Data from positive/total.csv", ylab = "Data from age_strat weekly", main = plc)
+    }
+    dev.off()
+    comp_non <- react_df[match(reg_week_plot, react_df$region_week), ]
+    comp_age <- react_age_df_out[match(reg_week_plot, react_age_df_out$region_week), ]
+    inds_look <- which(comp_age$Nr < 5000 & comp_non$Nr > 5000)[1:20]
+    comp_age[inds_look, ]
+    comp_non[inds_look, ]
+  }
+  
+  react_df <- as_tibble(react_age_df_out)
+  react_df$mid_week <- as.Date(react_df$mid_week)
+  readr::write_csv(react_df, "data/react.csv")
+}
 
 # Round data
 path_to_react_7a <- "data/unwt_ordered_ltla_prev7a.csv"
@@ -91,7 +151,7 @@ react_7 <- bind_rows(react_7a, react_7b) %>%
   mutate(round = 7)
 
 react_round_df <- react_7
-for (this_round in 8:11) {
+for (this_round in 8:13) {
   path_to_react <- paste0("data/unwt_ordered_ltla_prev", this_round, ".csv")
   this_react <- read_csv(path_to_react) %>%
     select(ltla, positive, number_samples) %>%
@@ -100,6 +160,7 @@ for (this_round in 8:11) {
 }
 
 readr::write_csv(react_round_df, "data/react_round.csv")
+
 
 ### Get regional counts ###
 
@@ -113,13 +174,21 @@ region_df <- pillar12_df %>%
          nr = replace_na(nr, 0)) %>%
   left_join(phe_region_pop, by = "phe_region")
 
+region_df <- region_df[!is.na(region_df$nt), ]
 write_csv(region_df, "data/region.csv")
+
+
+
+
+
+
 
 ### Get LTLA counts ###
 
 ltla_df <- pillar12_df %>%
   select(ltla = `LTLA Name`, phe_region = `Region Name`, mid_week, Nt, nt) %>%
   left_join(ltla_pop, by = "ltla")
+ltla_df <- ltla_df[!is.na(ltla_df$nt), ]
 
 write_csv(ltla_df, "data/ltla.csv")
 

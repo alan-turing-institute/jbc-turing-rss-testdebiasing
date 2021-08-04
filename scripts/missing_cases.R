@@ -4,6 +4,9 @@ library(rgdal)
 library(sf)
 library(xtable)
 library(gtools)
+
+# setwd("C:/Users/nicho/Documents/bauer_sync/projects/covid/covid_github/jbc-turing-rss-testdebiasing")
+
 source("scripts/plot_utils.R")
 source("scripts/SIR_utils.R")
 
@@ -21,8 +24,8 @@ n_weeks <- length(mid_week_unique)
 
 id <- "AR0.99sd1Rsd0.2"
 
-imperfect <- T
-type <- c("Infectious", "PCR_positive")[1]
+imperfect <- F
+type <- c("Infectious", "PCR_positive")[2]
 type_in_file_path <- paste0(type, "_", ifelse(imperfect, "Imperfect", "Perfect"))
 
 
@@ -92,6 +95,20 @@ last_week_df <- ltla_df %>%
 str(last_week_df)
 last_week_df[last_week_df$ltla == "Cornwall", "missing_per_100k"]
 last_week_df[last_week_df$ltla == "Cornwall", c("nt_per_100k", "m_per_100k")]
+
+
+# Get whole-country totals
+str(last_week_df)
+last_week_df$number_missing_point_est <- last_week_df$M / 1e5 * last_week_df$missing_per_100k
+england_total_missing <- sum(last_week_df$number_missing_point_est)
+england_total_M <- sum(last_week_df$M)
+england_total_found <- sum(last_week_df$nt)
+england_missing_prop <- england_total_missing / (england_total_missing + england_total_found)
+
+
+paste0("England, Cases: ", england_total_found, ", Estimated Missing Cases: ", england_total_missing, 
+       ", Estimated propn of cases missing: ", round(england_missing_prop, 2))
+
 
 ### Scatter plot ###
 

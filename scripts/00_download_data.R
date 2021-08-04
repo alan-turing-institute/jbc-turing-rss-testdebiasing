@@ -2,6 +2,12 @@ dir.create("data", showWarnings = FALSE)
 
 # Make sure to install prevdebiasr first
 # (GN: I did this by creating local prevdebiasr.tar.gz and using install.packages())
+# install.packages(pkgs = "/mnt/c/Users/nicho/Documents/bauer_sync/projects/covid/covid_github/prevdebiasr.tar.gz", repos = NULL)
+# better approach from Brieuc:
+# library(devtools)
+# devtools::install_github("alan-turing-institute/prevdebiasr")
+# OR
+# renv::install("alan-turing-institute/prevdebiasr")
 library(prevdebiasr)
 
 ### Download weekly Pillar 1+2 data ###
@@ -10,7 +16,13 @@ library(prevdebiasr)
 # 2.	Scroll down to “Latest Report” and click the link
 # 3.	Scroll down to “Demographic and regional information for people tested and testing positive, STARTDATE to ENDDATE: data tables”
 # 4.	Copy that link address to the url_to_pillar12 <- "PASTE ME HERE"
-url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/998213/Demographic_output_w56.ods"
+analysis_type <- c("missing_cases", "paper_results")[1]
+if (analysis_type == "missing_cases") {
+  url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1007158/Demographic_LA_tables_Week_60.ods"
+}
+if (analysis_type == "paper_results") {
+  url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/998213/Demographic_output_w56.ods"
+}
 path_to_pillar12 <- "data/Demographic_LA_tables.ods"
 download.file(url_to_pillar12, path_to_pillar12)
 
@@ -47,6 +59,23 @@ download.file(file.path(url_to_react, "unwt_ordered_ltla_prev10.csv"),
 path_to_react_round11 <- "data/unwt_ordered_ltla_prev11.csv"
 download.file(file.path(url_to_react, "unwt_ordered_ltla_prev11.csv"), 
               path_to_react_round11)
+
+path_to_react_round12 <- "data/unwt_ordered_ltla_prev12.csv"
+download.file(file.path(url_to_react, "unwt_ordered_ltla_prev_12.csv"), 
+              path_to_react_round12)
+
+path_to_react_round13 <- "data/unwt_ordered_ltla_prev13.csv"
+download.file(file.path(url_to_react, "unwt_ordered_ltla_prev_13.csv"), 
+              path_to_react_round13)
+
+
+# REACT age-stratified data
+for(round in 1:13) {
+  file_name_curr <- paste0("round_", round, "_go.csv")
+  url_to_react_age_file <- file.path(url_to_react, "region_age_week_aggregated", file_name_curr)
+  path_to_local_age_file <- file.path("data", file_name_curr)
+  download.file(url_to_react_age_file, path_to_local_age_file)
+}
 
 ### Download NHS vaccination data ###
 # Procedure for updating vaccination data links

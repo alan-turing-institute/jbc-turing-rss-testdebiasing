@@ -120,10 +120,10 @@ for (r in phe_regions) {
   result = nums / denoms
   
   res_df <- data.frame(
-    upper = c(rep(up_ci, 3), apply(result, 2, quantile, prob = 0.975)),
-    lower = c(rep(low_ci, 3), apply(result, 2, quantile, prob = 0.025)),
-    mean = c(rep(mu, 3), apply(result, 2, mean)),
-    var = c(rep(sd ^ 2, 3), apply(result, 2, var)),
+    upper = c(rep(up_ci, 3), apply(result, 2, quantile, prob = 0.975, na.rm = T)),
+    lower = c(rep(low_ci, 3), apply(result, 2, quantile, prob = 0.025, na.rm = T)),
+    mean = c(rep(mu, 3), apply(result, 2, mean, na.rm = T)),
+    var = c(rep(sd ^ 2, 3), apply(result, 2, var, na.rm = T)),
     mid_week = dates
   )
   

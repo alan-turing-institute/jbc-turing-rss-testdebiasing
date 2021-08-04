@@ -96,6 +96,20 @@ str(last_week_df)
 last_week_df[last_week_df$ltla == "Cornwall", "missing_per_100k"]
 last_week_df[last_week_df$ltla == "Cornwall", c("nt_per_100k", "m_per_100k")]
 
+
+# Get whole-country totals
+str(last_week_df)
+last_week_df$number_missing_point_est <- last_week_df$M / 1e5 * last_week_df$missing_per_100k
+england_total_missing <- sum(last_week_df$number_missing_point_est)
+england_total_M <- sum(last_week_df$M)
+england_total_found <- sum(last_week_df$nt)
+england_missing_prop <- england_total_missing / (england_total_missing + england_total_found)
+
+
+paste0("England, Cases: ", england_total_found, ", Estimated Missing Cases: ", england_total_missing, 
+       ", Estimated propn of cases missing: ", round(england_missing_prop, 2))
+
+
 ### Scatter plot ###
 
 p1 <- ggplot(last_week_df, aes(m_per_100k, missing_prop)) + 

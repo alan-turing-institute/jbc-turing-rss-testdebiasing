@@ -27,3 +27,27 @@ for(prinamc in names(prev_pri_list)) {
   axis(side = 3, at = labat, label = signif(pseq[which.max(tot_log_lik)], 2))
 }
 dev.off()
+
+
+pdf("/mnt/c/Temp/estimate_FPR.pdf", 12, 8)
+par(mfrow = c(1, 1))
+for(prinamc in "nonpar_eb") {
+  prev_pri <- prev_pri_list[[prinamc]]
+  pseq <- 10^seq(-5, -3, len = 100)
+  prev <- 0
+  pall <- 0
+  for (prev in prev_pri) {
+    pdens <- matrix(NA, nrow(d), length(pseq), dimnames = list(1:nrow(d), pseq))
+    for(pc in pseq) {
+      pdens[, as.character(pc)] <- dbinom(x = d$nr, size = d$Nr, prob = prev + pc, log = F)
+    }  
+    pall <- pall + pdens
+  }
+  tot_log_lik <- colSums(log(pall))
+  plot(pseq, tot_log_lik, log = "x", ty = "l", xlab = "FPR (alpha)", ylab = "Log marginal likelihood")
+  # mtext(side = 3, text = paste0("Prevalence prior = ", prinamc), line = 2.5)
+  labat <- pseq[which.max(tot_log_lik)]
+  abline(v = labat)
+  axis(side = 3, at = labat, label = signif(pseq[which.max(tot_log_lik)], 2))
+}
+dev.off()

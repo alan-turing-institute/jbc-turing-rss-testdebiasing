@@ -37,7 +37,7 @@ reg_df_curr[nrow(reg_df_curr) - 10:0, ]
 mid_week_unique <- sort(unique(ltla_df$mid_week))
 
 n_cores <- 12
-run_type <- c("fast", "full")[2]
+run_type <- c("fast", "full")[1]
 clust <- makeCluster(n_cores)
 doParallel::registerDoParallel(clust)
 
@@ -73,6 +73,7 @@ ltla_names <- sapply(ltla_list, function(x) x$ltla[1])
 ltla_prevalence <- parLapply(clust, ltla_list, local_prevalence,
                             control_debias, imperfect, type)
 names(ltla_prevalence) <- ltla_names
+
 # Save output
 delta_out_file <- file.path(out_dir, "delta_pcr_perfect.csv")
 readr::write_csv(delta_df, delta_out_file)
@@ -124,12 +125,15 @@ for (type in type_run) {
     saveRDS(ltla_prevalence, ltla_out_file, version = 2)
 
     # Fit SIR to latest available date
-    foreach(ltla_name = ltla_names, .packages = c("dplyr", "prevdebiasr")) %dopar% {
+    foreach(ltla_name = ltla_names, .packages = c("dplyr", "prevdebiasr")) %dopar% { #ltla_name <- ltla_names[1]#
         source("scripts/SIR_utils.R")
         d_ltla <- ltla_df %>%
             filter(ltla == ltla_name)
-
         I_log_lik <- ltla_prevalence[[ltla_name]]$log_post
+        
+        # TODO: Import up-to-date vax data
+        d_ltla$V[is.na(d_ltla$V)] <- d_ltla$V[max(which(!is.na(d_ltla$V)))]
+        
         SIR_model_out_ltla <- sample_I_R_SIR_from_pre_calc_lik(
             d_ltla, I_log_lik,
             trans_mats, control_debias,

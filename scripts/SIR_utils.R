@@ -30,6 +30,8 @@ control_SIR$epi_gamma <- 1 / control_SIR$generation_time
 
 # Main wrapper function
 
+# d = d_ltla
+
 sample_I_R_SIR_from_pre_calc_lik <- function(d, 
                                              I_log_lik, 
                                              trans_mats,
@@ -37,6 +39,11 @@ sample_I_R_SIR_from_pre_calc_lik <- function(d,
                                              control_SIR, 
                                              init_meth = c("biased_data", 
                                                            "random_data")[1]) {
+  if (all(c("ltla", "mid_week") %in% colnames(d))) {
+    d$namdat <- paste0(d$ltla, "_", d$mid_week)
+  } else {
+    d$namdat <- 1:nrow(d)
+  }
   d$I <- control_debias$I_seq[apply(I_log_lik, 1, function(v){ if(all(is.na(v))) {NA} else {which.max(v)}})]
   
   d$I <- c(mean(d$I[1:2]),
@@ -53,7 +60,6 @@ sample_I_R_SIR_from_pre_calc_lik <- function(d,
     out
   })
   d$R <- c(control_SIR$R_grid[apply(R_trans, 1, which.max)], 1)
-  
   saml <- rep(times = 3, x = list(matrix(NA, nrow(d), control_SIR$n_iters, 
                                          dimnames = list(d$namdat, 1:control_SIR$n_iters))))
   names(saml) <- c("I", "R", "Rplus")
@@ -103,8 +109,9 @@ sample_I_SIR_from_pre_calc_lik <- function(d, I_seq, trans_mats,
       parl.inf[[j]] <- matrix(-Inf, nI, nI)
     }
   }
+  # for(j in 1:23){
   for(j in 1:nrow(d)){
-    if(j == 1){
+      if(j == 1){
       for (k in 1:nI) {
         parl[[j]][k, ] <- lik[j, ]
       }
@@ -117,6 +124,9 @@ sample_I_SIR_from_pre_calc_lik <- function(d, I_seq, trans_mats,
       parll[[j]][updatec, ] <- sweep(log(prev_fwd_probs[updatec]) + log(trans_mats[[as.character(d$R[j])]][updatec, , drop = F]), 2, log_lik[j, ], '+')
       parl[[j]][updatec, ] <- exp(parll[[j]][updatec, , drop = F] - max(parll[[j]][updatec, , drop = F]))
       parl[[j]][updatec, ] <- parl[[j]][updatec, , drop = F] / sum(parl[[j]][updatec, , drop = F])
+      if(length(updatec) == 0) {
+        stop()
+      }
     }
   }
   for (j in nrow(d):1) {
@@ -133,6 +143,15 @@ sample_I_SIR_from_pre_calc_lik <- function(d, I_seq, trans_mats,
   return(I_out)
 }
 
+
+# I_seq <- control_debias$I_seq
+# R_grid <- control_SIR$R_grid 
+# R_AR_sd <- control_SIR$R_AR_sd
+# trll <- trans_mats
+# 
+# par(mfrow = c(2, 1))
+# plot(d$I)
+# plot(d$R)
 
 
 # Sample effective R conditional on rest of parameters

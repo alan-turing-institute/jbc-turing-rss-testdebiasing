@@ -4,6 +4,7 @@
 
 source("scripts/plot_utils.R")
 source("scripts/SIR_utils.R")
+source("scripts/01_preprocess_data.R")
 
 ltla_unique <- unique(ltla_df$ltla)
 mid_week_unique <- unique(ltla_df$mid_week)
@@ -14,7 +15,9 @@ date_recent <- max(mid_week_unique)
 ### DELTA HYPERPARAMETERS ###
 
 param_df <- expand.grid(delta_AR_sd = c(1, 2),
-                        delta_AR_rho = c(0.975, 0.99, 0.999))
+                        delta_AR_rho = c(0.975, 0.99, 0.999),
+                        alpha = 3e-4,
+                        beta = 0.05)
 
 sensitivity_plot_delta <- function(type, what_pl) {
   par(mfrow = c(3, 2))
@@ -22,7 +25,9 @@ sensitivity_plot_delta <- function(type, what_pl) {
     
     id <- paste0("AR", param_df$delta_AR_rho[i],
                  "sd", param_df$delta_AR_sd[i],
-                 "Rsd", 0.2)
+                 "Rsd", 0.2,
+                 "alpha", param_df$alpha[i],
+                 "beta", param_df$beta[i])
     
     panel_label <- substitute(paste(psi, " = ", rho, ", ", sigma[epsilon], " = ", sig), 
                               list(rho = param_df$delta_AR_rho[i],
@@ -79,13 +84,13 @@ sensitivity_plot_delta <- function(type, what_pl) {
     xpl <- plot_map$day_index
     ltla_curve <- c("Bolsover", "West Devon", "Bassetlaw", "North Hertfordshire", "Plymouth", 
                     "Newham", "Ealing", "Hounslow", "Brent", "Slough", "Leicester")[c(6, 7, 1, 2, 11)]
-    
+    ltla_curve <- c("Cheltenham", "Cornwall", "Rossendale", "Salford", "Torridge")
     max_prev_I <- ceiling(max(sapply(SIR_model_results[ltla_curve], 
                                      function(x) max(x$I_quant[ ,3]))))
     
     col_reg <- rainbow(length(ltla_curve), alpha = .75)
     names(col_reg) <- ltla_curve
-    ylim_use <- switch(what_pl, I = c(0, max_prev_I), R = c(0, 2.5))
+    ylim_use <- switch(what_pl, I = c(0, max_prev_I), R = c(0, 4))
     
     matplot(x = 0, y = 0, ty = "n", ylim = ylim_use, xlim = range(xpl), 
             xaxt = "n", yaxt = "s", xlab = "", las = 2, ylab = "", xaxs = "i")
@@ -120,28 +125,25 @@ sensitivity_plot_delta <- function(type, what_pl) {
   }
 }
 
-for (type in c("PCR_positive", "Infectious")) {
-  for (whatpl in c("I", "R")) {
-    pdf(paste0("plots/SI_delta_", type, "_", whatpl, ".pdf"), 10, 7)
-    sensitivity_plot_delta(type, whatpl)
-    dev.off()
-    
-    file.copy(paste0("plots/SI_delta_", type, "_", whatpl, ".pdf"),
-              paste0(overleaf_dir, "/SI_delta_", type, "_", whatpl, ".pdf"),
-              overwrite = TRUE)
-  }
+type <- "Infectious"
+for (whatpl in c("I", "R")) {
+  
+  pdf(paste0("plots/SI_delta_", type, "_", whatpl, ".pdf"), 10, 7)
+  sensitivity_plot_delta(type, whatpl)
+  dev.off()
+  
 }
 
 ### SENS/SPEC HYPERPARAMETERS ###
 
-param_df <- expand.grid(alpha = c(0.001, 0.003),
+param_df <- expand.grid(alpha = c(0.001, 3e-4),
                         beta = c(0.05, 0.1, 0.3))
 
 sensitivity_plot_sensspec <- function(type, what_pl) {
   par(mfrow = c(3, 2))
   for (i in 1:nrow(param_df)) {
     
-    id <- paste0("alpha", param_df$alpha[i],
+    id <- paste0("AR0.99sd1Rsd0.2alpha", param_df$alpha[i],
                  "beta", param_df$beta[i])
     
     panel_label <- substitute(paste(alpha, " = ", alp, ", ", beta, " = ", bet), 
@@ -199,13 +201,13 @@ sensitivity_plot_sensspec <- function(type, what_pl) {
     xpl <- plot_map$day_index
     ltla_curve <- c("Bolsover", "West Devon", "Bassetlaw", "North Hertfordshire", "Plymouth", 
                     "Newham", "Ealing", "Hounslow", "Brent", "Slough", "Leicester")[c(6, 7, 1, 2, 11)]
-    
+    ltla_curve <- c("Cheltenham", "Cornwall", "Rossendale", "Salford", "Torridge")
     max_prev_I <- ceiling(max(sapply(SIR_model_results[ltla_curve], 
                                      function(x) max(x$I_quant[ ,3]))))
     
     col_reg <- rainbow(length(ltla_curve), alpha = .75)
     names(col_reg) <- ltla_curve
-    ylim_use <- switch(what_pl, I = c(0, max_prev_I), R = c(0, 2.5))
+    ylim_use <- switch(what_pl, I = c(0, max_prev_I), R = c(0, 4))
     
     matplot(x = 0, y = 0, ty = "n", ylim = ylim_use, xlim = range(xpl), 
             xaxt = "n", yaxt = "s", xlab = "", las = 2, ylab = "", xaxs = "i")
@@ -240,10 +242,9 @@ sensitivity_plot_sensspec <- function(type, what_pl) {
   }
 }
 
-for (type in c("PCR_positive", "Infectious")) {
-  for (whatpl in c("I", "R")) {
-    pdf(paste0("plots/SI_sensspec_", type, "_", whatpl, ".pdf"), 10, 7)
-    sensitivity_plot_sensspec(type, whatpl)
-    dev.off()
-  }
+type <- "Infectious"
+for (whatpl in c("I", "R")) {
+  pdf(paste0("plots/SI_sensspec_", type, "_", whatpl, ".pdf"), 10, 7)
+  sensitivity_plot_sensspec(type, whatpl)
+  dev.off()
 }

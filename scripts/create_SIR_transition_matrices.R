@@ -85,7 +85,7 @@ trl <- foreach(Rc = control_SIR$R_grid,
                      if(sum(bin.d.prob.add$prob) > 1 + 1e-10)
                        stop()
                    }
-                   saveRDS(trmat, file_out)
+                   saveRDS(trmat, file_out, version = 2)
                  } else {
                    trmat <- readRDS(file_out)
                  }
@@ -96,4 +96,4 @@ stopCluster(cl)
 names(trl) <- control_SIR$R_grid
 out_file <- paste0("transmats/poisson_SIR_epi_gamma_", control_SIR$epi_gamma, ".RDS")
 dir.create("transmats")
-saveRDS(trl, out_file)
+saveRDS(trl, out_file, version = 2)

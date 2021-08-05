@@ -408,6 +408,13 @@
       "Repository": "CRAN",
       "Hash": "3471fb65971f1a7b2d4ae7848cf2db8d"
     },
+    "lubridate": {
+      "Package": "lubridate",
+      "Version": "1.7.10",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "1ebfdc8a3cfe8fe19184f5481972b092"
+    },
     "magrittr": {
       "Package": "magrittr",
       "Version": "2.0.1",
@@ -511,12 +518,12 @@
       "Version": "0.1.0",
       "Source": "GitHub",
       "RemoteType": "github",
+      "RemoteHost": "api.github.com",
       "RemoteUsername": "alan-turing-institute",
       "RemoteRepo": "prevdebiasr",
       "RemoteRef": "main",
-      "RemoteSha": "61765d456bb418fa68b06a24367331a203c5b55a",
-      "RemoteHost": "api.github.com",
-      "Hash": "35de9076c247d12e5fa2af4d9c5da675"
+      "RemoteSha": "b851aa35a27e7c833e9d9101f2ca58e392e7a384",
+      "Hash": "f9ad5cb413e74aad8acc96084dd9561c"
     },
     "progress": {
       "Package": "progress",
@@ -531,6 +538,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "97def703420c8ab10d8f0e6c72101e02"
+    },
+    "rappdirs": {
+      "Package": "rappdirs",
+      "Version": "0.3.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "5e3c5dc0b071b21fa128676560dbe94d"
     },
     "readODS": {
       "Package": "readODS",
@@ -573,6 +587,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "bb5996d0bd962d214a11140d77589917"
+    },
+    "reticulate": {
+      "Package": "reticulate",
+      "Version": "1.20",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "30ab0ea8c8d3dd16a3fa06903449bbfb"
     },
     "rgdal": {
       "Package": "rgdal",
@@ -734,6 +755,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "2826c5d9efb0a88f657c7a679c7106db"
+    },
+    "zoo": {
+      "Package": "zoo",
+      "Version": "1.8-9",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "035d1c7c12593038c26fb1c2fd40c4d2"
     }
   }
 }

@@ -29,7 +29,7 @@ for(prinamc in names(prev_pri_list)) {
 dev.off()
 
 
-pdf("/mnt/c/Temp/estimate_FPR.pdf", 12, 8)
+pdf("/mnt/c/Temp/estimate_FPR.pdf", 7, 5)
 par(mfrow = c(1, 1))
 for(prinamc in "nonpar_eb") {
   prev_pri <- prev_pri_list[[prinamc]]

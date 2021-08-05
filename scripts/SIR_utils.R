@@ -12,9 +12,14 @@ control_SIR$prior_immune_t0 <- list(mean = 0.06,
                                     upper_trunc = 0.1,
                                     lower_trunc = 0)
 
-# MCMC parameters
+# MCMC parameters 
 control_SIR$n_iters <- 200
 control_SIR$burn_in <- 100
+
+# # MCMC parameters for checking
+# control_SIR$n_iters <- 600
+# control_SIR$burn_in <- 300
+
 
 # R_grid is the grid for R number (this determines the discrete state space of the HMM on beta)
 # Note that R = beta / gamma, so the grid on R determines the grid on beta (as gamma is prespecified)

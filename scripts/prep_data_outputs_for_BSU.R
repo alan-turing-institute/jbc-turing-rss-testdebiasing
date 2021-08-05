@@ -46,7 +46,7 @@ imperfect <- FALSE#for (imperfect in c(FALSE, TRUE)) {
     region_prevalence <- readRDS(region_out_file)
   control_debias$quant_approx
     str(region_prevalence)
-    
+    region_prevalence[[1]]$log_post[1, ]
   # ###############
   # pdf("/mnt/c/Temp/bsu_checking_SIR_fitting_issue.pdf", 12, 9)
   # ind_curr <- 23
@@ -126,12 +126,15 @@ imperfect <- FALSE#for (imperfect in c(FALSE, TRUE)) {
     # I_all <- rbind(I_all, I_add)
     # prevent_all <- rbind(prevent_all, prevent_add)
   }
+  pdf("/mnt/c/Temp/phe_regions_bsu_plot.pdf", 9, 9)
+  par(mfrow = c(3, 3))
   for (region_curr in unique_regions) {# region_curr <- "London"#
     region_curr_df <- out_df[out_df$phe_region == region_curr, ]
     plot(1:nrow(region_curr_df), region_curr_df$m_I, ty = "l", lwd = 2, ylim = c(0, 4), main = region_curr, xlab = "Week index", ylab = "Prevalence (%)")
     lines(1:nrow(region_curr_df), region_curr_df$l_I)
     lines(1:nrow(region_curr_df), region_curr_df$u_I)
   }
+  dev.off()
   # mtext(outer = T, text = paste0("Imperfect testing ", imperfect))
 # }
 dev.off()

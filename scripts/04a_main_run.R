@@ -64,6 +64,9 @@ delta_df <- region_df %>%
       specify_delta_prior(.x, control_debias, imperfect)
     ))
 
+
+plot(unlist(delta_df[delta_df$phe_region == "London", "delta_prior_mean"]))
+
 # Estimate local prevalence for each LTLA
 ltla_list <- ltla_df %>%
 left_join(delta_df, by = c("phe_region", "mid_week")) %>%
@@ -80,7 +83,6 @@ readr::write_csv(delta_df, delta_out_file)
 
 ltla_out_file <- file.path(out_dir, "ltla_prevalence_pcr_perfect.RDS")
 saveRDS(ltla_prevalence, ltla_out_file, version = 2)
-
 
 ### Imperfect testing, PCR positivity and infectiousness ###
 imperfect <- switch (run_type,

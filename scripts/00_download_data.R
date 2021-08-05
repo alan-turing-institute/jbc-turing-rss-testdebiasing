@@ -16,14 +16,15 @@ library(prevdebiasr)
 # 2.	Scroll down to “Latest Report” and click the link
 # 3.	Scroll down to “Demographic and regional information for people tested and testing positive, STARTDATE to ENDDATE: data tables”
 # 4.	Copy that link address to the url_to_pillar12 <- "PASTE ME HERE"
-analysis_type <- c("missing_cases", "paper_results")[1]
-if (analysis_type == "missing_cases") {
-  url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1007158/Demographic_LA_tables_Week_60.ods"
-}
-if (analysis_type == "paper_results") {
-  url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/998213/Demographic_output_w56.ods"
-}
-path_to_pillar12 <- "data/Demographic_LA_tables.ods"
+url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1007158/Demographic_LA_tables_Week_60.ods"
+# analysis_type <- c("missing_cases", "paper_results")[1]
+# if (analysis_type == "missing_cases") {
+#   url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1007158/Demographic_LA_tables_Week_60.ods"
+# }
+# if (analysis_type == "paper_results") {
+#   url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/998213/Demographic_output_w56.ods"
+# }
+# path_to_pillar12 <- "data/Demographic_LA_tables.ods"
 download.file(url_to_pillar12, path_to_pillar12)
 
 ### Download REACT data ###

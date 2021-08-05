@@ -44,6 +44,7 @@ names(SIR_model_results) <- sub(".RDS", "", basename(out_files))
 
 R_all <- prevent_all <- I_all <- data.frame()
 quant_plot <- c(0.025, 0.5, 0.975)
+use_mean <- TRUE
 for (ltla_curr in ltla_unique) {
   
   this_M <- ltla_pop %>%
@@ -53,15 +54,24 @@ for (ltla_curr in ltla_unique) {
   saml_biased <- SIR_model_results[[ltla_curr]]
   its_keep <- (control_SIR$burn_in + 1):control_SIR$n_iters
   I_quant_curr <- t(apply(saml_biased$I[, its_keep], 1, function(v) quantile(v, quant_plot, na.rm = T))) / this_M * 100
+  if (use_mean) {
+    I_quant_curr[, '50%'] <- t(apply(saml_biased$I[, its_keep, drop = F], 1, mean, na.rm = T)) / this_M * 100
+  }
+  SIR_model_results[[ltla_curr]]$I_quant <- I_quant_curr
   ltla_curr_df <- ltla_df[ltla_df$ltla == ltla_curr, ]
   ltla_curr_df <- ltla_curr_df[order(ltla_curr_df$mid_week), ]
   prob_recover_in_week <- pexp(7, 1 / 7)
   E_num_infections_prevented_mcmc_out <- (saml_biased$I[, its_keep] - ltla_curr_df$nt) / this_M * saml_biased$R[, its_keep] * prob_recover_in_week
   SIR_model_results[[ltla_curr]]$prevent_quant <- t(apply(E_num_infections_prevented_mcmc_out, 1, 
                                                   function(v) quantile(v, quant_plot, na.rm = T)))
-  SIR_model_results[[ltla_curr]]$I_quant <- I_quant_curr
+  if (use_mean) {
+    SIR_model_results[[ltla_curr]]$prevent_quant[, '50%'] <- t(apply(E_num_infections_prevented_mcmc_out, 1, mean, na.rm = T))
+  }
   SIR_model_results[[ltla_curr]]$R_quant <- t(apply(saml_biased$R[, its_keep], 1, 
                                                     function(v) quantile(v, quant_plot, na.rm = T)))
+  if (use_mean) {
+    SIR_model_results[[ltla_curr]]$R_quant[, '50%'] <- t(apply(saml_biased$R[, its_keep], 1, mean, na.rm = T))
+  }
   SIR_model_results[[ltla_curr]]$R_quant[n_weeks, ]
   
   R_add <- as.data.frame(SIR_model_results[[ltla_curr]]$R_quant)

@@ -125,6 +125,9 @@ for (imperfect in c(FALSE, TRUE)[1]) {
           filter(phe_region == region_name)
 
       I_log_lik <- region_prevalence[[region_name]]$log_post
+      # TODO: Import up-to-date vax data
+      d_region$V[is.na(d_region$V)] <- d_region$V[max(which(!is.na(d_region$V)))]
+      
       SIR_model_out_region <- sample_I_R_SIR_from_pre_calc_lik(
           d_region, I_log_lik,
           trans_mats, control_debias,
@@ -145,10 +148,6 @@ stopCluster(clust)
 
 
 
-region_df <- readr::read_csv("data/region.csv")
-unique_region <- unique(region_df$phe_region)
-
-type_in_file_path <- paste0(type, "_", ifelse(imperfect, "Imperfect", "Perfect"))
 
 
 

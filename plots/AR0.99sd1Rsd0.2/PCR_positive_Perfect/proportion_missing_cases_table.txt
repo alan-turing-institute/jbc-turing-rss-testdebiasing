@@ -1,21 +1,21 @@
 % latex table generated in R 4.1.0 by xtable 1.8-4 package
-% Thu Aug  5 08:12:58 2021
+% Thu Aug  5 10:56:59 2021
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrrl}
   \hline
 LTLA & Cases & Estimated propn of cases missing & (95\% CI) \\ 
   \hline
-Barking and Dagenham & 320 & 0.77 & (0.71 - 0.82) \\ 
-  Havering & 442 & 0.76 & (0.7 - 0.8) \\ 
-  Lewisham & 453 & 0.76 & (0.69 - 0.79) \\ 
-  Newham & 321 & 0.76 & (0.7 - 0.81) \\ 
-  Redbridge & 313 & 0.76 & (0.68 - 0.81) \\ 
+Barking and Dagenham & 320 & 0.79 & (0.76 - 0.82) \\ 
+  Newham & 321 & 0.77 & (0.72 - 0.8) \\ 
+  Redbridge & 313 & 0.77 & (0.73 - 0.81) \\ 
   Bromley & 517 & 0.75 & (0.68 - 0.79) \\ 
-  Sutton & 471 & 0.74 & (0.68 - 0.78) \\ 
-  Rochford & 584 & 0.73 & (0.64 - 0.77) \\ 
-  Bexley & 538 & 0.72 & (0.68 - 0.76) \\ 
-  Chelmsford & 622 & 0.72 & (0.61 - 0.75) \\ 
+  Havering & 442 & 0.75 & (0.7 - 0.81) \\ 
+  Bexley & 538 & 0.74 & (0.69 - 0.78) \\ 
+  Lewisham & 453 & 0.74 & (0.69 - 0.77) \\ 
+  Chelmsford & 622 & 0.73 & (0.67 - 0.75) \\ 
+  Cheltenham & 357 & 0.73 & (0.65 - 0.77) \\ 
+  Harrow & 431 & 0.73 & (0.66 - 0.77) \\ 
    \hline
 \end{tabular}
 \end{table}

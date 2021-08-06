@@ -1,21 +1,21 @@
 % latex table generated in R 4.1.0 by xtable 1.8-4 package
-% Thu Aug  5 08:12:58 2021
+% Thu Aug  5 10:56:59 2021
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrrl}
   \hline
 LTLA & Cases & Estimated Missing Cases & (95\% CI) \\ 
   \hline
-Redcar and Cleveland & 1389 & 1898 & (1374 - 2300) \\ 
-  Hartlepool & 975 & 1724 & (1167 - 2055) \\ 
-  Chelmsford & 622 & 1628 & (969 - 1905) \\ 
-  Rochford & 584 & 1583 & (1037 - 1994) \\ 
-  Bromley & 517 & 1515 & (1096 - 1900) \\ 
-  North Warwickshire & 659 & 1511 & (1062 - 1923) \\ 
-  South Gloucestershire & 863 & 1507 & (912 - 2043) \\ 
-  Middlesbrough & 1282 & 1486 & (978 - 1916) \\ 
-  Worcester & 632 & 1468 & (1132 - 1593) \\ 
-  Plymouth & 857 & 1440 & (767 - 1874) \\ 
+Redcar and Cleveland & 1389 & 2090 & (1538 - 2300) \\ 
+  Hartlepool & 975 & 1753 & (1295 - 2055) \\ 
+  Chelmsford & 622 & 1676 & (1270 - 1905) \\ 
+  Solihull & 825 & 1568 & (1141 - 1956) \\ 
+  South Tyneside & 941 & 1537 & (1169 - 1718) \\ 
+  Bexley & 538 & 1535 & (1176 - 1886) \\ 
+  Middlesbrough & 1282 & 1526 & (1113 - 1916) \\ 
+  Stockton-on-Tees & 1130 & 1522 & (1154 - 1838) \\ 
+  Bromley & 517 & 1516 & (1096 - 1900) \\ 
+  Rochford & 584 & 1498 & (1037 - 1994) \\ 
    \hline
 \end{tabular}
 \end{table}

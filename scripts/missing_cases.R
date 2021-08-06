@@ -123,7 +123,7 @@ paste0("England, Cases: ", england_total_found, ", Estimated Missing Cases: ", e
 ### Scatter plot ###
 
 p1 <- ggplot(last_week_df, aes(m_per_100k, missing_prop)) + 
-  geom_point(aes(color = "black")) + 
+  geom_point() + 
   ylab("Estimated proportion of cases missing") +
   xlab("Estimated prevalence (per 100k)") +
   theme_minimal() +
@@ -165,6 +165,7 @@ tab_out <- xtable(d[1:10, ], digits = nround_dig)
 names(tab_out) <- c('LTLA', 'Cases', 'Estimated Missing Cases', '(95% CI)')
 print(tab_out,  file = paste0(output_plot_dir, "/missing_cases_table.txt"), include.rownames = FALSE)
 tab_out
+which(d$LTLA == "Newcastle-under-Lyme")
 
 # Proportions
 
@@ -178,6 +179,7 @@ d <- d[order(d$Proportion.of.missing.cases, decreasing = T), ]
 tab_out <- xtable(d[1:10, ], digits = c(0, 0, 0, nround_dig, nround_dig))
 names(tab_out) <- c('LTLA', 'Cases', 'Estimated propn of cases missing', '(95% CI)')
 print(tab_out,  file = paste0(output_plot_dir, "/proportion_missing_cases_table.txt"), include.rownames = FALSE)
+which(d$LTLA == "Newcastle-under-Lyme")
 
 # Prevented infections per 100 tests
 
@@ -201,6 +203,8 @@ names(tab_out) <- c('LTLA', 'Cases', 'Missing', 'R', 'Prevented', '(95% CI)')
 print(tab_out,  file = paste0(output_plot_dir, "/prevented_infections_table.txt"), include.rownames = FALSE)
 tab_out
 
+which(d$LTLA == "Newcastle-under-Lyme")
+sort(d$LTLA)
 
 ### PLOT DATA ###
 options(bitmapType = "cairo-png", device = "X11")

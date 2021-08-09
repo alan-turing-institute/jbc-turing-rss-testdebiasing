@@ -80,11 +80,14 @@ for(round in 1:13) {
 
 ### Download NHS vaccination data ###
 # Procedure for updating vaccination data links
-# 1.	Go to https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/covid-19-vaccinations-archive/ 
-# 2.	Scroll to bottom of page where the "Monthly Covid-19 vaccinations data archive" is
+# 1.	Go to https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/ 
+# 2.	Scroll down to "Monthly Covid-19 vaccinations" section
 # 3.  Copy and paste most recent monthly data URL below to url_to_vax <- "HERE PLEASE"
-url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/06/COVID-19-monthly-announced-vaccinations-10-June-2021.xlsx"
-url_to_most_recent_weekly_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/06/COVID-19-weekly-announced-vaccinations-24-June-2021.xlsx"
+# 4.  Scroll up to "Weekly data"
+# 5.  Copy and paste URL below to url_most_recent_weekly_vax <- "HERE PLEASE"
+
+url_to_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/07/COVID-19-monthly-announced-vaccinations-08-July-2021-revised.xlsx"
+url_to_most_recent_weekly_vax <- "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2021/08/COVID-19-weekly-announced-vaccinations-05-August-2021.xlsx"
 path_to_vax <- "data/COVID-19-monthly-announced-vaccinations.xlsx"
 path_to_weekly_vax <- "data/COVID-19-weekly-announced-vaccinations.xlsx"
 download.file(url_to_vax, path_to_vax)

@@ -1,21 +1,8 @@
 ### Figure 2 ###
 
-control <- prevdebiasr::get_control_parameters()
-
-# Quantiles to plot
-quant_plot <- c(0.025, 0.5, 0.975)
-  
-id <- "AR0.99sd1Rsd0.2"
-
-out_dir <- file.path("output", id)
-plot_dir <- file.path("plots", id)
-dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
-
-debiased_ltla <- readRDS(file.path(out_dir, "ltla_prevalence_pcr_perfect.RDS"))
-
 # Extract REACT round 7 and 8 output
 react_ind <- which(unique(ltla_df$mid_week) %in% react_date_df$mid_week)
-debiased_ll <- lapply(debiased_ltla,
+debiased_ll <- lapply(ltla_prevalence,
                       function(x) t(apply(x$norm_post[react_ind, ], 1, function(v) { 
                         if(any(is.na(v))) { 
                           return( rep(NA, length(quant_plot))) 
@@ -26,7 +13,7 @@ debiased_ll <- lapply(debiased_ltla,
                       })))
 
 debiased_ltla_estimates <- abind::abind(
-  debiased_ll, along = 3, new.names = list(as.character(7:11), 
+  debiased_ll, along = 3, new.names = list(as.character(react_rounds), 
                                            c("low", "mid", "up"),
                                            unique(raw_pillar2_df$ltla))
 ) %>%
@@ -39,14 +26,24 @@ debiased_ltla_estimates <- abind::abind(
 
 graphics.off()
 
-pdf(file.path(plot_dir, "fig2_bias_correction_789.pdf"), 9, 6.25)
+pdf(file.path(plot_dir, "fig2_bias_correction.pdf"), 9, 6.25)
 
 par(mfrow = c(2, 2), oma = c(4, 4, 4, 10), mar = c(3, 2, 2, 2))
-#max_prev <- 5
-#max_prev_uncorr <- 30
-max_prev <- 1.5
-max_prev_uncorr <- 8
-rounds_todo <- 7:9
+
+rounds_todo <- rev(react_rounds)[c(2, 1)]
+max_prev <- debiased_ltla_estimates %>%
+  filter(round %in% rounds_todo) %>%
+  pull(u) %>%
+  max()
+max_prev_uncorr <- raw_pillar2_df %>%
+  filter(round %in% rounds_todo) %>%
+  pull(u) %>%
+  max()
+max_prev_react <- react_ltla_df %>%
+  filter(round %in% rounds_todo) %>%
+  pull(m) %>%
+  max()
+
 panel_count <- 0
 point_col <- rgb(red = .5, green = .4, blue = .8, alpha = .75)
 
@@ -81,7 +78,7 @@ for (meth in c("raw", "debiased")) {
     bias_mn <- mean(comp_2$m - comp_1$m, na.rm = T)
     bias_se <- sd(comp_2$m - comp_1$m, na.rm = T) / sqrt(nrow(comp_1))
     
-    plot(comp_1$m, comp_2$m, main = "", xlim = c(0, max_prev), 
+    plot(comp_1$m, comp_2$m, main = "", xlim = c(0, max_prev_react), 
          ylim = c(0, ifelse(meth == "raw", max_prev_uncorr, max_prev)),
          xlab = "", ylab = "", ty = "n")
     
@@ -110,11 +107,8 @@ mtext(side = 1, outer = T, text = "REACT prevalence in % (95% CIs)", line = 1)
 mtext(side = 2, outer = T, text = "Pillar 1+2 prevalence in % (95% CIs)", line = 1)
 mtext(side = 4, outer = T, text = "Uncorrected", line = 0, at = .75, las = 1)
 mtext(side = 4, outer = T, text = "Corrected", line = 0, at = .25, las = 1)
-mtext(side = 3, outer = T, text = "REACT round 7", line = 0, at = .15, las = 1)
-mtext(side = 3, outer = T, text = "REACT round 8", line = 0, at = .5, las = 1)
-mtext(side = 3, outer = T, text = "REACT round 9", line = 0, at = .85, las = 1)
-#mtext(side = 3, outer = T, text = "REACT round 10", line = 0, at = .25, las = 1)
-#mtext(side = 3, outer = T, text = "REACT round 11", line = 0, at = .75, las = 1)
+mtext(side = 3, outer = T, text = paste("REACT round", rounds_todo[1]), line = 0, at = .25, las = 1)
+mtext(side = 3, outer = T, text = paste("REACT round", rounds_todo[2]), line = 0, at = .75, las = 1)
 
 dev.off()
 

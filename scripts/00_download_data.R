@@ -24,7 +24,7 @@ url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/
 # if (analysis_type == "paper_results") {
 #   url_to_pillar12 <- "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/998213/Demographic_output_w56.ods"
 # }
-# path_to_pillar12 <- "data/Demographic_LA_tables.ods"
+path_to_pillar12 <- "data/Demographic_LA_tables.ods"
 download.file(url_to_pillar12, path_to_pillar12)
 
 ### Download REACT data ###

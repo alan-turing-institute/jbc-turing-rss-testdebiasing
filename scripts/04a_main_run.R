@@ -128,23 +128,25 @@ for (type in type_run) {
 
     # Fit SIR to latest available date
     foreach(ltla_name = ltla_names, .packages = c("dplyr", "prevdebiasr")) %dopar% { #ltla_name <- ltla_names[1]#
-        source("scripts/SIR_utils.R")
-        d_ltla <- ltla_df %>%
-            filter(ltla == ltla_name)
-        I_log_lik <- ltla_prevalence[[ltla_name]]$log_post
-        
-        # TODO: Import up-to-date vax data
-        d_ltla$V[is.na(d_ltla$V)] <- d_ltla$V[max(which(!is.na(d_ltla$V)))]
-        
-        SIR_model_out_ltla <- sample_I_R_SIR_from_pre_calc_lik(
-            d_ltla, I_log_lik,
-            trans_mats, control_debias,
-            control_SIR
-        )
-
-        out_file <- file.path(out_dir, type_in_file_path, "SIR", paste0(ltla_name, ".RDS"))
-        dir.create(dirname(out_file), recursive = TRUE, showWarnings = FALSE)
-        saveRDS(SIR_model_out_ltla, out_file, version = 2)
+      source("scripts/SIR_utils.R")
+      set.seed(42)
+      
+      d_ltla <- ltla_df %>%
+        filter(ltla == ltla_name)
+      I_log_lik <- ltla_prevalence[[ltla_name]]$log_post
+      
+      # TODO: Import up-to-date vax data
+      d_ltla$V[is.na(d_ltla$V)] <- d_ltla$V[max(which(!is.na(d_ltla$V)))]
+      
+      SIR_model_out_ltla <- sample_I_R_SIR_from_pre_calc_lik(
+        d_ltla, I_log_lik,
+        trans_mats, control_debias,
+        control_SIR
+      )
+      
+      out_file <- file.path(out_dir, type_in_file_path, "SIR", paste0(ltla_name, ".RDS"))
+      dir.create(dirname(out_file), recursive = TRUE, showWarnings = FALSE)
+      saveRDS(SIR_model_out_ltla, out_file, version = 2)
     }
 }
 

@@ -102,19 +102,21 @@ for (i in 1:nrow(param_df)) {
 
     # Fit SIR to latest available date
     foreach(ltla_name = ltla_names, .packages = "dplyr") %dopar% {
-        d_ltla <- ltla_df %>%
+      set.seed(42)
+      
+      d_ltla <- ltla_df %>%
         filter(ltla == ltla_name)
-
-        I_log_lik <- ltla_prevalence[[ltla_name]]$log_post
-        SIR_model_out_ltla <- sample_I_R_SIR_from_pre_calc_lik(
+      
+      I_log_lik <- ltla_prevalence[[ltla_name]]$log_post
+      SIR_model_out_ltla <- sample_I_R_SIR_from_pre_calc_lik(
         d_ltla, I_log_lik,
         trans_mats, control_debias,
         control_SIR
-        )
-
-        out_file <- file.path(out_dir, type, "SIR", paste0(ltla_name, ".RDS"))
-        dir.create(dirname(out_file), recursive = TRUE, showWarnings = FALSE)
-        saveRDS(SIR_model_out_ltla, out_file, version = 2)
+      )
+      
+      out_file <- file.path(out_dir, type, "SIR", paste0(ltla_name, ".RDS"))
+      dir.create(dirname(out_file), recursive = TRUE, showWarnings = FALSE)
+      saveRDS(SIR_model_out_ltla, out_file, version = 2)
     }
 }
 

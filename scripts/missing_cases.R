@@ -29,7 +29,7 @@ type <- c("Infectious", "PCR_positive")[2]
 type_in_file_path <- paste0(type, "_", ifelse(imperfect, "Imperfect", "Perfect"))
 
 
-out_dir <- file.path("output", id, type, "SIR")
+out_dir <- file.path("output", id, type_in_file_path, "SIR")
 plot_dir <- file.path("plots", id, type_in_file_path)
 dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
 output_plot_dir <- c("~/Downloads", plot_dir)[2]
@@ -87,7 +87,9 @@ for (ltla_curr in ltla_unique) {
   prevent_all <- rbind(prevent_all, prevent_add)
 }
 
+
 last_week_df <- ltla_df %>%
+  filter(mid_week == this_week) %>%
   left_join(I_all, by = c("ltla", "mid_week")) %>%
   left_join(R_all, by = c("ltla", "mid_week")) %>%
   left_join(prevent_all, by = c("ltla", "mid_week")) %>%
@@ -166,6 +168,8 @@ names(tab_out) <- c('LTLA', 'Cases', 'Estimated Missing Cases', '(95% CI)')
 print(tab_out,  file = paste0(output_plot_dir, "/missing_cases_table.txt"), include.rownames = FALSE)
 tab_out
 which(d$LTLA == "Newcastle-under-Lyme")
+
+write.csv(d, file = "C:/Temp/missing_cases_full.csv", row.names = F)
 
 # Proportions
 

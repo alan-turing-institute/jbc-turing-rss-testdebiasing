@@ -2,9 +2,6 @@
 # Plot variation in delta across PHE regions 
 ###########################################
 
-library(dplyr)
-source("scripts/plot_utils.R")
-
 plot_delta_curves <- function(dl, phe_regs, del_axis_side = 4,
                               ylim_use = c(1, 4.5), add_legend = F, 
                               add_t_cut = F, add_react_round_legend = F) {
@@ -70,23 +67,15 @@ plot_delta_curves <- function(dl, phe_regs, del_axis_side = 4,
   }  
 }
 
-id <- "AR0.99sd1Rsd0.2"
-for (type in c("Infectious", "PCR_positive")) {
-  out_dir <- file.path("output", id, type)
-  plot_dir <- file.path("plots", id, type)
-  dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
-  
-  delta_df <- readr::read_csv(file.path(out_dir, "delta.csv"))
-  
-  pdf(paste0(plot_dir, "/delta_estimates.pdf"), 12, 7)
-  par(mfrow = c(1, 2), oma = c(4, 14, 6, 1), mar = c(3, 3, 2, 3))
-  phe_regs <- c("London", "Yorkshire and The Humber", "South West", 
-                "East of England", "West Midlands", "North West", "South East", 
-                "North East", "East Midlands")
-  plot_delta_curves(delta_df, phe_regs, del_axis_side = 2, add_legend = T,
-                    add_t_cut = F, add_react_round_legend = T, ylim_use = c(1,5))
-  plot_delta_curves(delta_df, "London", del_axis_side = 2, add_legend = F,
-                    add_t_cut = F, add_react_round_legend = F, ylim_use = c(1,5))
-  dev.off()
-}
+pdf(paste0(plot_dir, "/delta_estimates.pdf"), 12, 7)
+par(mfrow = c(1, 2), oma = c(4, 14, 6, 1), mar = c(3, 3, 2, 3))
+phe_regs <- c("London", "Yorkshire and The Humber", "South West", 
+              "East of England", "West Midlands", "North West", "South East", 
+              "North East", "East Midlands")
+plot_delta_curves(delta_df, phe_regs, del_axis_side = 2, add_legend = T,
+                  add_t_cut = F, add_react_round_legend = T, ylim_use = c(1,5))
+plot_delta_curves(delta_df, "London", del_axis_side = 2, add_legend = F,
+                  add_t_cut = F, add_react_round_legend = F, ylim_use = c(1,5))
+dev.off()
+
 

@@ -179,10 +179,6 @@ write_csv(region_df, "data/region.csv")
 
 
 
-
-
-
-
 ### Get LTLA counts ###
 
 ltla_df <- pillar12_df %>%
@@ -219,15 +215,26 @@ region_pop <- phe_region_pop %>%
 path_to_vax <- "data/COVID-19-monthly-announced-vaccinations.xlsx"
 path_to_weekly_vax <- "data/COVID-19-weekly-announced-vaccinations.xlsx"
 
+# Vaccinations started on the 8th December, corresponding to the mid_week of 13th December.
+# We assume it takes 2 weeks (i.e. 14 days) for vaccinations to become effective. 
 vax_start_mid_week <- as.Date("2020-12-13") + (2 * 7)
-vax_data_mid_week <- as.Date("2021-01-27")
-latest_vax_date <- as.Date("2021-06-20")
 
+# Extract latest date of weekly vaccination data
+latest_vax_date <- readxl::read_excel(path_to_weekly_vax, sheet = "Contents",
+                                      range = "C4", col_names = "date") %>%
+  pull(date) %>%
+  gsub(pattern = "^.*to ", replacement = "") %>%
+  lubridate::dmy()
+
+# Column 2 is the NHS region, column 18 is the total number of first doses
 weekly_vax_df <- readxl::read_excel(path_to_weekly_vax,
-  sheet = "NHS Region", skip = 15, n_max = 7, col_names = FALSE
+  sheet = "NHS Region", skip = 14, n_max = 7, col_names = FALSE
 ) %>%
-  select(region = 1, Count = 17) %>%
+  select(region = 2, Count = 18) %>%
   mutate(date = latest_vax_date)
+
+# SANITY CHECK AS OF 1st AUGUST 2021
+if (sum(weekly_vax_df$Count) < 38e6) stop("Check weekly vaccination input")
 
 monthly_vax_df <- readxl::read_excel(path_to_vax,
                      sheet = "Vaccination Date",
@@ -236,23 +243,28 @@ monthly_vax_df <- readxl::read_excel(path_to_vax,
     tidyr::pivot_longer(-date, names_to = "region", values_to = "Count") %>%
     mutate(date = as.Date(date), region = gsub("...\\d", "", region)) %>%
     bind_rows(weekly_vax_df)
-    
-vax_df <- region_pop %>%
+
+# This combines the weekly and monthly vaccination data, with NAs between the latest 
+# monthly date and the latest weekly date, and NAs between the vaccination start date
+# and the first monthly date.
+joint_vax_df <- region_pop %>%
   rename(M_reg = M) %>%
   full_join(tibble(date = seq(vax_start_mid_week - 1, latest_vax_date, by = 1)), by = character()) %>%
-  left_join(monthly_vax_df, by = c("date", "region")) %>%
+  left_join(monthly_vax_df, by = c("date", "region")) 
+
+vax_df <- joint_vax_df %>%
   group_by(region) %>%
   arrange(region, date) %>%
-  mutate(Count = if_else(date == vax_start_mid_week - 1, 0, Count),
-         count_fill = round(zoo::na.approx(Count)),
+  mutate(Count = if_else(date == vax_start_mid_week - 1, 0, Count), # Zero vaccinations at vaccination start date
+         count_fill = round(zoo::na.approx(Count)), # Linear interpolation to replace NAs
          prop_vax = count_fill / M_reg) %>%
   right_join(phe_region_to_region_df, by = "region") %>%
-    right_join(ltla_df, by = c("phe_region", "date" = "mid_week")) %>%
-    mutate(
-      prop_vax = if_else(date < vax_start_mid_week, 0, prop_vax),
-      V = round(prop_vax * M)
-    ) %>%
-    ungroup() %>%
+  right_join(ltla_df, by = c("phe_region", "date" = "mid_week")) %>%
+  mutate(
+    prop_vax = if_else(date < vax_start_mid_week, 0, prop_vax),
+    V = round(prop_vax * M)
+  ) %>%
+  ungroup() %>%
   select(ltla, mid_week = date, V) %>%
   arrange(ltla, mid_week)
 

@@ -81,17 +81,18 @@ for (mid_week_int in cut_dates) {
 
     SIR_out <- foreach(ltla_curr = ltla_names, .verbose = TRUE,
                         .packages = "dplyr") %dopar% {
-
-        d_ltla <- ltla_df %>%
-            filter(ltla == ltla_curr & mid_week <= mid_week_cut)
-
-        I_log_lik <- ltla_prevalence[[ltla_curr]]$log_post
-        SIR_model_out_ltla <- sample_I_R_SIR_from_pre_calc_lik(
-            d_ltla, I_log_lik, trans_mats, control_debias, control_SIR
-        )
-
-        return(SIR_model_out_ltla)
-    }
+                          set.seed(42)
+                          
+                          d_ltla <- ltla_df %>%
+                            filter(ltla == ltla_curr & mid_week <= mid_week_cut)
+                          
+                          I_log_lik <- ltla_prevalence[[ltla_curr]]$log_post
+                          SIR_model_out_ltla <- sample_I_R_SIR_from_pre_calc_lik(
+                            d_ltla, I_log_lik, trans_mats, control_debias, control_SIR
+                          )
+                          
+                          return(SIR_model_out_ltla)
+                        }
     names(SIR_out) <- ltla_names
     saveRDS(SIR_out, results_file, version = 2)
 }

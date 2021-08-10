@@ -1,21 +1,7 @@
-#############################################################
-# Source all functions, get global parameters
-#############################################################
-source("scripts/plot_utils.R")
-control <- prevdebiasr::get_control_parameters()
-
-
-id <- "AR0.99sd1Rsd0.2"
 
 #############################################################
 # Process debiased prevalence output
 #############################################################
-
-out_dir <- file.path("output", id)
-plot_dir <- file.path("plots", id)
-dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
-
-ltla_prevalence <- readRDS(file.path(out_dir, "ltla_prevalence_pcr_perfect.RDS"))
 
 norm_cdf_I_pl_all <- list()
 for(this_ltla in names(ltla_prevalence)) {
@@ -94,7 +80,7 @@ for (this_ltla in ltla_plot) {
   }
   
   # REACT plots
-  for (this_round in 7:11) {
+  for (this_round in react_rounds) {
     react_quants <- react_ltla_df %>%
       filter(ltla == this_ltla & round == this_round) %>%
       select(l,m,u) %>%

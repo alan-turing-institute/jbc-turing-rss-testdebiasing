@@ -5,13 +5,16 @@ dir.create("output", showWarnings = FALSE)
 ####################
 
 react_round_df <- readr::read_csv("data/react_round.csv")
+react_rounds <- sort(unique(react_round_df$round))
 
 round_start_dates <- as.Date(c("2020-11-13", "2021-01-06", "2021-02-04",
-                               "2021-03-11", "2021-04-15"))
+                               "2021-03-11", "2021-04-15", "2021-05-20",
+                               "2021-06-24"))
 round_end_dates <- as.Date(c("2020-12-03", "2021-01-22", "2021-02-23",
-                             "2021-03-30", "2021-05-03"))
+                             "2021-03-30", "2021-05-03", "2021-06-07",
+                             "2021-07-12"))
 
-react_date_df <- tibble(round = 7:11, 
+react_date_df <- tibble(round = react_rounds, 
                         start_date = round_start_dates,
                         end_date = round_end_dates) %>%
   mutate(mid_date = as.Date(round(0.5 * (as.numeric(start_date) + 
@@ -20,7 +23,7 @@ react_date_df <- tibble(round = 7:11,
   right_join(distinct(ltla_df, mid_week), by = character()) %>%
   group_by(round) %>%
   filter(abs(mid_week - mid_date) == min(abs(mid_week - mid_date)))
-  
+readr::write_csv(react_date_df, "data/react_dates.csv")
 
 ######################################
 # Calculate raw pillar 2 estimates
@@ -33,7 +36,7 @@ raw_pillar2_df <- ltla_df %>%
   bind_cols(as_tibble(Hmisc::binconf(.$nt, .$Nt) * 100)) %>%
   rename(m = PointEst, l = Lower, u = Upper)
 
-readr::write_csv(raw_pillar2_df, "output/raw_pillar2.csv")
+readr::write_csv(raw_pillar2_df, "data/raw_pillar2.csv")
 
 ############################################
 # Calculate REACT LTLA exact Binomial CIs
@@ -59,4 +62,4 @@ react_ltla_df <- react_round_df %>%
   bind_cols(as_tibble(Hmisc::binconf(.$positive, .$number_samples) * 100)) %>%
   rename(m = PointEst, l = Lower, u = Upper)
 
-readr::write_csv(react_ltla_df, "output/react_ltla.csv")
+readr::write_csv(react_ltla_df, "data/react_ltla.csv")

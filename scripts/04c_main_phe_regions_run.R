@@ -121,6 +121,8 @@ for (imperfect in c(FALSE, TRUE)[1]) {
     # Fit SIR to latest available date
     foreach(region_name = region_names, .packages = "dplyr") %dopar% {
       source("scripts/SIR_utils.R")
+      set.seed(42)
+      
       d_region <- region_df %>%
           filter(phe_region == region_name)
 

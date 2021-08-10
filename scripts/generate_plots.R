@@ -3,13 +3,16 @@ library(rgdal)
 library(dplyr)
 library(ggplot2)
 library(patchwork)
+library(tidyr)
+
 options(bitmapType = "cairo-png")
 
 source("scripts/plot_utils.R")
 source("scripts/SIR_utils.R")
 
-out_dir <- "output/missing"
 id <- "PCR_positive_perfect"
+control_par_id <- "AR0.99sd1Rsd0.2"
+out_dir <- file.path("output", control_par_id)
 plot_dir <- file.path(out_dir, id, "plots")
 dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
 

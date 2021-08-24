@@ -65,13 +65,11 @@ delta_df <- region_df %>%
     ))
 
 
-plot(unlist(delta_df[delta_df$phe_region == "London", "delta_prior_mean"]))
-
 # Estimate local prevalence for each LTLA
 ltla_list <- ltla_df %>%
-left_join(delta_df, by = c("phe_region", "mid_week")) %>%
-group_by(ltla) %>%
-group_split()
+      left_join(delta_df, by = c("phe_region", "mid_week")) %>%
+      group_by(ltla) %>%
+      group_split()
 ltla_names <- sapply(ltla_list, function(x) x$ltla[1])
 ltla_prevalence <- parLapply(clust, ltla_list, local_prevalence,
                             control_debias, imperfect, type)

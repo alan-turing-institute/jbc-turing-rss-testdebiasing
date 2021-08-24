@@ -88,8 +88,7 @@ for (ltla_curr in ltla_unique) {
 }
 
 
-last_week_df <- ltla_df %>%
-  filter(mid_week == this_week) %>%
+all_week_df <- ltla_df %>%
   left_join(I_all, by = c("ltla", "mid_week")) %>%
   left_join(R_all, by = c("ltla", "mid_week")) %>%
   left_join(prevent_all, by = c("ltla", "mid_week")) %>%
@@ -104,10 +103,25 @@ last_week_df <- ltla_df %>%
          missing_prop = 1 -  (nt_per_100k / m_per_100k),
          l_missing_prop = 1 - (nt_per_100k / l_per_100k),
          u_missing_prop = 1 - (nt_per_100k / u_per_100k))
-str(last_week_df)
-last_week_df[last_week_df$ltla == "Cornwall", "missing_per_100k"]
-last_week_df[last_week_df$ltla == "Cornwall", c("nt_per_100k", "m_per_100k")]
 
+dput(names(all_week_df))
+
+
+fields_to_rob <- data.frame(old = c("ltla", "phe_region", "l", "m", "u", "l_R", "m_R", "u_R", "mid_week", "Nt", "nt", "M", "nt_per_100k", "m_per_100k", 
+  "l_per_100k", "u_per_100k", "missing_per_100k", "u_missing_per_100k", 
+  "l_missing_per_100k"),
+  new = c("ltla", "phe_region", "l_prev_percent", "m_prev_percent", "u_prev_percent", "l_Rt", "m_Rt", "u_Rt", "mid_week", 
+          "N_pillar12", "n_pillar12", "M", "n_pillar12_per_100k", "m_prev_num_per_100k", 
+          "l_prev_num_per_100k", "u_prev_num_per_100k", "missing_per_100k", "u_missing_per_100k", 
+          "l_missing_per_100k"))
+output_to_rob <- all_week_df[, fields_to_rob$old]
+names(output_to_rob)<- fields_to_rob$new
+write.csv(output_to_rob, file = "C:/Temp/historical_missing_cases_output.csv", row.names = F)
+
+
+last_week_df <- all_week_df %>%
+  filter(mid_week == this_week)
+  
 
 # Get whole-country totals
 str(last_week_df)

@@ -133,9 +133,9 @@ for (del_curr in del_seq) {
 max_log_post <- max(sapply(log_post_eval_list, function(x) max(x$log_post)))
 delta_marg_post_eval_unnorm <- sapply(log_post_eval_list, function(x) sum(exp(x$log_post - max_log_post)))
 delta_bin_width <- diff(del_seq[1:2])
-delta_marg_post_eval_norm <- delta_marg_post_eval_unnorm / sum(delta_marg_post_eval_unnorm)# / delta_bin_width
+delta_full_marg_post_norm <- delta_marg_post_eval_unnorm / sum(delta_marg_post_eval_unnorm)# / delta_bin_width
 
-plot(del_seq, delta_marg_post_eval_norm, ty = "l")
+plot(del_seq, delta_full_marg_post_norm, ty = "l")
 
 #####################################################
 # Evaluate the bivariate posteriors, joint and cut
@@ -167,6 +167,8 @@ joint_2d_log_posterior <- log(joint_2d_posterior_norm)
 joint_2d_cut_posterior_unnorm <- exp(log_cut_post_I_delta_fine - max(log_cut_post_I_delta_fine))
 joint_2d_cut_posterior_norm <- joint_2d_cut_posterior_unnorm / sum(joint_2d_cut_posterior_unnorm)# / pi_delta_bin_area
 joint_2d_log_cut_posterior <- log(joint_2d_cut_posterior_norm)
+delta_cut_marg_post_norm <- rowSums(joint_2d_cut_posterior_norm)
+pi_cut_marg_post_norm <- colSums(joint_2d_cut_posterior_norm)
 
 
 max(joint_2d_log_cut_posterior)
@@ -193,9 +195,9 @@ for (I_curr in I_fine) {# I_curr <- I_fine[500]#
 I_max_log_post <- max(sapply(I_log_post_eval_list, function(x) max(x$log_post)))
 I_marg_post_eval_unnorm <- sapply(I_log_post_eval_list, function(x) sum(exp(x$log_post - I_max_log_post)))
 pi_bin_width <- diff(pi_seq_coarse[1:2])
-pi_marg_post_norm <- I_marg_post_eval_unnorm / sum(I_marg_post_eval_unnorm)# / pi_bin_width
+pi_full_marg_post_norm <- I_marg_post_eval_unnorm / sum(I_marg_post_eval_unnorm)# / pi_bin_width
 
-plot(pi_seq_coarse, pi_marg_post_norm, ty = "l")
+plot(pi_seq_coarse, pi_full_marg_post_norm, ty = "l")
 
 
 I_quant <- prevdebiasr:::randomised_testing_prevalence(test_df, control, imperfect)
@@ -203,20 +205,20 @@ delta_regional <- prevdebiasr:::delta_regional_posterior(test_df, I_quant, contr
 delta_df_cut_for_inference <- data.frame(delta_prior_mean = delta_regional$delta_post_mean,
                                          delta_prior_sd = delta_regional$delta_post_sd)
 
-delta_post_moment1 <- sum(delta_marg_post_eval_norm * del_seq, na.rm = TRUE)
-delta_post_moment2 <- sum(delta_marg_post_eval_norm * del_seq^2, na.rm = TRUE)
+delta_post_moment1 <- sum(delta_full_marg_post_norm * del_seq, na.rm = TRUE)
+delta_post_moment2 <- sum(delta_full_marg_post_norm * del_seq^2, na.rm = TRUE)
 delta_post_mean <- delta_post_moment1
 delta_post_sd <- sqrt(delta_post_moment2 - (delta_post_moment1)^2)
-delta_df_noncut_for_inference <- data.frame(delta_prior_mean = delta_post_mean,
+delta_df_full_for_inference <- data.frame(delta_prior_mean = delta_post_mean,
                                             delta_prior_sd = delta_post_sd)
 
 #####################################################
 # Evaluate the LTLA-level prevalence for joint and cut
 ltla_df_use <- ltla_df[ltla_df$mid_week == mid_week_use & ltla_df$phe_region == region_curr, ]
 ltla_prev_list <- list()
-for(plot_type in c("uncut", "cut")) {
-  if(plot_type == "uncut") {
-    delta_df <- cbind(test_df[j, c("phe_region", "mid_week")], delta_df_noncut_for_inference)
+for(plot_type in c("full", "cut")) {
+  if(plot_type == "full") {
+    delta_df <- cbind(test_df[j, c("phe_region", "mid_week")], delta_df_full_for_inference)
   }
   if(plot_type == "cut") {
     delta_df <- cbind(test_df[j, c("phe_region", "mid_week")], delta_df_cut_for_inference)
@@ -270,16 +272,16 @@ jpeg(paste0(plot_dir, "/cut_vs_full.jpeg"), 9, 9, res = 750, units = "in")
 par(mar = c(3, 3, 5, 5), oma = c(1, 1, 1, 1), mfrow = c(2, 2))
 cexax <- 1
 # plot_bd <- -20
-for(plot_type in c("uncut", "cut")) {
-  if(plot_type == "uncut") {
+for(plot_type in c("full", "cut")) {
+  if(plot_type == "full") {
     zpl <- joint_2d_log_posterior
-    x_marg <- delta_marg_post_eval_norm
-    y_marg <- pi_marg_post_norm
+    x_marg <- delta_full_marg_post_norm
+    y_marg <- pi_full_marg_post_norm
   }
   if(plot_type == "cut") {
     zpl <- joint_2d_log_cut_posterior
-    x_marg <- rowSums(exp(joint_2d_log_cut_posterior))
-    y_marg <- colSums(exp(joint_2d_log_cut_posterior))
+    x_marg <- delta_cut_marg_post_norm
+    y_marg <- pi_cut_marg_post_norm
   }
   cut_diff_from_max_log_post <- 20
   # cut_at_for_plot <- floor((max(c(joint_2d_log_posterior, joint_2d_log_cut_posterior)) - cut_diff_from_max_log_post) / 10) * 10
@@ -315,7 +317,7 @@ for(plot_type in c("uncut", "cut")) {
   lines(1:n_del, new_y)
   lines(new_x, 1:n_pi_fine_plot)
   del_mean_curr <- switch (plot_type,
-                           uncut = delta_df_noncut_for_inference$delta_prior_mean,
+                           full = delta_df_full_for_inference$delta_prior_mean,
                            cut = delta_df_cut_for_inference$delta_prior_mean
   )
   I_mean_curr <- sum(y_marg * I_fine)
@@ -327,13 +329,14 @@ for(plot_type in c("uncut", "cut")) {
   text(range(new_x)[2] + diff(range(new_x)) * .75, y_loc, formatC(I_mean_curr / M_curr * 100, format = "f", digits = 1), adj = c(1, .5), cex = .9)
   par(xpd = F)
   mtext_curr <- switch (plot_type,
-                        uncut = "Full posterior",
+                        full = "Full posterior",
                         cut = "Cut posterior"
   )
   mtext(side = 3, line = 3.5, text = mtext_curr, cex = 1.2)
-  mtext(side = 3, line = 1, at = 0, text = switch (plot_type, uncut = "(a)", cut = "(b)"), cex = 1)
+  mtext(side = 3, line = 1, at = 0, text = switch (plot_type, full = "(a)", cut = "(b)"), cex = 1)
 }
-for (plot_type in c("uncut", "cut")) {
+bias_store <- list()
+for (plot_type in c("full", "cut")) {
   comp_2 <- data.frame(ltla = ltla_df_use$ltla, 
                        l = unlist(ltla_df_use[, paste0(plot_type, "_prevprop_post_lower")]) * 100,
                        m = unlist(ltla_df_use[, paste0(plot_type, "_prevprop_post_mn")]) * 100, 
@@ -341,19 +344,88 @@ for (plot_type in c("uncut", "cut")) {
   plot(comp_1$m, comp_2$m, xlim = c(0, 5), ylim = c(0, 5), ty = "n", xlab = "", ylab = "", las = 1, xaxs = "i", yaxs = "i")
   mtext(side = 1, line = 2.5, text = "% Prevalence (REACT)", cex = cexax)
   mtext(side = 2, line = 2.5, text = "% Prevalence (debiased Pillar 1+2)", cex = cexax)
-  bias_mean <- mean(comp_2$m - comp_1$m)
-  bias_se <- sd(comp_2$m - comp_1$m) / sqrt(nrow(comp_1))
-  mtext(side = 3, line = 0.25, text = paste0("Bias = ", formatC(x = bias_mean, format = "f", digits = 2),
-                                             "% (SE = ", formatC(x = bias_se, format = "f", digits = 2), "%)"), cex = cexax)
+  bias_store[[paste0(plot_type, "_mean")]] <- bias_mean <- mean(comp_2$m - comp_1$m)
+  bias_store[[paste0(plot_type, "_se")]] <- bias_se <- sd(comp_2$m - comp_1$m) / sqrt(nrow(comp_1))
+  # mtext(side = 3, line = 0.25, text = paste0("Bias = ", formatC(x = bias_mean, format = "f", digits = 2),
+  #                                            "% (SE = ", formatC(x = bias_se, format = "f", digits = 2), "%)"), cex = cexax)
   abline(0, 1)
   for (k in 1:nrow(comp_1)) {
     lines(x = rep(comp_1$m[k], 2), y = unlist(comp_2[k, c("l", "u")]))
     lines(x = unlist(comp_1[k, c("l", "u")]), y = rep(comp_2$m[k], 2), col = "grey")
   }
   points(comp_1$m, comp_2$m, pch = 19, cex = .7)
-  mtext(side = 3, line = 1, at = 0, text = switch (plot_type, uncut = "(c)", cut = "(d)"), cex = 1)
+  mtext(side = 3, line = 1, at = 0, text = switch (plot_type, full = "(c)", cut = "(d)"), cex = 1)
 }
 dev.off()
+
+
+
+
+
+# Output means and 95% CIs for marg delta
+delta_mean_cut <- sum(delta_cut_marg_post_norm * del_seq)
+delta_sd_cut <- delta_df_cut_for_inference$delta_prior_sd
+delta_lower_cut <- del_seq[findInterval(0.025, cumsum(delta_cut_marg_post_norm)) - 1]
+delta_upper_cut <- del_seq[findInterval(0.975, cumsum(delta_cut_marg_post_norm)) - 1]
+delta_mean_full <- sum(delta_full_marg_post_norm * del_seq)
+delta_sd_full <- delta_df_full_for_inference$delta_prior_sd
+delta_lower_full <- del_seq[findInterval(0.025, cumsum(delta_full_marg_post_norm)) - 1]
+delta_upper_full <- del_seq[findInterval(0.975, cumsum(delta_full_marg_post_norm)) - 1]
+
+pi_mean_cut <- sum(pi_cut_marg_post_norm * pi_seq_coarse) * 100
+pi_lower_cut <- pi_seq_coarse[findInterval(0.025, cumsum(pi_cut_marg_post_norm)) - 1] * 100
+pi_upper_cut <- pi_seq_coarse[findInterval(0.975, cumsum(pi_cut_marg_post_norm)) - 1] * 100
+pi_mean_full <- sum(pi_full_marg_post_norm * pi_seq_coarse) * 100
+pi_lower_full <- pi_seq_coarse[findInterval(0.025, cumsum(pi_full_marg_post_norm)) - 1] * 100
+pi_upper_full <- pi_seq_coarse[findInterval(0.975, cumsum(pi_full_marg_post_norm)) - 1] * 100
+
+bias_mean_full <- bias_store$full_mean
+bias_se_full <- bias_store$full_se
+bias_mean_cut <- bias_store$cut_mean
+bias_se_cut <- bias_store$cut_se
+
+dir_text_numbers <- "C:/Users/nicho/Dropbox/Apps/Overleaf/Interoperability of models/text_numbers/cut_vs_full_comp"
+save_num <- c("delta_mean_cut", "delta_sd_cut", "delta_lower_cut", "delta_upper_cut", "delta_mean_full", "delta_sd_full", 
+              "delta_lower_full", "delta_upper_full", "pi_mean_cut", "pi_lower_cut", "pi_upper_cut", "pi_mean_full", "pi_lower_full", "pi_upper_full")
+for(numc in save_num)
+  write.table(formatC(eval(as.name(numc)), format = "f", digits = 1), file = paste(dir_text_numbers, "/", numc, ".txt", sep = ""), 
+              col.names = F, row.names = F, quote = F)
+
+
+
+save_num <- c("bias_mean_full", "bias_se_full", "bias_mean_cut", "bias_se_cut")
+for(numc in save_num)
+  write.table(formatC(eval(as.name(numc)), format = "f", digits = 2), file = paste(dir_text_numbers, "/", numc, ".txt", sep = ""), 
+              col.names = F, row.names = F, quote = F)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

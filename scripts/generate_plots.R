@@ -86,6 +86,9 @@ I_all <- IR %>%
 rownames(R_all) <- R_all$ltla
 rownames(I_all) <- I_all$ltla
 
+str(IR)
+readr::write_csv(IR, path = "C:/Users/nicho/Dropbox/Apps/Overleaf/Interoperability of models/shared_data/IR_for_interop.csv")
+?readr::write_csv
 #################################
 ### Debiased prevalence plots ###
 #################################

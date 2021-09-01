@@ -2,13 +2,18 @@
 
 This repository contains the R scripts needed to reproduce the results reported 
 in the manuscript 'Local prevalence of transmissible SARS-CoV-2 infection : 
-an integrative causal model for debiasing fine-scale targeted testing data'.  
+an integrative causal model for debiasing fine-scale targeted testing data'. To
+run these scripts, you will need R version 3.6.3 or later, widely available on 
+Unix-like, Windows and Mac families of operating systems. The demo below has
+been tested on macOS 10.15 Catalina, Windows 10 and CentOS Linux 7.
 
 To get started, you will need to install the 
 [renv](https://rstudio.github.io/renv/index.html) R package and, in an R 
-console, run
+console within this working directory, run
 ```
+renv::activate()
 renv::restore()
+# 3 minutes, 10 seconds
 ```
 to install the required packages for the scripts. 
 
@@ -35,7 +40,7 @@ To generate estimates for $\delta$ for the South East, i.e. the log odds ratio
 of being tested in the infected versus the non-infected subpopulations: 
 
 ```
-control_debias <- get_control_parameters()
+control_debias <- get_control_parameters(alpha_testing = 3e-4)
 delta_df <- specify_delta_prior(southeast_df, control_debias)
 # 2 minutes, 28 seconds
 ```
@@ -83,8 +88,8 @@ adur_prevalence$norm_post[1:3, 30:32]
 ## Scripts to reproduce manuscript results
 
 To subdirectory `scripts` contains all the code needed to reproduce the results 
-in the manuscript. On a computing cluster using 24 CPUs, running all the scripts 
-took approximately 16 hours.
+in the manuscript. On a CentOS Linux 7 computing cluster using 24 CPUs, running 
+all the scripts took approximately 16 hours.
 
 `00_download_data.R`  fetches the required data.  
 `01_preprocess_data.R`  performs some initial preprocessing of the data for downstream use.  
@@ -100,6 +105,8 @@ took approximately 16 hours.
 
 
 ### Notes
+
+The scripts to generate map plots requires the additional package "rgdal".
 
 The script to generate SI Figure 15 uses python. To install the relevant dependencies 
 via a conda environment, run `conda env create -f testdebiasing.yml`.

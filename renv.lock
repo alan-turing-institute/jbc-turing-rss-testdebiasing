@@ -595,13 +595,6 @@
       "Repository": "CRAN",
       "Hash": "30ab0ea8c8d3dd16a3fa06903449bbfb"
     },
-    "rgdal": {
-      "Package": "rgdal",
-      "Version": "1.5-19",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "2c2f770bce01f5057a6e3754cb87a797"
-    },
     "rlang": {
       "Package": "rlang",
       "Version": "0.4.10",
@@ -636,13 +629,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "9d6831c4c002137d99be6b946ac9da07"
-    },
-    "sp": {
-      "Package": "sp",
-      "Version": "1.4-1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "a44a3cebab900c0f77e16804f361468e"
     },
     "stringi": {
       "Package": "stringi",

@@ -22,14 +22,42 @@ react_date_df <- tibble(round = 7:11,
   filter(abs(mid_week - mid_date) == min(abs(mid_week - mid_date)))
   
 
+########################################################################
+# Calculate binomial confidence intervals using Wilson's method
+# (Function adapted from Hmisc R package under GPL-3 License)
+# (See https://cran.r-project.org/web/packages/Hmisc/index.html )
+########################################################################
+binconf <- function (x, n, alpha = 0.05) {
+
+  bc <- function(x, n, alpha) {
+    zcrit <- -qnorm(alpha/2)
+    z2 <- zcrit * zcrit
+    p <- x/n
+    cl <- (p + z2/2/n + c(-1, 1) * zcrit * sqrt((p * (1 - 
+                                                        p) + z2/4/n)/n))/(1 + z2/n)
+    if (x == 1) 
+      cl[1] <- -log(1 - alpha)/n
+    if (x == (n - 1)) 
+      cl[2] <- 1 + log(1 - alpha)/n
+
+    c(x/n, cl)
+  }
+  
+  mat <- matrix(ncol = 3, nrow = length(x))
+  for (i in 1:length(x)) mat[i, ] <- bc(x[i], n[i], alpha = alpha)
+  dimnames(mat) <- list(rep("", dim(mat)[1]), c("m", "l", "u"))
+
+  as.data.frame(mat, row.names = NULL)
+
+}
+
 ######################################
 # Calculate raw pillar 2 estimates
 ######################################
 
 raw_pillar2_df <- ltla_df %>%
   inner_join(react_date_df, by = "mid_week") %>%
-  bind_cols(as_tibble(Hmisc::binconf(.$nt, .$Nt) * 100)) %>%
-  rename(m = PointEst, l = Lower, u = Upper)
+  bind_cols(binconf(.$nt, .$Nt) * 100)
 
 readr::write_csv(raw_pillar2_df, "output/raw_pillar2.csv")
 
@@ -54,7 +82,6 @@ react_ltla_df <- react_round_df %>%
   group_by(ltla, round) %>%
   summarise(positive = sum(positive),
             number_samples = sum(number_samples), .groups = "drop") %>%
-  bind_cols(as_tibble(Hmisc::binconf(.$positive, .$number_samples) * 100)) %>%
-  rename(m = PointEst, l = Lower, u = Upper)
+  bind_cols(binconf(.$positive, .$number_samples) * 100)
 
 readr::write_csv(react_ltla_df, "output/react_ltla.csv")

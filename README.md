@@ -2,14 +2,15 @@
 
 This repository contains the R scripts needed to reproduce the results reported 
 in the manuscript 'Local prevalence of transmissible SARS-CoV-2 infection : 
-an integrative causal model for debiasing fine-scale targeted testing data'. To
-run these scripts, you will need R version 3.6.3 or later, widely available on 
-Unix-like, Windows and Mac families of operating systems. The demo below has
-been tested on macOS 10.15 Catalina, Windows 10 and CentOS Linux 7.
+an integrative causal model for debiasing fine-scale targeted testing data'. 
 
-To get started, you will need to install the 
-[renv](https://rstudio.github.io/renv/index.html) R package and, in an R 
-console within this working directory, run
+## Installation
+
+To run these scripts, you will need R version 3.6.3 or later, widely available on 
+Unix-like, Windows and Mac families of operating systems. The demo below has
+been tested on macOS 10.15 Catalina, Windows 10 and CentOS Linux 7. To get started, 
+you will need to install the [renv](https://rstudio.github.io/renv/index.html) 
+R package and, in an R console within this working directory, run
 ```
 renv::activate()
 renv::restore()
@@ -36,7 +37,7 @@ of positive and total Pillar 1+2 tests respectively, while the columns `nr` and
 `Nr` contain the corresponding number of REACT tests. The column `M` contains 
 the population of the relevant region.  
   
-To generate estimates for $\delta$ for the South East, i.e. the log odds ratio 
+To generate estimates for &delta; for the South East, i.e. the log odds ratio 
 of being tested in the infected versus the non-infected subpopulations: 
 
 ```
@@ -49,7 +50,7 @@ The `get_control_parameters()` function is a utility to set the hyperparameters
 of the statistical model. See the manuscript and `?get_control_parameters` for 
 more details. The output `delta_df` is a data frame with two columns: 
 `delta_prior_mean` and `delta_prior_sd` contain the mean and standard deviation 
-of a moment-matched Gaussian approximation for $\delta$, to be used downstream 
+of a moment-matched Gaussian approximation for &delta;, to be used downstream 
 in estimating debiased prevalence.
 
 ```

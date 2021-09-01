@@ -147,3 +147,33 @@ get_ltla_shape_file <- function(merge_Hackney_CoL = TRUE) {
   
   return(LTLA_shp_Reg)
 }
+
+
+########################################################################
+# Calculate binomial confidence intervals using Wilson's method
+# (Function adapted from Hmisc R package under GPL-3 License)
+# (See https://cran.r-project.org/web/packages/Hmisc/index.html )
+########################################################################
+binconf <- function (x, n, alpha = 0.05) {
+  
+  bc <- function(x, n, alpha) {
+    zcrit <- -qnorm(alpha/2)
+    z2 <- zcrit * zcrit
+    p <- x/n
+    cl <- (p + z2/2/n + c(-1, 1) * zcrit * sqrt((p * (1 - 
+                                                        p) + z2/4/n)/n))/(1 + z2/n)
+    if (x == 1) 
+      cl[1] <- -log(1 - alpha)/n
+    if (x == (n - 1)) 
+      cl[2] <- 1 + log(1 - alpha)/n
+    
+    c(x/n, cl)
+  }
+  
+  mat <- matrix(ncol = 3, nrow = length(x))
+  for (i in 1:length(x)) mat[i, ] <- bc(x[i], n[i], alpha = alpha)
+  dimnames(mat) <- list(rep("", dim(mat)[1]), c("m", "l", "u"))
+  
+  as.data.frame(mat, row.names = NULL)
+  
+}

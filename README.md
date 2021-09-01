@@ -107,7 +107,9 @@ all the scripts took approximately 16 hours.
 
 ### Notes
 
-The scripts to generate map plots requires the additional package "rgdal".
+The scripts to generate the map plots in `06f_delta_variant.R` requires the 
+additional R packages "sf" and "rgdal". They are not installed here by default 
+due to their large number of dependencies.
 
 The script to generate SI Figure 15 uses python. To install the relevant dependencies 
 via a conda environment, run `conda env create -f testdebiasing.yml`.

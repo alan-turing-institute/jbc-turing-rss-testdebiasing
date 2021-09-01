@@ -57,7 +57,7 @@ for (this_ltla in ltla_plot) {
   d <- ltla_df %>%
     filter(ltla == this_ltla)
   d$raw_prop <- d$nt / d$Nt * 100
-  raw_prop_bin_conf <- Hmisc::binconf(x = d$nt, n = d$Nt) * 100
+  raw_prop_bin_conf <- binconf(x = d$nt, n = d$Nt) * 100
   
   ymin <- .0
   ylim_use <- c(0, max(d$raw_prop))

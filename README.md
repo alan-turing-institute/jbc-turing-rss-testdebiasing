@@ -9,11 +9,15 @@ an integrative causal model for debiasing fine-scale targeted testing data'.
 To run these scripts, you will need R version 3.6.3 or later, widely available on 
 Unix-like, Windows and Mac families of operating systems. The demo below has
 been tested on macOS 10.15 Catalina, Windows 10 and CentOS Linux 7. To get started, 
-you will need to install the [renv](https://rstudio.github.io/renv/index.html) 
-R package and, in an R console within this working directory, run
+open an R console, and install the [renv](https://rstudio.github.io/renv/index.html) 
+R package if you don't have it already (e.g. via `install.packages("renv")`). Then,
+run the following, changing `path_to_dir` to the path of your local version of this
+repository,
 ```
-renv::activate()
-renv::restore()
+path_to_dir <- "path/to/jbc-turing-rss-testdebiasing"
+setwd(path_to_dir)
+renv::activate(path_to_dir)
+renv::restore(path_to_dir)
 # 3 minutes, 10 seconds
 ```
 to install the required packages for the scripts. 
@@ -25,7 +29,7 @@ of Adur and its corresponding PHE region of the South East. To load the data and
 the `prevdebiasr` package:
 
 ```
-load("data/example.RData")
+base::load("data/example.RData")
 library(prevdebiasr)
 ```
 

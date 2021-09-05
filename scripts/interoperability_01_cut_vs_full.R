@@ -65,6 +65,19 @@ if(data_in == "whole_round") {
 }
 
 
+par(mfrow = c(2, 1))
+regc <- "Barking and Dagenham"
+ltla_df_curr <- as.data.frame(ltla_df[ltla_df$ltla == regc, ])
+matplot(1:nrow(ltla_df_curr), cbind(ltla_df_curr$Nt, ltla_df_curr$nt), xaxt = "n", xlab = "")
+axis(side = 1, at = 1:nrow(ltla_df_curr), labels = ltla_df_curr$mid_week, las = 2, cex.axis = .7, xlab = "")
+matplot(1:nrow(ltla_df_curr), ltla_df_curr$nt / ltla_df_curr$Nt, xaxt = "n", xlab = "")
+axis(side = 1, at = 1:nrow(ltla_df_curr), labels = ltla_df_curr$mid_week, las = 2, cex.axis = .7, xlab = "")
+
+
+cbind(unlist(ltla_df[ltla_df$ltla == "Barking and Dagenham", "Nt"]) / unlist(ltla_df[ltla_df$ltla == "Barking and Dagenham", "nt"])))
+
+                                      ltla_df[ltla_df$ltla == "Barking and Dagenham", "Nt"]) / unlist(ltla_df[ltla_df$ltla == "Barking and Dagenham", "nt"])))
+
 j <- 1
 M_curr <- test_df$M[j]
 control <- control_debias

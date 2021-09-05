@@ -29,7 +29,7 @@ col_data["bayes_factor"] <- 1
 col_data["react_samples"] <- rgb(red = 1, green = .5, blue = 0, alpha = transpar_const)
 
 
-annotate_months <- function(d, add_axis = T, shade_alpha = .2, for_presentation = F){
+annotate_months <- function(d, add_axis = T, shade_alpha = .2, for_presentation = F, ...){
   #d$month <- sapply(strsplit(d$date, "-"), function(v) paste(v[1:2], collapse = "-"))
   d$month <- months(d$date)
   d$month <- format(d$date, "%Y-%m")
@@ -54,7 +54,7 @@ annotate_months <- function(d, add_axis = T, shade_alpha = .2, for_presentation 
  #   if(for_presentation) {
 #      labs[labs == "May"] <- ""
 #    }
-    axis(side = 1, at = ats, labels = labs, las = 2, tcl = 0)
+    axis(side = 1, at = ats, labels = labs, las = 2, tcl = 0, ...)
   }
 }
 

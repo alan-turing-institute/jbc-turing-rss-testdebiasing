@@ -47,13 +47,13 @@ date_recent <- max(mid_week_unique)
 out_files <- list.files(file.path(out_dir, id, "SIR"), full.names = TRUE)
 SIR_model_results <- lapply(out_files, readRDS)
 names(SIR_model_results) <- sub(".RDS", "", basename(out_files))
-save(SIR_model_results, file = "C:/Temp/SIR_output_for_tor.RData")
-str(SIR_model_results)
+
+# save(SIR_model_results, file = "C:/Temp/SIR_output_for_tor.RData")
 
 IR <- data.frame()
 Rl <- Il <- list()
 
-ltla_curr <- "Adur"#for (ltla_curr in ltla_unique) {
+for (ltla_curr in ltla_unique) {
   
   this_M <- ltla_pop %>%
     filter(ltla == ltla_curr) %>%

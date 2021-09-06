@@ -48,6 +48,8 @@ out_files <- list.files(file.path(out_dir, id, "SIR"), full.names = TRUE)
 SIR_model_results <- lapply(out_files, readRDS)
 names(SIR_model_results) <- sub(".RDS", "", basename(out_files))
 
+# save(SIR_model_results, file = "C:/Temp/SIR_output_for_tor.RData")
+
 IR <- data.frame()
 Rl <- Il <- list()
 
@@ -89,6 +91,8 @@ rownames(I_all) <- I_all$ltla
 str(IR)
 readr::write_csv(IR, path = "C:/Users/nicho/Dropbox/Apps/Overleaf/Interoperability of models/shared_data/IR_for_interop.csv")
 ?readr::write_csv
+
+
 #################################
 ### Debiased prevalence plots ###
 #################################

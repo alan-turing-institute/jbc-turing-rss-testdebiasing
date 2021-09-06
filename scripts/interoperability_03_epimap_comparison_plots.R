@@ -60,7 +60,7 @@ plot_dir <- "plots"
 plot_dir <- "C:/Users/nicho/Dropbox/Apps/Overleaf/Interoperability of models/figures"
 dir.create(plot_dir, showWarnings = F)
 n_ltla_plot <- length(ltla_plot)
-export_plot <- F
+export_plot <- T
 if (export_plot) {
   pdf(file.path(plot_dir, "interop_R_counts_epimap.pdf"), 12, 7)
 }
@@ -69,7 +69,7 @@ pch_ests <- 19
 cex_ests <- 1
 col_curr <- list(corrected = rgb(0, 0, 1, alpha = .5), uncorrected = rgb(1, 0, 0, alpha = .3))
 plot(0, xaxt = "n", yaxt = "n", xlab = "", ylab = "", bty = "n", ty = "n")
-col_use <- list(debias = rgb(0, 0, 1, alpha = .5), epimap = rgb(1, 0, 0, alpha = .5), ED = rgb(.3, .7, .2, alpha = .5))
+col_use <- list(debias = rgb(0, 0, 1, alpha = .5), epimap = rgb(1, 0, 0, alpha = .5), ED = grey(.2, alpha = .5))#rgb(.5, 0, .5, alpha = .5))
 leg_expand <- 1.3
 legend(x = "top", legend = c("De-biasing model", "Epimap model", "Epimap debiased"),
        lty = 1, lwd = 3, col = unlist(col_use), cex = leg_expand, bty = "", title = "Effective R")

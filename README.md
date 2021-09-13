@@ -7,7 +7,9 @@ an integrative causal model for debiasing fine-scale targeted testing data'.
 ## Installation
 
 To run these scripts, you will need R version 3.6.3 or later, widely available on 
-Unix-like, Windows and Mac families of operating systems. The demo below has
+Unix-like, Windows and Mac families of operating systems. If you have R version 4.0.0
+or above on Windows, you will also need to install 
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/). The demo below has
 been tested on macOS 10.15 Catalina, Windows 10 and CentOS Linux 7. To get started,
 first [clone](https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository)
 this repository onto your local machine. Next, open an R console, and install the 

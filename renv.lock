@@ -340,15 +340,15 @@
     },
     "prevdebiasr": {
       "Package": "prevdebiasr",
-      "Version": "0.1.0",
+      "Version": "0.1.1",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "alan-turing-institute",
       "RemoteRepo": "prevdebiasr",
       "RemoteRef": "main",
-      "RemoteSha": "ab72af5759ad6627e02e9e83f9f687f17e87740f",
-      "Hash": "0f811ed72bfb52d051fdc2a4d420ad04"
+      "RemoteSha": "f3c2e757d606c43823fe57bb7cbd2abd9cf260c9",
+      "RemoteHost": "api.github.com",
+      "Hash": "9de0b0f88f945bb45ec3d3fb93fae6a6"
     },
     "progress": {
       "Package": "progress",

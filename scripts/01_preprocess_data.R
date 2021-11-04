@@ -49,6 +49,8 @@ ltla_pop <- pop_size %>%
   filter(ltla != "Northamptonshire") %>%
   bind_rows(northamptonshire_pop)
 
+readr::write_csv(ltla_pop, "data/ltla_pop.csv")
+
 phe_region_pop <- pop_size %>%
   inner_join(region_code, by = "Code") %>%
   select(phe_region, M = `All ages`)

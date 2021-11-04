@@ -11,7 +11,8 @@ from matplotlib import gridspec
 sns.set_style("whitegrid")
 
 plt.rc("text", usetex=True)
-plt.rc("font", family="serif")
+plt.rc("font", family="sans-serif")
+plt.rc("font", size=7)
 matplotlib.rcParams["text.latex.preamble"] = [r"\usepackage{amsmath}", r"\usepackage{amsfonts}"]
 
 #=================================================
@@ -35,6 +36,8 @@ dates = df_data['mid_week'].unique()
 
 inf_df = pd.read_csv(infectious_estimates_path)
 inf_df = inf_df.loc[inf_df['mid_week'] > "2020-06-14"]
+
+cm2in = 0.39
 
 # Get mean and lower/upper CIs for uniform incidence
 def get_pcr_plus(path=samples_path):
@@ -77,10 +80,10 @@ def plot_posterior(
 ):
     if tex_plot:
         plt.rc("text", usetex=True)
-        plt.rc("font", family="serif")
+        plt.rc("font", family="sans-serif")
         matplotlib.rcParams["text.latex.preamble"] = [r"\usepackage{amsmath}"]
     support = np.arange(len(posterior_means)) + start_idx
-    ax.plot(support, posterior_means, "r", label=posterior_label, color=posterior_color)
+    ax.plot(support, posterior_means, "r", label=posterior_label, color=posterior_color, linewidth = 1)
 
     if posterior_confidence_intervals is not None:
         upper, lower = (
@@ -99,20 +102,20 @@ def plot_posterior(
             support, posterior_means, lower, alpha=alpha, color=confidence_interval_color
         )
     if title is not None:
-        ax.set_title(title, size=16)
+        ax.set_title(title, size=7)
     if legend:
-        ax.legend(loc=0, fontsize=16)
+        ax.legend(loc=0, fontsize=6)
 
     plt.setp(ax.xaxis.get_majorticklabels(), rotation=70)
 
-fig = plt.figure(figsize=(12, 25))
-gs = gridspec.GridSpec(10, 1,height_ratios=[3]+[2]*9)
+fig = plt.figure(figsize=(16 * cm2in, 20 * cm2in))
+gs = gridspec.GridSpec(10, 1,height_ratios=[5]+[2.5]*9)
 ax = [plt.subplot(gs[i]) for i in range(10)]
-
+plt.subplots_adjust(bottom = 0.1)
 for name, area_df in df_data[df_data['mid_week']>='2020-06-21'].groupby('phe_region'):
-    ax[0].plot(np.arange(53), area_df['nt'], label=name)
+    ax[0].plot(np.arange(53), area_df['nt'], label=name, linewidth = 1)
     ax[0].set_yscale('log')
-ax[0].legend(loc=2, fontsize=10)
+ax[0].legend(loc=2, fontsize=5)
 ax[0].set_xticklabels([])
 ax[0].set_xticks(np.arange(53))
 
@@ -128,26 +131,27 @@ for i, name in enumerate(inf_df['phe_region'].unique()):
     ax[i+1].set_xticklabels([])
     ax[i+1].set_xticks(np.arange(53))
     ax[i+1].set_ylim(0.4, 0.8)
+    ax[i+1].set_yticks([0.4, 0.5, 0.6, 0.7, 0.8])
     eb = ax[i+1].errorbar([0], [BASE_PI], np.array([upper_uniform - BASE_PI, BASE_PI - lower_uniform])[:, None], alpha=0.5,
-                   fmt='r--', capsize=8)
+                   fmt='r--', capsize=8, linewidth = 1)
     eb[-1][0].set_linestyle('--')
 
-    txt_anno = ax[i+1].text(1,0.75, name, fontsize=12)
+    txt_anno = ax[i+1].text(1,0.75, name, fontsize=6)
     txt_anno.set_bbox(dict(alpha=0.6, facecolor='white'))
 
     plt.xticks(np.arange(53), pd.DatetimeIndex(dates[3:]).strftime("%m-%d"))
 
-    plt.setp(ax[i+1].get_xticklabels(), fontsize=12)
-    plt.setp(ax[i+1].get_yticklabels(), fontsize=12)
+    plt.setp(ax[i+1].get_xticklabels(), fontsize=5)
+    plt.setp(ax[i+1].get_yticklabels(), fontsize=5)
 
-plt.setp(ax[0].get_xticklabels(), fontsize=12)
-plt.setp(ax[0].get_yticklabels(), fontsize=12)
-ax[0].set_title('Pillar 1+2 raw weekly incidence', fontsize=16)
-ax[0].set_ylabel('Positive test counts (log scale)', fontsize=14)
-ax[1].set_title(r'$\mathbb{P}(\text{Infectious} \mid \text{PCR+})$', fontsize=16)
-ax[1].legend(loc=1, fontsize=12, title='Sampling Model', title_fontsize=12)
-ax[-1].set_xlabel('Week', fontsize=16)
-ax[5].set_ylabel(r'$\mathbb{P}(\text{Infectious} \mid \text{PCR+})$', fontsize=16)
-plt.tight_layout()
+plt.setp(ax[0].get_xticklabels(), fontsize=5)
+plt.setp(ax[0].get_yticklabels(), fontsize=5)
+ax[0].set_title('Pillar 1+2 raw weekly incidence', fontsize=6)
+ax[0].set_ylabel('Positive test counts\n(log scale)', fontsize=7)
+ax[1].set_title(r'$\mathbb{P}(\text{Infectious} \mid \text{PCR+})$', fontsize=6)
+ax[1].legend(loc=1, fontsize=6, title='Sampling Model', title_fontsize=6)
+ax[-1].set_xlabel('Week', fontsize=8)
+ax[5].set_ylabel(r'$\mathbb{P}(\text{Infectious} \mid \text{PCR+})$', fontsize=7)
+plt.tight_layout(pad = 0.5)
 
-plt.savefig('plots/SI_pcrpos_to_infectious', dpi=150)
+plt.savefig('plots/SI_pcrpos_to_infectious.pdf')

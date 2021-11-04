@@ -10,6 +10,12 @@ id <- "AR0.99sd1Rsd0.2"
 # Process debiased prevalence output
 #############################################################
 
+ltla_df <- readr::read_csv("data/ltla.csv")
+ltla_pop <- readr::read_csv("data/ltla_pop.csv")
+react_date_df <- readr::read_csv("data/react_dates.csv")
+raw_pillar2_df <- readr::read_csv("data/raw_pillar2.csv")
+react_ltla_df <- readr::read_csv("data/react_ltla.csv")
+
 out_dir <- file.path("output", id)
 plot_dir <- file.path("plots", id)
 dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
@@ -40,13 +46,13 @@ xpl <- plot_map$day_index
 #  R prediction Figure in paper
 ###########################################################
 graphics.off()
-pdf(file.path(plot_dir, "uncorrected_and_cross_sec_corr.pdf"), 12, 6)
-
+cm2in <- 0.39
+pdf(file.path(plot_dir, "uncorrected_and_cross_sec_corr.pdf"), width = 18 * cm2in, 7 * cm2in, pointsize = 7)
 ltla_plot <- choose_focus_ltlas(ltla_df)
-par(mfrow = c(2, 5), mar = c(3, 3, 2, 1))
+par(mfrow = c(2, 5), mar = c(3, 3.5, 2, 1))
 pch_ests <- 19
 cex_ests <- 1
-col_curr <- list(corrected = rgb(0, 0, 1, alpha = .5), uncorrected = rgb(1, 0, 0, alpha = .5))
+col_curr <- list(corrected = rgb(0, 1, 1, alpha = .5), uncorrected = rgb(0, 0.6, 0, alpha = .5))
 plot(0, xaxt = "n", yaxt = "n", xlab = "", ylab = "", bty = "n", ty = "n")
 legend(x = "center", legend = c("Raw Pillar 1+2", "Corrected", "REACT estimate", "REACT rounds"),
        pch = c(rep(pch_ests, 3), 15), pt.cex = c(rep(cex_ests, 3), 1.6), 
@@ -60,12 +66,12 @@ for (this_ltla in ltla_plot) {
   raw_prop_bin_conf <- binconf(x = d$nt, n = d$Nt) * 100
   
   ymin <- .0
-  ylim_use <- c(0, max(d$raw_prop))
+  ylim_use <- c(0, max(raw_prop_bin_conf$u))
   
   matplot(x = 0, y = 0, ty = "n", ylim = ylim_use, xlim = range(xpl), 
           xaxt = "n", yaxt = "s", xlab = "", las = 2, ylab = "", xaxs = "i", 
           main = this_ltla)
-  mtext(side = 2, text = "%", line = 2, las = 2, cex = .8)
+  mtext(side = 2, text = "Prevalence (%)", line = 2.2, cex = .8)
   abline(h = 5, col = "light grey", lty = 3)
   add_react_sampling_intervals_to_plot(d = plot_map, prev_max = ylim_use[2], 
                                        col_data = col_data, type = "daily")

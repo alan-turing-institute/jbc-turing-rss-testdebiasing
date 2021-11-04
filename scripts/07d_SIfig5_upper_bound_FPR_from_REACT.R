@@ -26,3 +26,10 @@ for(prinamc in names(prev_pri_list)) {
   axis(side = 3, at = labat, label = signif(pseq[which.max(tot_log_lik)], 2))
 }
 
+cm2in <- 0.39
+pdf("plots/estimate_FPR.pdf", width = 16 * cm2in, height = 12 * cm2in, pointsize = 7)
+par(mfrow = c(1,1))
+plot(pseq, tot_log_lik, log = "x", ty = "l", xlab = "FPR (alpha)", ylab = "Log marginal likelihood")
+abline(v = labat)
+axis(side = 3, at = labat, label = signif(pseq[which.max(tot_log_lik)], 2))
+dev.off()

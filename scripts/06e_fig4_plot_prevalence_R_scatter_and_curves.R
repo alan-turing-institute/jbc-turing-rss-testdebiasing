@@ -1,4 +1,7 @@
 source("scripts/SIR_utils.R")
+source("scripts/plot_utils.R")
+ltla_df <- readr::read_csv("data/ltla.csv")
+ltla_pop <- readr::read_csv("data/ltla_pop.csv")
 
 ############################
 # Import weekly Pillar 2 and REACT
@@ -54,7 +57,7 @@ rownames(I_all) <- I_all$ltla
 ###########################################################
 # Prevalence R scatter Figure in paper
 ###########################################################
-pdf(paste0(plot_dir, "/prevalence_curves_new.pdf"), 10, 7)
+pdf(paste0(plot_dir, "/prevalence_curves_new.pdf"), width = 18 * cm2in, 12 * cm2in, pointsize = 7)
 
 layout(mat = matrix(c(1, 1, 2, 3), 2, 2))
 par(mar = c(4, 4, 2, 2), oma = c(1, 1, 1, 1))
@@ -90,6 +93,8 @@ names(col_reg) <- ltla_curve
 for(ltla_curr in ltla_curve) {
   text(x = R_all[ltla_curr, "m_jit"] + .05, y = I_all[ltla_curr, "m"] - .04, 
        labels = ltla_curr, pos = 2, cex = 1, col = col_reg[ltla_curr])
+  points(R_all[ltla_curr,"m_jit"], I_all[ltla_curr, "m"], 
+         col = col_reg[ltla_curr], pch = 19, cex = .7)
 }
 mtext(side = 2, text = "LTLA prevalence (%)", line = 3)
 mtext(side = 1, text = "Effective R value", line = 3)
@@ -124,13 +129,14 @@ for (what_pl in c("I", "R")) {
       matc <- SIR_model_results[[ltla_curr]]$R_quant
     }
     colc <- col_reg[ltla_curr]
-    lines(xpl_week, matc[, 2], lty = 1, lwd = 4, col = colc)
-    lines(xpl_week, matc[, 3], lty = 1, lwd = 1, col = colc)
-    lines(xpl_week, matc[, 1], lty = 1, lwd = 1, col = colc)
+    lines(xpl_week, matc[, 2], lty = 1, lwd = 2, col = colc)
+    lines(xpl_week, matc[, 3], lty = 1, lwd = 0.8, col = colc)
+    lines(xpl_week, matc[, 1], lty = 1, lwd = 0.8, col = colc)
   }
   abline(v = match(date_recent, plot_map$date))
   axis(side = 3, at = match(date_recent, plot_map$date), labels = date_recent)
-  mtext(side = 3, text = switch(what_pl, I = "Prevalence (%)", R = "Effective R value"), line = .5)
+  mtext(side = 3, text = switch(what_pl, I = "Prevalence", R = "Effective R value"), line = .5)
+  title(ylab = switch(what_pl, I = "Prevalence (%)", R = "Rt"))
   
   annotate_months(plot_map, add_axis = T, shade_alpha = .2, for_presentation = T)
   if(what_pl == "I") {

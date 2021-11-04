@@ -2,6 +2,8 @@
 source("scripts/plot_utils.R")
 source("scripts/SIR_utils.R")
 
+ltla_df <- readr::read_csv("data/ltla.csv")
+
 unique_ltla <- unique(ltla_df$ltla)
 mid_week_unique <- sort(unique(ltla_df$mid_week))
 cut_dates <- seq(as.Date("2020-10-18"), rev(mid_week_unique)[2], by = 7)
@@ -57,12 +59,14 @@ for (mid_week_int in cut_dates) {
 #  R prediction Figure in paper
 ###########################################################  
 graphics.off()
-pdf(file.path(plot_dir, "validation_2_for_paper.pdf"), 11, 7)
+
+cm2in <- 0.39
+pdf(file.path(plot_dir, "validation_2_for_paper.pdf"), width = 18 * cm2in, 12 * cm2in, pointsize = 7)
 
 ylims <- list(list(c(-3.2, 3.2), c(-2, 2), c(-1.5, 1.5)), list(c(-6, 6), c(-2.5, 2.5), c(-2, 2)))
 case_ranges <- list(c(0, 201), c(201, 501), c(501, Inf))
 n_ran <- length(case_ranges)
-par(mfrow = c(2, n_ran), mar = c(3, 3, 2, 2), oma = c(4, 4, 7, 12))
+par(mfrow = c(2, n_ran), mar = c(4, 4, 2, 2), oma = c(4, 4, 5, 12))
 
 case_labs <- sapply(case_ranges, function(x) paste(x[1], x[2] - 1, sep = " - "))
 case_labs <- gsub("501 - Inf", "> 500", case_labs)
@@ -84,7 +88,9 @@ for (n_week_ahead in 1:2) {
     cor_out <- cor.test(xpl, ypl, use = "p", me = "sp")
     cor_res[[n_week_ahead]][[case_labs[j]]] <- cor_out
     plot(xpl, ypl, main = "", xlab = "", ylab = "", xlim = c(0, 3.1), 
-         ylim = ylims[[n_week_ahead]][[j]], las = 2, ty = "n")
+         ylim = 1.04 * ylims[[n_week_ahead]][[j]], las = 2, ty = "n")
+    title(ylab = "Future log2 change in case numbers", 
+          xlab = "Estimated R at baseline", line = 3)
     if (j == n_ran) {
       axis(side = 4, at = c(-1, 1), labels = c("Halving", "Doubling"), las = 2, col = 1)
     }
@@ -93,15 +99,16 @@ for (n_week_ahead in 1:2) {
     abline(h = 1, col = "red", lty = 3)
     points(xpl, ypl, cex = .8)
     if (n_week_ahead == 1) {
-      mtext(side = 3, line = 3.5, text = case_labs[j], col = "blue")
+      mtext(side = 3, line = 1, text = case_labs[j], col = "blue")
     }
-    mtext(side = 3, line = .5, text = paste("rho = ", round(cor_out$estimate, 2)), cex = .8)
+    mtext(side = 3, line = -1.5,
+          text = paste("rho = ", round(cor_out$estimate, 2)), cex = .8)
   }
 }
-mtext(outer = T, side = 3, line = 3.5, text = "Weekly case numbers per 100,000 at baseline", col = "blue")
-mtext(outer = T, side = 4, at = c(.75, .25), text = c("One week ahead", "Two weeks ahead"), las = 2)
-mtext(outer = T, side = 4, at = c(.75, .25) - .03, text = rep("change in # cases", 2), las = 2)
-mtext(outer = T, side = 1, line = 1, text = "Estimated R at baseline")
-mtext(outer = T, side = 2, line = 1, text = "Future log2 change in case numbers")
+mtext(outer = T, side = 3, line = 2, text = "Weekly case numbers per 100,000 at baseline", col = "blue")
+mtext(outer = T, side = 4, at = c(.78, .28), text = c("One week ahead", "Two weeks ahead"), las = 2)
+mtext(outer = T, side = 4, at = c(.78, .28) - .03, text = rep("change in # cases", 2), las = 2)
+#mtext(outer = T, side = 1, line = 1, text = "Estimated R at baseline")
+#mtext(outer = T, side = 2, line = 1, text = "Future log2 change in case numbers")
 
 dev.off()

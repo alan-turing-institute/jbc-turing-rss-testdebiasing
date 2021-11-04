@@ -5,6 +5,7 @@ dir.create("output", showWarnings = FALSE)
 ####################
 
 react_round_df <- readr::read_csv("data/react_round.csv")
+ltla_df <- readr::read_csv("data/ltla.csv")
 
 round_start_dates <- as.Date(c("2020-11-13", "2021-01-06", "2021-02-04",
                                "2021-03-11", "2021-04-15"))
@@ -21,6 +22,7 @@ react_date_df <- tibble(round = 7:11,
   group_by(round) %>%
   filter(abs(mid_week - mid_date) == min(abs(mid_week - mid_date)))
   
+readr::write_csv(react_date_df, "data/react_dates.csv")
 
 ########################################################################
 # Calculate binomial confidence intervals using Wilson's method
@@ -59,7 +61,7 @@ raw_pillar2_df <- ltla_df %>%
   inner_join(react_date_df, by = "mid_week") %>%
   bind_cols(binconf(.$nt, .$Nt) * 100)
 
-readr::write_csv(raw_pillar2_df, "output/raw_pillar2.csv")
+readr::write_csv(raw_pillar2_df, "data/raw_pillar2.csv")
 
 ############################################
 # Calculate REACT LTLA exact Binomial CIs
@@ -84,4 +86,4 @@ react_ltla_df <- react_round_df %>%
             number_samples = sum(number_samples), .groups = "drop") %>%
   bind_cols(binconf(.$positive, .$number_samples) * 100)
 
-readr::write_csv(react_ltla_df, "output/react_ltla.csv")
+readr::write_csv(react_ltla_df, "data/react_ltla.csv")

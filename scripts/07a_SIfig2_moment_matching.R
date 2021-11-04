@@ -111,15 +111,15 @@ id <- paste0("AR", control$delta_AR_rho,
              "sd", control$delta_AR_sd,
              "Rsd", control$R_AR_sd)
 plot_dir <- file.path("plots", id, "PCR_positive")
-
+cm2in <- 0.39
 for (phe_reg in c("London", "North West")) {
   indvc <- which(region_df$phe_region == phe_reg & 
                    region_df$mid_week >= as.Date("2020-11-23") &
                    region_df$mid_week <= as.Date("2021-01-24"))
   graphics.off()
   
-  pdf(file.path(plot_dir, paste0("SI_moment_match_", phe_reg, ".pdf")), 8, 7)
-  par(mfrow = c(3, 3))
+  pdf(file.path(plot_dir, paste0("SI_moment_match_", phe_reg, ".pdf")), width = 10 * cm2in, 8 * cm2in, pointsize = 7)
+  par(mfrow = c(3, 3), mar = c(3,3,3,3))
   for (j in indvc) {
     hist(delquants[j, ], probability = TRUE, main = "", xlab = region_df$mid_week[j],
          breaks=seq(min(delquants[j, ], na.rm=T),max(delquants[j, ], na.rm=T), l = 9))
@@ -128,8 +128,6 @@ for (phe_reg in c("London", "North West")) {
           y = dnorm(xseq, delta_post_mean[j], delta_post_sd[j]),
           col = "red")
   }
-  mtext(phe_reg, side = 3, line = -3, outer = TRUE)
+  mtext(phe_reg, side = 3, line = -2, outer = TRUE)
   dev.off()
 }
-
-

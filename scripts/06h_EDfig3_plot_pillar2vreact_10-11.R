@@ -1,6 +1,12 @@
-### Figure 2 ###
+### Extended Data Figure ###
+library(tidyr)
 
 control <- prevdebiasr::get_control_parameters()
+ltla_pop <- readr::read_csv("data/ltla_pop.csv")
+react_date_df <- readr::read_csv("data/react_dates.csv")
+ltla_df <- readr::read_csv("data/ltla.csv")
+raw_pillar2_df <- readr::read_csv("data/raw_pillar2.csv")
+react_ltla_df <- readr::read_csv("data/react_ltla.csv")
 
 # Quantiles to plot
 quant_plot <- c(0.025, 0.5, 0.975)
@@ -39,9 +45,9 @@ debiased_ltla_estimates <- abind::abind(
 
 graphics.off()
 
-pdf(file.path(plot_dir, "fig2_bias_correction_1011.pdf"), 9, 6.25)
+pdf(file.path(plot_dir, "fig2_bias_correction_1011.pdf"), width = 16 * cm2in, 12 * cm2in, pointsize = 7)
 
-par(mfrow = c(2, 2), oma = c(4, 4, 4, 10), mar = c(3, 2, 2, 2))
+par(mfrow = c(2, 2), oma = c(2, 2, 2, 2), mar = c(4, 4, 2.5, 2.5))
 max_prev <- 1.5
 max_prev_uncorr <- 8
 rounds_todo <- 10:11
@@ -65,6 +71,7 @@ for (meth in c("raw", "debiased")) {
         ungroup() %>%
         filter(round == this_round) %>%
         select(l, m, u)
+      ylab <- "Uncorrected Pillar 1+2 prevalence (%)"
     }
     
     if (meth == "debiased") {
@@ -72,6 +79,7 @@ for (meth in c("raw", "debiased")) {
         ungroup() %>%
         filter(round == this_round) %>%
         select(l, m, u)
+      ylab <- "Debiased prevalence (%)"
     }
     
     cor_est <- round(cor(comp_1$m, comp_2$m, use = "p", me = "sp"), 2)
@@ -81,6 +89,7 @@ for (meth in c("raw", "debiased")) {
     plot(comp_1$m, comp_2$m, main = "", xlim = c(0, max_prev), 
          ylim = c(0, ifelse(meth == "raw", max_prev_uncorr, max_prev)),
          xlab = "", ylab = "", ty = "n")
+    title(ylab = ylab, xlab = "REACT prevalence (%)", line = 3)
     
     for (j in 1:nrow(comp_1)) {
       lines(x = comp_1[j, c("l", "u")], y = rep(comp_2$m[j], 2), col = grey(.8))
@@ -97,18 +106,27 @@ for (meth in c("raw", "debiased")) {
                         "% (SE = ", 
                         round(bias_se, 2), 
                         ")"), 
-          cex = .7, line = 0.5)
+          cex = .8, line = -2)
     
     mtext(side = 3, at = -.2, text = paste0("(", letters[panel_count], ")"), 
           cex = 1, line = .5)
   }
 }
-mtext(side = 1, outer = T, text = "REACT prevalence in % (95% CIs)", line = 1)
-mtext(side = 2, outer = T, text = "Pillar 1+2 prevalence in % (95% CIs)", line = 1)
-mtext(side = 4, outer = T, text = "Uncorrected", line = 0, at = .75, las = 1)
-mtext(side = 4, outer = T, text = "Corrected", line = 0, at = .25, las = 1)
-mtext(side = 3, outer = T, text = "REACT round 10", line = 0, at = .25, las = 1)
-mtext(side = 3, outer = T, text = "REACT round 11", line = 0, at = .75, las = 1)
+# mtext(side = 1, outer = T, text = "REACT prevalence in % (95% CIs)", line = 1)
+# mtext(side = 2, outer = T, text = "Pillar 1+2 prevalence in % (95% CIs)", line = 1)
+# mtext(side = 4, outer = T, text = "Uncorrected", line = 0, at = .75, las = 1)
+# mtext(side = 4, outer = T, text = "Corrected", line = 0, at = .25, las = 1)
+mtext(side = 3, outer = T, text = "REACT round 10", line = -1, at = .25, las = 1)
+mtext(side = 3, outer = T, text = "REACT round 11", line = -1, at = .75, las = 1)
 
 dev.off()
 
+raw_pillar2_df %>%
+  group_by(round) %>%
+  summarise(range(Nt)) %>%
+  print(n=10)
+
+react_ltla_df %>%
+  group_by(round) %>%
+  summarise(range(number_samples)) %>%
+  print(n=10)

@@ -259,7 +259,8 @@ p1 <- ltla_I_plots[[1]]  + ltla_R_plots[[1]] + var_plots[[1]] + scatt_plots[[1]]
 
 plot_dir <- file.path("plots", "AR0.99sd1Rsd0.2", "Infectious")
 dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
-ggsave(file.path(plot_dir, "delta_variant.png"), 
-       width = 8, height = 12, units = "in")
+
+ggsave(file.path(plot_dir, "delta_variant.pdf"), p1, 
+       width = 18, height = 18, units = "cm")
 
        

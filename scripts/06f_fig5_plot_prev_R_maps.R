@@ -4,11 +4,12 @@ library(ggplot2)
 library(patchwork)
 source("scripts/plot_utils.R")
 source("scripts/SIR_utils.R")
-options(bitmapType = "cairo-png")
+options(bitmapType = "cairo-png", device = "X11")
 
 ############################
 # Import weekly Pillar 2 and REACT
 ##########################
+ltla_pop <- readr::read_csv("data/ltla_pop.csv")
 ltla_df <- readr::read_csv("data/ltla.csv")
 ltla_unique <- unique(ltla_df$ltla)
 mid_week_unique <- unique(ltla_df$mid_week)
@@ -58,7 +59,7 @@ for (ltla_curr in ltla_unique) {
   IR <- rbind(IR, add_all)
 }
 
-n_week_plot <- 20
+n_week_plot <- 21
 week_plot <- rev(rev(mid_week_unique)[1 + 2 * (0:(n_week_plot - 1))])
 
 xmin <- 82672
@@ -98,7 +99,7 @@ ne_grob <- ggplotGrob(y_ne)
 
 ltla_plot <- ggplot(data = LTLA_shp_Reg) + 
   geom_sf(aes(fill = lf_mean), colour=NA) +
-  theme_void() +
+  theme_void(base_size = 7) +
   theme(plot.title = element_text(size = 7)) + 
   ggtitle(as.Date(week_plot_curr, origin = "1970-01-01")) +
   annotation_custom(grob = lnd_grob, xmin = xmin, xmax = xmin+0.35*(xmax-xmin), 
@@ -113,7 +114,7 @@ for (week_plot_curr in week_plot[-1]) {
   y_lnd <- ggplot(data = filter(LTLA_shp_Reg, RGN20NM == "London")) + 
     geom_sf(aes(fill = lf_mean ), color = NA, show.legend = FALSE) + 
     theme_void() +
-    ggtitle("London") + 
+    #ggtitle("London") + 
     scale_fill_viridis_c(option = "A", limits = c(0, plot_max), direction = -1) +
     theme(plot.title = element_text(size = 7)) 
   
@@ -140,12 +141,11 @@ for (week_plot_curr in week_plot[-1]) {
 }
 
 p_out <- ltla_plot +
-  plot_layout(guides = "collect") & 
+  plot_layout(nrow = 3, guides = "collect") & 
   scale_fill_viridis_c(option = "A", limits = c(0, plot_max), direction = -1) & 
   labs(fill="Prevalence (%)")
 
-ggsave(file.path(plot_dir, "prev_maps.png"), p_out, width = 12, height = 8, units = "in")
-
+ggsave(file.path(plot_dir, "prev_maps.pdf"), p_out, width = 18, height = 9, units = "cm")
 
 ### Effective R maps ###
 max_R <- 2
@@ -181,7 +181,7 @@ ne_grob <- ggplotGrob(y_ne)
 
 ltla_plot <- ggplot(data = LTLA_shp_Reg) + 
   geom_sf(aes(fill = lf_mean), colour=NA) +
-  theme_void() +
+  theme_void(base_size = 7) +
   theme(plot.title = element_text(size = 7)) + 
   ggtitle(as.Date(week_plot_curr, origin = "1970-01-01")) +
   annotation_custom(grob = lnd_grob, xmin = xmin, xmax = xmin+0.35*(xmax-xmin), 
@@ -198,7 +198,7 @@ for (week_plot_curr in week_plot[-1]) {
   y_lnd <- ggplot(data = filter(LTLA_shp_Reg, RGN20NM == "London")) + 
     geom_sf(aes(fill = lf_mean ), color = NA, show.legend = FALSE) + 
     theme_void() +
-    ggtitle("London") + 
+    #ggtitle("London") + 
     scale_fill_distiller(palette = "RdYlBu", limits =c(0, 2), 
                          breaks = seq(0, 2, 0.5), 
                          labels = c(seq(0, 1.5, 0.5), "2.0+")) +
@@ -227,11 +227,10 @@ for (week_plot_curr in week_plot[-1]) {
 }
 
 p_out <- ltla_plot + 
-  plot_layout(guides = "collect") & 
+  plot_layout(guides = "collect", nrow = 3) & 
   scale_fill_distiller(palette = "RdYlBu", limits = c(0, 2), 
                        breaks = seq(0, 2, 0.5), 
                        labels = c(seq(0, 1.5, 0.5), "2.0+")) & 
   labs(fill="Rt")
 
-ggsave(file.path(plot_dir, "R_maps.png"), p_out, width = 12, height = 8, units = "in")
-
+ggsave(file.path(plot_dir, "R_maps.pdf"), p_out, width = 18, height = 9, units = "cm")

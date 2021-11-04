@@ -4,7 +4,9 @@
 
 source("scripts/plot_utils.R")
 source("scripts/SIR_utils.R")
-source("scripts/01_preprocess_data.R")
+
+ltla_df <- readr::read_csv("data/ltla.csv")
+ltla_pop <- readr::read_csv("data/ltla_pop.csv")
 
 ltla_unique <- unique(ltla_df$ltla)
 mid_week_unique <- unique(ltla_df$mid_week)
@@ -20,7 +22,7 @@ param_df <- expand.grid(delta_AR_sd = c(1, 2),
                         beta = 0.05)
 
 sensitivity_plot_delta <- function(type, what_pl) {
-  par(mfrow = c(3, 2))
+  par(mfrow = c(3, 2), mar = c(4,4,4,4))
   for (i in 1:nrow(param_df)) {
     
     id <- paste0("AR", param_df$delta_AR_rho[i],
@@ -109,7 +111,7 @@ sensitivity_plot_delta <- function(type, what_pl) {
         matc <- SIR_model_results[[ltla_curr]]$R_quant
       }
       colc <- col_reg[ltla_curr]
-      lines(xpl_week, matc[, 2], lty = 1, lwd = 4, col = colc)
+      lines(xpl_week, matc[, 2], lty = 1, lwd = 2, col = colc)
       lines(xpl_week, matc[, 3], lty = 1, lwd = 1, col = colc)
       lines(xpl_week, matc[, 1], lty = 1, lwd = 1, col = colc)
     }
@@ -124,11 +126,11 @@ sensitivity_plot_delta <- function(type, what_pl) {
     
   }
 }
-
+cm2in <- 0.39
 type <- "Infectious"
 for (whatpl in c("I", "R")) {
   
-  pdf(paste0("plots/SI_delta_", type, "_", whatpl, ".pdf"), 10, 7)
+  pdf(paste0("plots/SI_delta_", type, "_", whatpl, ".pdf"), width = 18 * cm2in, 10 * cm2in, pointsize = 7)
   sensitivity_plot_delta(type, whatpl)
   dev.off()
   
@@ -140,7 +142,7 @@ param_df <- expand.grid(alpha = c(0.001, 3e-4),
                         beta = c(0.05, 0.1, 0.3))
 
 sensitivity_plot_sensspec <- function(type, what_pl) {
-  par(mfrow = c(3, 2))
+  par(mfrow = c(3, 2), mar = c(4,4,4,4))
   for (i in 1:nrow(param_df)) {
     
     id <- paste0("AR0.99sd1Rsd0.2alpha", param_df$alpha[i],
@@ -226,7 +228,7 @@ sensitivity_plot_sensspec <- function(type, what_pl) {
         matc <- SIR_model_results[[ltla_curr]]$R_quant
       }
       colc <- col_reg[ltla_curr]
-      lines(xpl_week, matc[, 2], lty = 1, lwd = 4, col = colc)
+      lines(xpl_week, matc[, 2], lty = 1, lwd = 2, col = colc)
       lines(xpl_week, matc[, 3], lty = 1, lwd = 1, col = colc)
       lines(xpl_week, matc[, 1], lty = 1, lwd = 1, col = colc)
     }
@@ -244,7 +246,8 @@ sensitivity_plot_sensspec <- function(type, what_pl) {
 
 type <- "Infectious"
 for (whatpl in c("I", "R")) {
-  pdf(paste0("plots/SI_sensspec_", type, "_", whatpl, ".pdf"), 10, 7)
+  pdf(paste0("plots/SI_sensspec_", type, "_", whatpl, ".pdf"), width = 18 * cm2in, 10 * cm2in, pointsize = 7)
   sensitivity_plot_sensspec(type, whatpl)
   dev.off()
 }
+

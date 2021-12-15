@@ -1,8 +1,7 @@
 # Debiasing targeted testing data
 
 This repository contains the R scripts needed to reproduce the results reported 
-in the manuscript 'Local prevalence of transmissible SARS-CoV-2 infection : 
-an integrative causal model for debiasing fine-scale targeted testing data'. 
+in the manuscript 'Improving local prevalence estimates of SARS-CoV-2 infections using a causal debiasing framework'. 
 
 ## Installation
 

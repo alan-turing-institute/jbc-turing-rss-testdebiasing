@@ -8,7 +8,7 @@ ltla_df <- readr::read_csv("data/ltla.csv")
 # Link to file in "Interoperability of models" Overleaf, file "shared_data/IR_for_interop.csv"
 # IR <- read.csv("https://www.dropbox.com/s/43kjmxq9kqunp22/IR_for_interop.csv?dl=1", stringsAsFactors = F)
 # IR <- read.csv("https://www.dropbox.com/s/43kjmxq9kqunp22/Rt-combined.csv?dl=1", stringsAsFactors = F)
-IR <- read.csv("https://www.dropbox.com/s/j0gtd2nue8sqfy1/Rt-combined.csv?dl=1", stringsAsFactors = F)
+IR <- read.csv("https://www.dropbox.com/s/j0gtd2nue8sqfy1/Rt-combined-v2.csv?dl=1", stringsAsFactors = F)
 
 IR$ltla_mid_week <- paste0(IR$ltla, "_", IR$mid_week)
 mid_week_unique <- sort(unique(IR$mid_week))
@@ -52,9 +52,11 @@ set.seed(42)
 # ltla_plot <- c(sample(ltla_unique, 2), "Havering", "Redbridge")
 # ltla_plot <- c("Liverpool", "Birmingham", "Havering", "Redbridge")
 # ltla_plot <- c("Liverpool", "Birmingham", "Redbridge", "Havering")
-ltla_plot <- c("Birmingham", "Liverpool", "Thurrock", "Havering")
+# ltla_plot <- c("Birmingham", "Liverpool", "Thurrock", "Havering")
+ltla_plot <- c("Birmingham", "Liverpool", "Havering")
 # ltla_plot <- c("Liverpool", "Birmingham", "Waltham Forest", "Havering")
 
+col2rgb("cyan")
 # graphics.off()
 plot_dir <- "plots"
 plot_dir <- "C:/Users/nicho/Dropbox/Apps/Overleaf/Interoperability of models/figures"
@@ -69,7 +71,11 @@ pch_ests <- 19
 cex_ests <- 1
 col_curr <- list(corrected = rgb(0, 0, 1, alpha = .5), uncorrected = rgb(1, 0, 0, alpha = .3))
 plot(0, xaxt = "n", yaxt = "n", xlab = "", ylab = "", bty = "n", ty = "n")
-col_use <- list(debias = rgb(0, 0, 1, alpha = .5), epimap = rgb(1, 0, 0, alpha = .5), ED = grey(.2, alpha = .5))#rgb(.5, 0, .5, alpha = .5))
+trans_alpha <- .25
+full_alpha <- .75
+full_lwd <- 2
+col_use_transparent <- list(debias = rgb(0, 0, 1, alpha = trans_alpha), epimap = rgb(1, 0, 0, alpha = trans_alpha), ED = rgb(0, 1, 1, alpha = trans_alpha))#rgb(.5, 0, .5, alpha = .5))
+col_use <- list(debias = rgb(0, 0, 1, alpha = full_alpha), epimap = rgb(1, 0, 0, alpha = full_alpha), ED = rgb(0, 1, 1, alpha = full_alpha))#rgb(.5, 0, .5, alpha = .5))
 leg_expand <- 1.3
 legend(x = "top", legend = c("De-biasing model", "Epimap model", "Epimap debiased"),
        lty = 1, lwd = 3, col = unlist(col_use), cex = leg_expand, bty = "", title = "Effective R")
@@ -117,26 +123,29 @@ for (ltla_curr in ltla_plot) {
   if(ltla_curr %in% c("Liverpool")) {
     vline_at <- "2020-11-08"
   }
-  abline(v = match(vline_at, plot_map$date_char), lty = 3)
+  abline(v = match(vline_at, plot_map$date_char), lty = 2, lwd = 2)
   xpl_week <- plot_map[match(d$mid_week, plot_map$date_char), "day_index"]
   if (what_pl == "R") {
     matc <- IR[IR$ltla == ltla_curr & IR$mid_week %in% as.character(d$mid_week), c("debiased_R_l", "debiased_R_m", "debiased_R_u")]
     matc <- IR[IR$ltla == ltla_curr & IR$Date %in% plot_map$date_char, c("debiased_R_l", "debiased_R_m", "debiased_R_u")]
   }
   colc <- 1
-  lines(plot_map$day_index, matc[, 2], lty = 1, lwd = lwd_mid, col = col_use$debias)
-  lines(plot_map$day_index, matc[, 3], lty = 1, lwd = 1, col = col_use$debias)
-  lines(plot_map$day_index, matc[, 1], lty = 1, lwd = 1, col = col_use$debias)
+  lines(plot_map$day_index, matc[, 2], lty = 1, lwd = full_lwd, col = col_use$debias)
+  polygon(x = c(plot_map$day_index, rev(plot_map$day_index)), y = c(matc[, 1], rev(matc[, 3])), col = col_use_transparent$debias, border = NA)
+  # lines(plot_map$day_index, matc[, 3], lty = 1, lwd = 1, col = col_use$debias)
+  # lines(plot_map$day_index, matc[, 1], lty = 1, lwd = 1, col = col_use$debias)
   epimap_R <- IR[IR$ltla == ltla_curr & IR$Date %in% plot_map$date_char, c("epimap_R_l", "epimap_R_m", "epimap_R_u", "Date")]
   epimap_R <- epimap_R[match(plot_map$date_char, epimap_R$Date), ]
-  lines(plot_map$day_index, epimap_R[, 2], lty = 1, lwd = lwd_mid, col = col_use$epimap)
-  lines(plot_map$day_index, epimap_R[, 1], lty = 1, lwd = 1, col = col_use$epimap)
-  lines(plot_map$day_index, epimap_R[, 3], lty = 1, lwd = 1, col = col_use$epimap)
+  lines(plot_map$day_index, epimap_R[, 2], lty = 1, lwd = full_lwd, col = col_use$epimap)
+  polygon(x = c(plot_map$day_index, rev(plot_map$day_index)), y = c(epimap_R[, 1], rev(epimap_R[, 3])), col = col_use_transparent$epimap, border = NA)
+  # lines(plot_map$day_index, epimap_R[, 1], lty = 1, lwd = 1, col = col_use$epimap)
+  # lines(plot_map$day_index, epimap_R[, 3], lty = 1, lwd = 1, col = col_use$epimap)
   ED_R <- IR[IR$ltla == ltla_curr & IR$Date %in% plot_map$date_char, c("epimap_debiased_R_l", "epimap_debiased_R_m", "epimap_debiased_R_u", "Date")]
   ED_R <- ED_R[match(plot_map$date_char, ED_R$Date), ]
-  lines(plot_map$day_index, ED_R[, 2], lty = 1, lwd = lwd_mid, col = col_use$ED)
-  lines(plot_map$day_index, ED_R[, 1], lty = 1, lwd = 1, col = col_use$ED)
-  lines(plot_map$day_index, ED_R[, 3], lty = 1, lwd = 1, col = col_use$ED)
+  lines(plot_map$day_index, ED_R[, 2], lty = 1, lwd = full_lwd, col = col_use$ED)
+  polygon(x = c(plot_map$day_index, rev(plot_map$day_index)), y = c(ED_R[, 1], rev(ED_R[, 3])), col = col_use_transparent$ED, border = NA)
+  # lines(plot_map$day_index, ED_R[, 1], lty = 1, lwd = 1, col = col_use$ED)
+  # lines(plot_map$day_index, ED_R[, 3], lty = 1, lwd = 1, col = col_use$ED)
   # annotate_months(plot_map, add_axis = T, shade_alpha = .2, for_presentation = T)
   mid_week_plot <- mid_week_unique[mid_week_unique %in% IR$Date]
   ypl <- d[match(mid_week_plot, d$mid_week), c("Nt", "nt")]
@@ -154,7 +163,7 @@ for (ltla_curr in ltla_plot) {
   d$case_pos <- d$nt / d$Nt
   plot(match(mid_week_plot, plot_map$date_char), d[match(mid_week_plot, d$mid_week), c("case_pos")], ty = "b",
           log = "", lty = 1, xaxt = "n", yaxt = "n", col = "blue", ylim = c(0, .5), pch = 3, ylab = "")
-  abline(v = match(vline_at, plot_map$date_char), lty = 3)
+  abline(v = match(vline_at, plot_map$date_char), lty = 2, lwd = 2)
   if(match(ltla_curr, ltla_plot) == n_ltla_plot) {
     mtext(side = 4, line = 3,  text = "Test positivity", col = 4, cex = cexax)
     axis(side = 4, col.axis = "blue", col = "blue", cex.axis = ax_expand)
@@ -181,7 +190,7 @@ tes_pos_liv_week_1 <- liverpool$test_pos[liverpool$mid_week == "2020-11-01"] * 1
 tes_pos_liv_week_2 <- liverpool$test_pos[liverpool$mid_week == "2020-11-08"] * 100
 
 dir_text_numbers <- "C:/Users/nicho/Dropbox/Apps/Overleaf/Interoperability of models/text_numbers/epimap_case_study"
-dir.create(dir_text_numbers)
+dir.create(dir_text_numbers, showWarnings = F)
 
 save_num <- c("tes_pos_liv_week_1", "tes_pos_liv_week_2")
 for(numc in save_num)

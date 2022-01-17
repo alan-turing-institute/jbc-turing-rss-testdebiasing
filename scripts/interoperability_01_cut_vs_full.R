@@ -19,6 +19,10 @@ ltla_df <- readr::read_csv("data/ltla.csv") %>%
   ) %>%
   select(ltla, phe_region, mid_week, Nt, nt, M, V, alpha, beta)
 
+
+region_df[region_df$phe_region == "London" & region_df$mid_week == "2021-01-17", ]
+ltla_df[ltla_df$phe_region == "London" & ltla_df$mid_week == "2021-01-17", ]
+
 alpha_testing <- 3e-4
 control_debias <- prevdebiasr::get_control_parameters(
   alpha_testing = alpha_testing
@@ -74,9 +78,6 @@ matplot(1:nrow(ltla_df_curr), ltla_df_curr$nt / ltla_df_curr$Nt, xaxt = "n", xla
 axis(side = 1, at = 1:nrow(ltla_df_curr), labels = ltla_df_curr$mid_week, las = 2, cex.axis = .7, xlab = "")
 
 
-cbind(unlist(ltla_df[ltla_df$ltla == "Barking and Dagenham", "Nt"]) / unlist(ltla_df[ltla_df$ltla == "Barking and Dagenham", "nt"])))
-
-                                      ltla_df[ltla_df$ltla == "Barking and Dagenham", "Nt"]) / unlist(ltla_df[ltla_df$ltla == "Barking and Dagenham", "nt"])))
 
 j <- 1
 M_curr <- test_df$M[j]

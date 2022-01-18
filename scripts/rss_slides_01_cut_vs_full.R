@@ -78,10 +78,6 @@ matplot(1:nrow(ltla_df_curr), ltla_df_curr$nt / ltla_df_curr$Nt, xaxt = "n", xla
 axis(side = 1, at = 1:nrow(ltla_df_curr), labels = ltla_df_curr$mid_week, las = 2, cex.axis = .7, xlab = "")
 
 
-cbind(unlist(ltla_df[ltla_df$ltla == "Barking and Dagenham", "Nt"]) / unlist(ltla_df[ltla_df$ltla == "Barking and Dagenham", "nt"])))
-
-                                      ltla_df[ltla_df$ltla == "Barking and Dagenham", "Nt"]) / unlist(ltla_df[ltla_df$ltla == "Barking and Dagenham", "nt"])))
-
 j <- 1
 M_curr <- test_df$M[j]
 control <- control_debias

@@ -10,6 +10,8 @@ dir.create("data", showWarnings = FALSE)
 # renv::install("alan-turing-institute/prevdebiasr")
 library(prevdebiasr)
 
+# install.packages(setdiff(deps,c("prevdebiasr", installed.packages()[,"Package"])))
+
 ### Download weekly Pillar 1+2 data ###
 # Procedure for updating Pillar 1+2 data links
 # 1.	Go to https://www.gov.uk/government/collections/nhs-test-and-trace-statistics-england-weekly-reports

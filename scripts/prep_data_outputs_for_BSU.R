@@ -43,7 +43,7 @@ region_prevalence <- readRDS(region_out_file)
 out_files <- file.path(out_dir, type_in_file_path, "SIR", paste0(unique_regions, ".RDS"))
 SIR_model_results <- lapply(out_files, readRDS)
 names(SIR_model_results) <- unique_regions
-
+saveRDS(SIR_model_results, file = "output/SIR_MCMC_outputs_for_Epi_ensemble_team.RDS")
 out_df <- data.frame()
 quant_plot <- c(0.025, 0.5, 0.975)
 for (region_curr in unique_regions) {#region_curr <- "London"#
@@ -54,7 +54,6 @@ for (region_curr in unique_regions) {#region_curr <- "London"#
   region_curr_df <- region_df[region_df$phe_region == region_curr, ]
   saml_biased <- SIR_model_results[[region_curr]]
   its_keep <- (control_SIR$burn_in + 1):control_SIR$n_iters
-
   # I SIR quantiles
   I_quant_curr <- t(apply(saml_biased$I[, its_keep], 1, function(v) quantile(v, quant_plot, na.rm = T))) / this_M * 100
   I_add <- as.data.frame(I_quant_curr)

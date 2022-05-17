@@ -98,7 +98,7 @@ To subdirectory `scripts` contains all the code needed to reproduce the results
 in the manuscript. On a CentOS Linux 7 computing cluster using 24 CPUs, running 
 all the scripts took approximately 16 hours.
 
-`00_download_data.R`  fetches the required data.  
+`00_download_data.R`  fetches the required data. In case any of the links in this script are broken, we have also made the data available as a zip file at [this Zenodo repository](https://doi.org/10.5281/zenodo.6557505).  
 `01_preprocess_data.R`  performs some initial preprocessing of the data for downstream use.  
 `02_calculate_infectiousness_estimates` computes the time-dependent probability of being infectiousness conditional on returning a (true) positive PCR test  
 `03_prevalence_comparisons.R` calculates prevalence estimates and credible intervals using 1) only Pillar 1+2 data and 2) only REACT data.  
